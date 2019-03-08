@@ -22,11 +22,11 @@ if($_POST['Submit'])
         $filepurpose = $_POST['upfilepurpose'];
         $filerevision = $_POST['upfilerevision'];
 
-        $basename_filename_name = basename($_FILES["filename"]["name"],"." . strtolower($fileextension));
+        $basename_filename_name = basename($_FILES["upfilename"]["name"],"." . strtolower($fileextension));
         $newbasename_filename_name = $basename_filename_name . "_REVISION_" . $filerevision . "." . strtolower($fileextension);
 
         $target_dir = "files/";
-        $target_file = $target_dir . basename($_FILES["filename"]["name"]);
+        $target_file = $target_dir . basename($_FILES["upfilename"]["name"]);
         $target_file_new = $target_dir . $newbasename_filename_name;
         $uploadOk = 1;
         $imageFileType = pathinfo($target_file,PATHINFO_EXTENSION);
@@ -37,7 +37,7 @@ if($_POST['Submit'])
                 header("location: home.php?error=2");
                 $uploadOk = 0;
             }
-        else if ($_FILES["filename"]["size"] > 25000000)
+        else if ($_FILES["upfilename"]["size"] > 25000000)
             {
                 //echo "Sorry, your file is too large.";
                 header("location: home.php?error=3");
@@ -52,7 +52,7 @@ if($_POST['Submit'])
         
         if ($uploadOk == 1) 
             {
-                if (move_uploaded_file($_FILES["filename"]["tmp_name"], $target_file_new)) 
+                if (move_uploaded_file($_FILES["upfilename"]["tmp_name"], $target_file_new)) 
                     {
                         
                         $conn = new mysqli($servername, $username, $password, $dbname);
@@ -69,7 +69,7 @@ if($_POST['Submit'])
                         if ($conn->query($sql) === TRUE) {
                             //copy($filepath, $destinationpath);
                             //echo "New record created successfully";
-                            header("location: home.php?success=1");
+                            header("location: home.php?success=10");
                         } else {
                             echo "Error: " . $sql . "<br>" . $conn->error;
                             //header("location: home.php?error=1");

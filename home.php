@@ -297,7 +297,7 @@
 
 <div class="modal fade bd-example-modal-lg" id="updateModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
-    <form method="post" action="update.php"></form>
+    <form method="post" enctype="multipart/form-data" action="update.php">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLabel">Update</h5>
@@ -319,13 +319,13 @@
           <div class="col-md-4 pull-right">
             <label for="exampleFormControlSelect1" >File Extension</label>
             <div class="input-group">
-              <input type="text" class="form-control form-control-lg" id="upfileextension" name="fileextension" required>
+              <input type="text" class="form-control form-control-lg" id="upfileextension" name="upfileextension" required>
             </div>
           </div>
           <div class="col-md-4 pull-right">
             <label for="exampleFormControlSelect1" >File Revision</label>
             <div class="input-group">
-              <input type="text" class="form-control form-control-lg" id="upfilerevision" name="filerevision" required>
+              <input type="text" class="form-control form-control-lg" id="upfilerevision" name="upfilerevision" required>
             </div>
           </div>
            <div class="col-md-4">
@@ -343,7 +343,7 @@
       
       </div>
       <div class="modal-footer">
-        
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
         <input type="Submit"  class="btn btn-primary" name ="Submit" value="Submit">
       </div>
     </div>
@@ -429,7 +429,7 @@
           </div>
       <div class="col-md-12">    
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        
         <input type="Submit"  class="btn btn-primary" name ="Submit" value="Submit">
       </div>
   		</div>
