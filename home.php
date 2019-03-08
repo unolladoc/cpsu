@@ -297,6 +297,7 @@
 
 <div class="modal fade bd-example-modal-lg" id="updateModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
+    <form method="post" action="update.php"></form>
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLabel">Update</h5>
@@ -343,9 +344,10 @@
       </div>
       <div class="modal-footer">
         
-        <button type="button" class="btn btn-primary">Save changes</button>
+        <input type="Submit"  class="btn btn-primary" name ="Submit" value="Submit">
       </div>
     </div>
+</form>
   </div>
 </div>
 
