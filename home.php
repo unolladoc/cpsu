@@ -43,15 +43,15 @@
               <p>Document List</p>
             </a>
           </li>
-          <li><a href="#">
+          <li><a href="https://docs.google.com/document/?usp=docs_alc&authuser=0">
               <i class="now-ui-icons design_app"></i>
-              <p>Document Editor</p>
+              <p>Open Google Doc</p>
             </a>
           </li>
           <li>
             <a href="#">
               <i class="now-ui-icons design_app"></i>
-              <p>Member List</p>
+              <p>Members</p>
             </a>
           </li>
         </ul>

@@ -21,8 +21,10 @@ if($_POST['Submit'])
         $fileextension = $_POST['fileextension'];
         $filepurpose = $_POST['filepurpose'];
         $filerevision = $_POST['filerevision'];
-
-        $basename_filename_name = basename($_FILES["filename"]["name"],"." . strtolower($fileextension));
+        
+        $temp_name = basename($_FILES["filename"]["name"],"." . strtolower($fileextension));
+        $basename_filename_name = preg_replace('/\s+/', '_', $temp_name);
+        //$basename_filename_name = basename($_FILES["filename"]["name"],"." . strtolower($fileextension));
         $newbasename_filename_name = $basename_filename_name . "_REVISION_" . $filerevision . "." . strtolower($fileextension);
 
         $target_dir = "files/";
