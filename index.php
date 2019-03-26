@@ -117,13 +117,13 @@
                             </div>
                           </div>';
                   }
-                  if(isset($_GET['notloggedin'])){
+                  if(isset($_GET['error'])){
                     echo '<div class="alert alert-danger" role="alert">
                             <div class="container">
                               <div class="alert-icon">
                                 <i class="now-ui-icons ui-1_bell-53"></i>
                               </div>
-                              You are not logged in.
+                              Invalid Request.
                               <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                 <span aria-hidden="true">
                                   <i class="now-ui-icons ui-1_simple-remove"></i>
