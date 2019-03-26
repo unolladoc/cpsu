@@ -132,6 +132,36 @@
                             </div>
                           </div>';
                   }
+                  if(isset($_GET['register']) && $_GET['register'] == 1){
+                    echo '<div class="alert alert-info" role="alert">
+                            <div class="container">
+                              <div class="alert-icon">
+                                <i class="now-ui-icons ui-1_bell-53"></i>
+                              </div>
+                              Registration Successful. Please wait for the Administrator to approve your account.
+                              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">
+                                  <i class="now-ui-icons ui-1_simple-remove"></i>
+                                </span>
+                              </button>
+                            </div>
+                          </div>';
+                  }
+                  if(isset($_GET['register']) && $_GET['register'] == 0){
+                    echo '<div class="alert alert-danger" role="alert">
+                            <div class="container">
+                              <div class="alert-icon">
+                                <i class="now-ui-icons ui-1_bell-53"></i>
+                              </div>
+                              Registration unsuccessful.
+                              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">
+                                  <i class="now-ui-icons ui-1_simple-remove"></i>
+                                </span>
+                              </button>
+                            </div>
+                          </div>';
+                  }
                   ?>
                 <div class="input-group no-border input-lg">
                   <div class="input-group-prepend">
@@ -215,8 +245,6 @@
   <!--  Plugin for the DatePicker, full documentation here: https://github.com/uxsolutions/bootstrap-datepicker -->
   <script src="assets/js/plugins/bootstrap-datepicker.js" type="text/javascript"></script>
   <!--  Google Maps Plugin    -->
-  <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE"></script>
-  <!-- Control Center for Now Ui Kit: parallax effects, scripts for the example pages etc -->
   <script src="assets/js/now-ui-kit.js?v=1.2.0" type="text/javascript"></script>
 </body>
 
@@ -264,10 +292,28 @@
   </div>
 </div>
 
+<script>
+  $('.modal').on('hidden.bs.modal', function(){
+      $(this).find('form')[0].reset();
+  });
+</script>
+
 <script type="text/javascript">
   
   $("#cavPassword").keyup(function(){
      if($(this).val() == $("#caPassword").val()){
+        $("#vperror").text("");
+        $("#caSubmit").removeAttr("disabled");
+               //alert("values do not match");
+               //more processing here
+     }else{
+         $("#vperror").text("Password does not match");
+         $("#caSubmit").attr("disabled", "disabled");
+     }
+});
+
+$("#caPassword").keyup(function(){
+     if($(this).val() == $("#cavPassword").val()){
         $("#vperror").text("");
         $("#caSubmit").removeAttr("disabled");
                //alert("values do not match");

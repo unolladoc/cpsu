@@ -38,19 +38,19 @@ if($_POST['Submit'])
         if (file_exists($target_file_new)) 
             {
                 //echo "Sorry, file already exists.";
-                header("location: home.php?error=2");
+                header("location: admin/index.php?error=2");
                 $uploadOk = 0;
             }
         else if ($_FILES["upfilename"]["size"] > 25000000)
             {
                 //echo "Sorry, your file is too large.";
-                header("location: home.php?error=3");
+                header("location: admin/index.php?error=3");
                 $uploadOk = 0;
             }
         else if($imageFileType != "doc" && $imageFileType != "docx" && $imageFileType != "pdf" && $imageFileType != "jpg" && $imageFileType != "jpeg") 
             {
                 //echo "Sorry, only doc, docx, pdf";
-                header("location: home.php?error=4");
+                header("location: admin/index.php?error=4");
                 $uploadOk = 0;
             }
         
@@ -73,10 +73,10 @@ if($_POST['Submit'])
                         if ($conn->query($sql) === TRUE) {
                             //copy($filepath, $destinationpath);
                             //echo "New record created successfully";
-                            header("location: home.php?success=10");
+                            header("location: admin/index.php?success=10");
                         } else {
                             echo "Error: " . $sql . "<br>" . $conn->error;
-                            //header("location: home.php?error=1");
+                            //header("location: admin/index.php?error=1");
                         }
                         //echo "The file ". basename( $_FILES["filename"]["name"]). " has been uploaded.<br>";
                         //echo $sql;

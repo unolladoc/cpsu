@@ -19,11 +19,11 @@ if($result->num_rows > 0){
 		unlink($filetodelete);
 		$sql3 = "DELETE from files where id ='$id';";
 		$result3 = mysqli_query($conn,$sql3);
-		header("location: home.php?success=2");
+		header("location: admin/index.php?success=2");
 	}else{
 
 	}
 }else{
-	header("location: home.php?error=5");
+	header("location: admin/index.php?error=5");
 }
 ?>

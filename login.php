@@ -17,7 +17,7 @@ if($result->num_rows > 0){
 	$_SESSION['name'] = $row['name'];
 	$_SESSION['username'] = $row['username'];
 
-	header("location: home.php");
+	header("location: admin/");
 }else{
     header("location: index.php?invalid=true");
   }
