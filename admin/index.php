@@ -166,6 +166,12 @@
 
                                             while ($row = $result->fetch_assoc()) {
 
+                                                if ($row['file_extension'] == 'DOC' || $row['file_extension'] == 'DOCX') {
+                                                    $filename = "<a href='https://docs.google.com/gview?url=http://" . $servername . "/" . $row['file_path'] . "&embedded=true' target='_blank'>" . $row['file_name'] . "</a>";
+                                                } else {
+                                                    $filename = $row['file_name'];
+                                                }
+
                                                 $actionbuttons = '
                                                 <button type="button" onclick="getRowForUptade(' . $rowi . ')" rel="tooltip" class="btn btn-info btn-sm btn-round btn-icon" data-toggle="modal" title="Update" data-target="#updateModal" data-dismiss="modal">
                                                   <i class="now-ui-icons arrows-1_cloud-upload-94"></i>
@@ -180,7 +186,7 @@
                                             " . $row['id'] . "
                                           </td>
                                           <td>
-                                            " . $row['file_name'] . "
+                                            " . $filename . "
                                           </td>
                                           <td>
                                             " . $row['file_extension'] . "

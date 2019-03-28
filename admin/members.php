@@ -170,9 +170,13 @@
                                                   </button>';
                                                 } else if ($row['type'] == 1) {
                                                     $access = "Admin";
-                                                    $actionbuttons = '<button type="button" onclick="getRowID(' . $rowi . ')" rel="tooltip" class="btn btn-warning btn-sm btn-round btn-icon" data-toggle="modal" title="Remove as Admin" data-target="#revokeadminaccessModal" data-dismiss="modal">
-                                                    <i class="now-ui-icons users_single-02"></i>
-                                                </button>';
+                                                    if($_SESSION['id']==$row['id']){
+                                                        $actionbuttons = '-';
+                                                    }else{
+                                                        $actionbuttons = '<button type="button" onclick="getRowID(' . $rowi . ')" rel="tooltip" class="btn btn-warning btn-sm btn-round btn-icon" data-toggle="modal" title="Remove as Admin" data-target="#revokeadminaccessModal" data-dismiss="modal">
+                                                        <i class="now-ui-icons users_single-02"></i>
+                                                    </button>';
+                                                    }
                                                 } else if ($row['type'] == 2) {
                                                     $access = "Guest";
                                                     $actionbuttons = '<button type="button" onclick="getRowID(' . $rowi . ')" rel="tooltip" class="btn btn-info btn-sm btn-round btn-icon" data-toggle="modal" title="Make Admin" data-target="#adminaccessModal" data-dismiss="modal">
