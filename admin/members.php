@@ -19,7 +19,7 @@
     <link rel="icon" type="../image/png" href="../assets/img/favicon.png">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <title>
-        Home - Administrator
+        Members - Administrator
     </title>
     <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />
     <!--     Fonts and icons     -->
@@ -43,7 +43,7 @@
             </div>
             <div class="sidebar-wrapper">
                 <ul class="nav">
-                    <li class="active">
+                    <li>
                         <a href="#">
                             <i class="now-ui-icons files_single-copy-04"></i>
                             <p>Document List</p>
@@ -54,8 +54,8 @@
                             <p>Create NEW (Google Doc)</p>
                         </a>
                     </li>
-                    <li>
-                        <a href="members.php">
+                    <li class="active">
+                        <a href="#">
                             <i class="now-ui-icons users_single-02"></i>
                             <p>Members</p>
                         </a>
@@ -75,7 +75,6 @@
                                 <span class="navbar-toggler-bar bar3"></span>
                             </button>
                         </div>
-                        <button class="btn btn-info btn-round btn-lg" data-toggle="modal" data-target="#addFileModal" data-dismiss="modal">Add File</button>
                     </div>
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-bar navbar-kebab"></span>
@@ -120,7 +119,7 @@
                                 <div class="card-header" role="tab" id="headingTwo">
 
                                     <div class="card-header">
-                                        <h4 class="card-title"> Document List</h4>
+                                        <h4 class="card-title"> Member List</h4>
                                         <!--<i class="now-ui-icons arrows-1_minimal-down"></i>-->
                                     </div>
 
@@ -131,7 +130,7 @@
                                 <div class="table-responsive">
                                     <table class="table" id="myTable">
                                         <?php 
-                                        $sql = "SELECT * FROM files ORDER BY datetime DESC";
+                                        $sql = "SELECT * FROM user;";
                                         $result = $conn->query($sql);
                                         $rowi = 1;
 
@@ -146,16 +145,10 @@
                                           Name
                                         </th>
                                         <th onclick="sortTable(2)">
-                                          File Type
+                                          Username
                                         </th>
                                         <th onclick="sortTable(3)">
-                                          Revision
-                                        </th>
-                                        <th onclick="sortTable(4)">
-                                          Purpose
-                                        </th>
-                                        <th onclick="sortTable(5)">
-                                          Uploaded
+                                          Access
                                         </th>
                                         <th class="text-right" >
                                           Action
@@ -166,39 +159,45 @@
 
                                             while ($row = $result->fetch_assoc()) {
 
-                                                $actionbuttons = '
-                                                <button type="button" onclick="getRowForUptade(' . $rowi . ')" rel="tooltip" class="btn btn-info btn-sm btn-round btn-icon" data-toggle="modal" title="Update" data-target="#updateModal" data-dismiss="modal">
-                                                  <i class="now-ui-icons arrows-1_cloud-upload-94"></i>
+                                                if ($row['type'] == 0) {
+                                                    $access = "UNVERIFIED";
+                                                    $actionbuttons = '
+                                                  <button type="button" onclick="getRowID(' . $rowi . ')" rel="tooltip" class="btn btn-success btn-sm btn-round btn-icon" data-toggle="modal" title="Approve" data-target="#deleteModal" data-dismiss="modal">
+                                                      <i class="now-ui-icons ui-1_check"></i>
                                                   </button>
-                                                  <button type="button" onclick="getRowID(' . $rowi . ')" rel="tooltip" class="btn btn-danger btn-sm btn-round btn-icon" data-toggle="modal" title="Delete" data-target="#deleteModal" data-dismiss="modal">
+                                                  <button type="button" onclick="getRowID(' . $rowi . ')" rel="tooltip" class="btn btn-danger btn-sm btn-round btn-icon" data-toggle="modal" title="Remove User" data-target="#deleteModal" data-dismiss="modal">
                                                       <i class="now-ui-icons ui-1_simple-remove"></i>
                                                   </button>';
-
-
+                                                } else if ($row['type'] == 1) {
+                                                    $access = "Admin";
+                                                    $actionbuttons = '<button type="button" onclick="getRowID(' . $rowi . ')" rel="tooltip" class="btn btn-warning btn-sm btn-round btn-icon" data-toggle="modal" title="Remove as Admin" data-target="#deleteModal" data-dismiss="modal">
+                                                    <i class="now-ui-icons users_single-02"></i>
+                                                </button>';
+                                                } else if ($row['type'] == 2) {
+                                                    $access = "Guest";
+                                                    $actionbuttons = '<button type="button" onclick="getRowID(' . $rowi . ')" rel="tooltip" class="btn btn-info btn-sm btn-round btn-icon" data-toggle="modal" title="Make Admin" data-target="#deleteModal" data-dismiss="modal">
+                                                    <i class="now-ui-icons users_single-02"></i>
+                                                </button>
+                                                <button type="button" onclick="getRowID(' . $rowi . ')" rel="tooltip" class="btn btn-warning btn-sm btn-round btn-icon" data-toggle="modal" title="Remove Access" data-target="#deleteModal" data-dismiss="modal">
+                                                    <i class="now-ui-icons ui-1_simple-remove"></i>
+                                                </button>
+                                                    ';
+                                                }
                                                 echo "<tr>
                                           <td>
                                             " . $row['id'] . "
                                           </td>
                                           <td>
-                                            " . $row['file_name'] . "
+                                            " . $row['name'] . "
                                           </td>
                                           <td>
-                                            " . $row['file_extension'] . "
+                                            " . $row['username'] . "
                                           </td>
                                           <td>
-                                            " . $row['file_rev'] . "
-                                          </td>
-                                          <td>
-                                            " . $row['file_purpose'] . "
-                                          </td>
-                                          <td>
-                                            " . $row['datetime'] . "
+                                            " . $access . "
                                           </td>
                                           <td class='td-actions text-right'>
-                                           		<a href='../" . $row['file_path'] . "' download><button type='button' rel='tooltip' class='btn btn-success btn-sm btn-round btn-icon' title='Download' data-dismiss='modal'>
-                                           			<i class='now-ui-icons arrows-1_cloud-download-93'></i>
-                                                </button></a>
-                                           		" . $actionbuttons . "
+                                          " . $actionbuttons . "                                           		
                                           </td>
                                         </tr>";
                                                 $rowi++;
@@ -301,63 +300,6 @@
 
 </body>
 
-
-<div class="modal fade bd-example-modal-lg" id="updateModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <form method="post" enctype="multipart/form-data" action="../update.php">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Update</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div>
-                        <label id="upfilename"></label><br>
-                        <label id="upfilerevisionlbl"></label>
-                    </div>
-                    <!--<button class="btn btn-primary btn-round">Browse File</button>--><br>
-                    <label for="exampleFormControlSelect1">File Name</label>
-                    <div class="input-group">
-                        <input class="form-control" type="file" name="upfilename" id="upfilename" onchange="" required>
-                    </div>
-                    <input type="hidden" name="upidno" id="upidno">
-                    <div class="col-md-4 pull-right">
-                        <label for="exampleFormControlSelect1">File Extension</label>
-                        <div class="input-group">
-                            <input type="text" class="form-control form-control-lg" id="upfileextension" name="upfileextension" required>
-                        </div>
-                    </div>
-                    <div class="col-md-4 pull-right">
-                        <label for="exampleFormControlSelect1">File Revision</label>
-                        <div class="input-group">
-                            <input type="text" class="form-control form-control-lg" id="upfilerevision" name="upfilerevision" required>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <label for="exampleFormControlSelect1">File Purpose</label>
-                        <div class="input-group">
-                            <select class="form-control form-control" name="upfilepurpose" id="upfilepurpose" required>
-                                <option value="">Select...</option>
-                                <option value="Letter">Letter</option>
-                                <option value="Form">Form</option>
-                                <option value="Memo">Memo</option>
-                            </select>
-                            <!--<input type="text" class="form-control form-control-lg" id="" name="filepurpose" value="Accreditation" required>-->
-                        </div>
-                    </div>
-
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                    <input type="Submit" class="btn btn-primary" name="Submit" value="Submit">
-                </div>
-            </div>
-        </form>
-    </div>
-</div>
-
 <div id="deleteModal" class="modal fade modal-mini modal-danger" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -367,7 +309,7 @@
                 </div>
             </div>
             <div class="modal-body">
-                <form method="post" action="../delete.php">
+                <form method="post" action="remove.php">
                     <div class="form-group row">
                         <div class="col-sm-12 text-center">Delete?<h4 id="docname"></h4>
                         </div>
@@ -393,60 +335,6 @@
         </div>
     </div>
 </div>
-
-<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" id="addFileModal" data-backdrop="static" data-keyboard="false">
-    <div class="modal-dialog modal-lg">
-        <form method="post" enctype="multipart/form-data" action="../upload.php" id="" name="">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Add File</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <!--<button class="btn btn-primary btn-round">Browse File</button>--><br>
-                    <label for="exampleFormControlSelect1">File Name</label>
-                    <div class="input-group">
-                        <input class="form-control" type="file" name="filename" id="filename" onchange="" required>
-                    </div>
-
-                    <div class="col-md-4 pull-right">
-                        <label for="exampleFormControlSelect1">File Extension</label>
-                        <div class="input-group">
-                            <input type="text" class="form-control form-control-lg" id="fileextension" name="fileextension" required>
-                        </div>
-                    </div>
-                    <div class="col-md-4 pull-right">
-                        <label for="exampleFormControlSelect1">File Revision</label>
-                        <div class="input-group">
-                            <input type="text" class="form-control form-control-lg" id="filerevision" name="filerevision" required>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <label for="exampleFormControlSelect1">File Purpose</label>
-                        <div class="input-group">
-                            <select class="form-control form-control" name="filepurpose" required>
-                                <option value="">Select...</option>
-                                <option value="Letter">Letter</option>
-                                <option value="Form">Form</option>
-                                <option value="Memo">Memo</option>
-                            </select>
-                            <!--<input type="text" class="form-control form-control-lg" id="" name="filepurpose" value="Accreditation" required>-->
-                        </div>
-                    </div>
-                    <div class="col-md-12">
-                        <div class="modal-footer">
-
-                            <input type="Submit" class="btn btn-primary" name="Submit" value="Submit">
-                        </div>
-                    </div>
-                </div>
-        </form>
-    </div>
-</div>
-
-
 
 <script>
     $('.modal').on('hidden.bs.modal', function() {
@@ -643,33 +531,6 @@ if (isset($_GET['error']) && $_GET['error'] == 5) {
         $("#display_validate_no_txt").val(reg);*/
         document.getElementById("docname").innerHTML = doc;
         $("#idno").val(id);
-
-    }
-</script>
-
-<script>
-    function getRowForUptade(r) {
-        var fid = document.getElementById("myTable").rows[r].cells.item(0).innerHTML;
-        var fname = document.getElementById("myTable").rows[r].cells.item(1).innerHTML;
-        var fxtn = document.getElementById("myTable").rows[r].cells.item(2).innerHTML;
-        var frev = document.getElementById("myTable").rows[r].cells.item(3).innerHTML;
-        var fpor = document.getElementById("myTable").rows[r].cells.item(4).innerHTML;
-        /*var bch = document.getElementById("myTable").rows[r].cells.item(2).innerHTML;
-        var amt = document.getElementById("myTable").rows[r].cells.item(3).innerHTML;
-        document.getElementById("display_validate_no").innerHTML = "Invalidate "+reg+"?";
-        document.getElementById("print_validate_no").innerHTML = "Control Number: "+reg;
-        document.getElementById("print_donor").innerHTML = "Donor: "+dnr;
-        document.getElementById("print_batch_no").innerHTML = "Batch: "+bch;
-        document.getElementById("print_amount").innerHTML = "Amount "+amt;
-        $("#display_validate_no_txt").val(reg);*/
-        //document.getElementById("docname").innerHTML = doc;
-        $('#upfilename').text("File Name: " + fname);
-        $("#upidno").val(fid);
-        $('#upfilerevisionlbl').text("Revision: " + frev.replace(/\s/g, ""));
-        $('#upfilerevision').val(parseInt(frev.replace(/\s/g, "")) + 1);
-        $('#upfileextension').val(fxtn.replace(/\s/g, ""));
-        $('#upfilepurpose').val(fpor.replace(/\s/g, ""));
-
 
     }
 </script>

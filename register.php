@@ -16,11 +16,11 @@ if ($conn->connect_error) {
     if ($conn->query($sql) === true) {
         //copy($filepath, $destinationpath);
         //echo "New record created successfully";
-        header("location: admin/index.php?register=1");
+        header("location: index.php?register=1");
     } else {
         //echo "Error: " . $sql . "<br>" . $conn->error;
         //header("location: home.php?error=1");
-        header("location: admin/index.php?register=0");
+        header("location: index.php?register=0");
     }
 }
 ?> 
