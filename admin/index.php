@@ -533,8 +533,8 @@ if (isset($_GET['error']) && $_GET['error'] == 5) {
     echo "<script>
             $.notify({
             
-            title: 'Invalid Password',
-            message: '<strong>Unable to Verify</strong>' 
+            title: 'Unable to Verify',
+            message: '<strong>File Not Deleted</strong>' 
             },{
             
             type: 'danger',
