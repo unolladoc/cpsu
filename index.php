@@ -12,7 +12,7 @@
       }else{
         header("Location: index.php");
       }
-    }
+    }else{}
     ?>
     <meta charset="utf-8" />
     <link rel="apple-touch-icon" sizes="76x76" href="assets/img/apple-icon.png">
@@ -259,7 +259,7 @@
         <form method="post" enctype="multipart/form-data" action="register.php">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Create Account</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>

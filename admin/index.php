@@ -157,7 +157,8 @@
                                         <th onclick="sortTable(5)">
                                           Uploaded
                                         </th>
-                                        <th class="text-right" >
+                                        <th></th>
+                                        <th>
                                           Action
                                         </th>
                                       </thead>
@@ -166,20 +167,13 @@
 
                                             while ($row = $result->fetch_assoc()) {
 
-                                                if ($row['file_extension'] == 'DOC' || $row['file_extension'] == 'DOCX') {
-                                                    $filename = "<a href='https://docs.google.com/gview?url=http://" . $servername . "/" . $row['file_path'] . "&embedded=true' target='_blank'>" . $row['file_name'] . "</a>";
-                                                } else {
-                                                    $filename = $row['file_name'];
-                                                }
+                                                // if ($row['file_extension'] == 'DOC' || $row['file_extension'] == 'DOCX') {
+                                                //     $filename = "<a href='https://docs.google.com/gview?url=http://" . $servername . "/" . $row['file_path'] . "&embedded=true' target='_blank'>" . $row['file_name'] . "</a>";
+                                                // } else {
+                                                //     $filename = $row['file_name'];
+                                                // }
 
-                                                $actionbuttons = '
-                                                <button type="button" onclick="getRowForUptade(' . $rowi . ')" rel="tooltip" class="btn btn-info btn-sm btn-round btn-icon" data-toggle="modal" title="Update" data-target="#updateModal" data-dismiss="modal">
-                                                  <i class="now-ui-icons arrows-1_cloud-upload-94"></i>
-                                                  </button>
-                                                  <button type="button" onclick="getRowID(' . $rowi . ')" rel="tooltip" class="btn btn-danger btn-sm btn-round btn-icon" data-toggle="modal" title="Delete" data-target="#deleteModal" data-dismiss="modal">
-                                                      <i class="now-ui-icons ui-1_simple-remove"></i>
-                                                  </button>';
-
+                                                $filename = $row['file_name'];
 
                                                 echo "<tr>
                                           <td>
@@ -204,7 +198,15 @@
                                            		<a href='../" . $row['file_path'] . "' download><button type='button' rel='tooltip' class='btn btn-success btn-sm btn-round btn-icon' title='Download' data-dismiss='modal'>
                                            			<i class='now-ui-icons arrows-1_cloud-download-93'></i>
                                                 </button></a>
-                                           		" . $actionbuttons . "
+
+                                        </td>
+                                                <td class='td-actions text-right'>
+                                           		 <button type='button' onclick='getRowForUptade(" . $rowi . ")' rel='tooltip' class='btn btn-info btn-sm btn-round btn-icon' data-toggle='modal' title='Update' data-target='#updateModal' data-dismiss='modal'>
+                                                  <i class='now-ui-icons arrows-1_cloud-upload-94'></i>
+                                                  </button>
+                                                  <button type='button' onclick='getRowID(" . $rowi . ")' rel='tooltip' class='btn btn-danger btn-sm btn-round btn-icon' data-toggle='modal' title='Delete' data-target='#deleteModal' data-dismiss='modal'>
+                                                      <i class='now-ui-icons ui-1_simple-remove'></i>
+                                                  </button>
                                           </td>
                                         </tr>";
                                                 $rowi++;
@@ -342,7 +344,7 @@
                         </div>
                     </div>
                     <div class="col-md-4">
-                        <label for="exampleFormControlSelect1">File Purpose</label>
+                        <label for="exampleFormControlSelect1">File Type</label>
                         <div class="input-group">
                             <select class="form-control form-control" name="upfilepurpose" id="upfilepurpose" required>
                                 <option value="">Select...</option>
@@ -430,7 +432,7 @@
                         </div>
                     </div>
                     <div class="col-md-4">
-                        <label for="exampleFormControlSelect1">File Purpose</label>
+                        <label for="exampleFormControlSelect1">File Type</label>
                         <div class="input-group">
                             <select class="form-control form-control" name="filepurpose" required>
                                 <option value="">Select...</option>
@@ -444,7 +446,7 @@
                     <div class="col-md-12">
                         <div class="modal-footer">
 
-                            <input type="Submit" class="btn btn-primary" name="Submit" value="Submit">
+                            <input type="Submit" class="btn btn-primary" name="Submit" value="Submit" onclick="">
                         </div>
                     </div>
                 </div>
@@ -695,7 +697,5 @@ if (isset($_GET['error']) && $_GET['error'] == 5) {
 
     };
 </script>
-
-
 
 </html> 
