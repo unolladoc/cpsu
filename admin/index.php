@@ -75,7 +75,7 @@
                                 <span class="navbar-toggler-bar bar3"></span>
                             </button>
                         </div>
-                        <button class="btn btn-info btn-round btn-lg" data-toggle="modal" data-target="#addFileModal" data-dismiss="modal">Add File</button>
+                        <button class="btn btn-info btn-round btn-lg" data-toggle="modal" data-target="#addFileModal" data-dismiss="modal" onclick="">Add File</button>
                     </div>
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-bar navbar-kebab"></span>
@@ -255,6 +255,7 @@
     <script src="../assets/js/core/bootstrap-notify.min.js"></script>
     <script src="../assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>
     <script src="../assets/js/angular.min.js"></script>
+    <script src="../assets/js/jquery.uploadifive.min.js"></script>
     <!--  Google Maps Plugin    
   <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE"></script>
   -->
@@ -312,7 +313,7 @@
 
 <div class="modal fade bd-example-modal-lg" id="updateModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
-        <form method="post" enctype="multipart/form-data" action="../update.php">
+        <form method="post" enctype="multipart/form-data" action="../update.php" id="updateFileForm">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">Update</h5>
@@ -404,7 +405,8 @@
 
 <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" id="addFileModal" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog modal-lg">
-        <form method="post" enctype="multipart/form-data" action="../upload.php" id="" name="">
+        <form method="post" enctype="multipart/form-data" action="../upload.php" id="addFileForm" name="">
+            <input type="hidden" value="addFileForm" name="<?php echo ini_get("session.upload_progress.name"); ?>">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">Add File</h5>
@@ -413,6 +415,14 @@
                     </button>
                 </div>
                 <div class="modal-body">
+                    <div class="progress-container progress-primary" id="progressBar">
+                        <span class="progress-badge" id="uploading"></span>
+                        <div class="progress">
+                            <div class="progress-bar" id="progress" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100">
+                                <span class="progress-value" id="status"></span>
+                            </div>
+                        </div>
+                    </div>
                     <!--<button class="btn btn-primary btn-round">Browse File</button>--><br>
                     <label for="exampleFormControlSelect1">File Name</label>
                     <div class="input-group">
@@ -445,7 +455,6 @@
                     </div>
                     <div class="col-md-12">
                         <div class="modal-footer">
-
                             <input type="Submit" class="btn btn-primary" name="Submit" value="Submit" onclick="">
                         </div>
                     </div>
@@ -697,5 +706,75 @@ if (isset($_GET['error']) && $_GET['error'] == 5) {
 
     };
 </script>
+
+<!-- <script>
+
+$.uploadifive({ onProgress: function(file, e) { fn.onProgress(file, e.loaded);} });
+
+</script>
+
+<script>
+
+var fnProgress = function(file, bytes) {
+    var percentage = (bytesLoaded / file.size) * 100;
+
+    // Update DOM
+    $('#progress').css({ 'width': percentage + '%' });
+    $('#status').html(Math.round(percentage + '%'));
+}
+
+</script> -->
+
+<!-- <script>
+function toggleBarVisibility() {
+    var e = document.getElementById("progressBar");
+    e.style.display = (e.style.display == "block");// ? "none" : "block";
+}
+
+
+    function createRequestObject() {
+        var http;
+        if (navigator.appName == "Microsoft Internet Explorer") {
+            http = new ActiveXObject("Microsoft.XMLHTTP");
+        } else {
+            http = new XMLHttpRequest();
+        }
+        return http;
+    }
+
+    function sendRequest() {
+        var http = createRequestObject();
+        http.open("GET", "progress.php");
+        http.onreadystatechange = function() {
+            handleResponse(http);
+        };
+        http.send(null);
+    }
+
+    function handleResponse(http) {
+        var response;
+        if (http.readyState == 4) {
+            response = http.responseText;
+            document.getElementById("progress").style.width = response + "%";
+            document.getElementById("status").innerHTML = response + "%";
+            document.getElementById("uploading").innerHTML = "Uploading...";
+            if (response < 100) {
+                setTimeout("sendRequest()", 1000);
+            } else {
+                toggleBarVisibility();
+                document.getElementById("status").innerHTML = "Done.";
+            }
+        }
+    }
+
+    function startUpload() {
+        toggleBarVisibility();
+        setTimeout("sendRequest()", 1000);
+    }
+
+    (function() {
+        document.getElementById("addFileForm").onsubmit = startUpload;
+    })();
+</script> -->
 
 </html> 
