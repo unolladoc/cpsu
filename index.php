@@ -3,16 +3,17 @@
 
 <head>
     <?php
+    include('conn.php');
     session_start();
     if (isset($_SESSION['id'])) {
-      if ($_SESSION['type'] == 1) { 
+      if ($_SESSION['type'] == 1) {
         header("Location: admin/");
-      } else if ($_SESSION['type'] == 2) { 
+      } else if ($_SESSION['type'] == 2) {
         header("Location: member/");
-      }else{
+      } else {
         header("Location: index.php");
       }
-    }else{}
+    } else { }
     ?>
     <meta charset="utf-8" />
     <link rel="apple-touch-icon" sizes="76x76" href="assets/img/apple-icon.png">
@@ -271,6 +272,40 @@
                         <input type="text" class="form-control" name="caName" placeholder="Full Name" required>
                     </div>
                     <div class="form-group">
+                        <label for="">Campus</label>
+                        <select class="form-control form-control" name="campus" id="campuses" required>
+                            <?php
+
+                            $sql = "SELECT * from campuses";
+                            $result = $conn->query($sql);
+
+                            if ($result->num_rows > 0) {
+
+                              echo "<option value=''>Select...</option>";
+
+                              while ($row = $result->fetch_assoc()) {
+                                echo "<option value='" . $row['id'] . "' id='" . $row['campus'] . "'>" . $row['campus'] . "</option>";
+                              }
+                            }
+
+                            ?>
+                            <!-- <option value="">Select...</option>
+                            <option value="Main">Main</option>
+                            <option value="Candoni">Candoni</option>
+                            <option value="Cauayan">Cauayan</option>
+                            <option value="Hinigaran">Hinigaran</option>
+                            <option value="Hinoba-an">Hinoba-an</option>
+                            <option value="Ilog">Ilog</option>
+                            <option value="Moises Padilla">Moises Padilla</option>
+                            <option value="San Carlos">San Carlos</option> -->
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="">Office</label>
+                        <select class="form-control form-control" name="office" id="offices" required>
+                        </select>
+                    </div>
+                    <div class="form-group">
                         <div class="form-group">
                             <label>Username</label>
                             <input type="text" class="form-control" name="caUsername" placeholder="Username" required>
@@ -328,6 +363,30 @@
             $("#caSubmit").attr("disabled", "disabled");
         }
     });
+</script>
+
+<script>
+    $(document).ready(function() {
+        $("#campuses").change(function() {
+            var cid = $("#campuses").val();
+            //alert(cid);
+            $.ajax({
+                url: 'loaddata.php',
+                method: 'post',
+                data: 'cid=' + cid
+            }).done(function(data) {
+                console.log(data);
+                datas = JSON.parse(data);
+                $('#offices').empty();
+                //alert(datas.length);
+                $('#offices').append('<option>' + datas.office + '</option>');
+                
+                // $.each(datas, function(key, o) {
+                //     $('#offices').append('<option>' + o.office + '</option>');
+                // })
+            })
+        })
+    })
 </script>
 
 </html> 

@@ -1,8 +1,8 @@
 <?php
 
-$servername = "43.255.154.8";
-$username = "cpsuadmin";
-$password = "cpsuadmin2019";
+$servername = "localhost";
+$username = "root";
+$password = "";
 $dbname = "cpsu";
 
 // Create connection
