@@ -173,7 +173,7 @@
                                                 //     $filename = $row['file_name'];
                                                 // }
 
-                                                $filename = $row['file_name'];
+                                                $filename = "<a href='../" . $row['file_path'] . "' rel='tooltip'  title='Download' onclick = updateDownloads('".$row['id']."'); download>".$row['file_name']."</a>";
 
                                                 echo "<tr>
                                           <td>
@@ -205,11 +205,11 @@
                                           </td>
                                           
                                           <td class='td-actions text-right'>
-                                           		<a href='../" . $row['file_path'] . "' download><button type='button' rel='tooltip' class='btn btn-success btn-sm btn-round btn-icon' title='Download' data-dismiss='modal'>
+                                           		<a href='#'><button type='button' rel='tooltip' class='btn btn-success btn-sm btn-round btn-icon' title='Details' data-dismiss='modal'>
                                            			<i class='now-ui-icons arrows-1_cloud-download-93'></i>
                                                 </button></a>
-
-                                        </td>
+ 
+                                          </td>
                                                 <td class='td-actions text-right'>
                                            		 <button type='button' onclick='getRowForUptade(" . $rowi . ")' rel='tooltip' class='btn btn-info btn-sm btn-round btn-icon' data-toggle='modal' title='Update' data-target='#updateModal' data-dismiss='modal'>
                                                   <i class='now-ui-icons arrows-1_cloud-upload-94'></i>
@@ -728,6 +728,31 @@ if (isset($_GET['error']) && $_GET['error'] == 5) {
         //document.getElementById("fileextension").disabled = true;
 
     };
+</script>
+
+<script>
+
+function updateDownloads(myObj){
+    var obj, dbParam, xmlhttp;
+      obj = {
+        "fid": myObj
+      };
+      dbParam = JSON.stringify(obj);
+      //alert(dbParam);
+      xmlhttp = new XMLHttpRequest();
+      xmlhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+          //myObj = JSON.parse(this.responseText);
+          //console.log(myObj);
+          //console.log(txt);
+        }
+      };
+     xmlhttp.open("POST", "../updatedownloads.php", true);
+     xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+     xmlhttp.send("x=" + dbParam);
+
+}
+
 </script>
 
 <!-- <script>

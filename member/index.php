@@ -119,7 +119,7 @@
                                 <div class="table-responsive">
                                     <table class="table" id="myTable">
                                         <?php 
-                                        $sql = "SELECT * FROM files ORDER BY datetime DESC";
+                                        $sql = "SELECT * FROM files where archive = 0 ORDER BY datetime DESC";
                                         $result = $conn->query($sql);
                                         $rowi = 1;
 
@@ -151,7 +151,7 @@
 
                                             while ($row = $result->fetch_assoc()) {
 
-                                                  $filename = '<a href="../' . $row['file_path'] . '" rel="tooltip" title="Click to Download" download>' .  $row['file_name'] . '</a>';
+                                                $filename = "<a href='../" . $row['file_path'] . "' rel='tooltip'  title='Download' onclick = updateDownloads('".$row['id']."'); download>".$row['file_name']."</a>";
 
                                                   echo "<tr>
                                                   <td>
@@ -359,6 +359,31 @@
             }
         }
     }
+</script>
+
+<script>
+
+function updateDownloads(myObj){
+    var obj, dbParam, xmlhttp;
+      obj = {
+        "fid": myObj
+      };
+      dbParam = JSON.stringify(obj);
+      //alert(dbParam);
+      xmlhttp = new XMLHttpRequest();
+      xmlhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+          //myObj = JSON.parse(this.responseText);
+          //console.log(myObj);
+          //console.log(txt);
+        }
+      };
+     xmlhttp.open("POST", "../updatedownloads.php", true);
+     xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+     xmlhttp.send("x=" + dbParam);
+
+}
+
 </script>
 
 </html> 
