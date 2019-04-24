@@ -495,6 +495,18 @@ if (isset($_GET['success']) && $_GET['success'] == 1) {
             });
           </script> ";
 }
+if (isset($_GET['success']) && $_GET['success'] == 10) {
+    echo "<script>
+            $.notify({
+            
+            title: '<strong>Success</strong>',
+            message: 'File Updated Successfully' 
+            },{
+            
+            type: 'info'
+            });
+          </script> ";
+}
 if (isset($_GET['success']) && $_GET['success'] == 2) {
     echo "<script>
             $.notify({

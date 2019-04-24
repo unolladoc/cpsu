@@ -1,5 +1,5 @@
 <?php 
-include 'conn.php';
+include '../conn.php';
 
 session_start();
 
@@ -24,7 +24,7 @@ if($result->num_rows > 0){
 					if ($conn->query($sql3) === TRUE) {
 						$filetodelete = $row2['file_path'];
 						unlink($filetodelete);
-						header("location: admin/index.php?success=2");
+						header("location: index.php?success=2");
 					}
 				}else {
 					echo "Error: " . $sql4 . "<br>" . $conn->error;
@@ -34,5 +34,10 @@ if($result->num_rows > 0){
 
 	}
 }else{
-	header("location: admin/index.php?error=5");
+	header("location: index.php?error=5");
 }
+
+$sqll = "Insert into logs values(null, '".$_SESSION['name']." DELETED ".$row2['file_name']." from DATABASE',CAST('$datenow' as datetime));";
+if ($conn->query($sqll) === TRUE) {}else{echo "Error: " . $sqll . "<br>" . $conn->error;}
+
+?>

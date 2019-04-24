@@ -13,10 +13,23 @@ $result = mysqli_query($conn, $sql);
 
 if ($result->num_rows > 0) {
 	$sql2 = "UPDATE user set type = 2 where id ='$id';";
-	//echo $sql2;
-	$result2 = mysqli_query($conn,$sql2);
-	header("location: members.php?success=1");
+	if($conn->query($sql2) === TRUE){
+		header("location: members.php?success=1");
+	}
+	
 } else {
 	header("location: members.php?error=5");
 }
- 
+
+$sqlu = "SELECT * FROM user WHERE id ='$id';";
+$resultu = mysqli_query($conn, $sqlu);
+
+if ($resultu->num_rows > 0) {
+	$rowu = $resultu->fetch_assoc();
+
+	$sqll = "Insert into logs values(null, '".$_SESSION['name']." approved ".$rowu['name']." as user',CAST('$datenow' as datetime));";
+	if ($conn->query($sqll) === TRUE) {}else{echo "Error: " . $sqll . "<br>" . $conn->error;}
+}
+
+
+?>

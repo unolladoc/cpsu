@@ -19,4 +19,16 @@ if ($result->num_rows > 0) {
 } else {
 	header("location: members.php?error=5");
 }
+
+$sqlu = "SELECT * FROM user WHERE id ='$id';";
+$resultu = mysqli_query($conn, $sqlu);
+
+if ($resultu->num_rows > 0) {
+	$rowu = $resultu->fetch_assoc();
+
+	$sqll = "Insert into logs values(null, '".$_SESSION['name']." REMOVED ".$rowu['name']." as user',CAST('$datenow' as datetime));";
+	if ($conn->query($sqll) === TRUE) {}else{echo "Error: " . $sqll . "<br>" . $conn->error;}
+}
+
+?>
  

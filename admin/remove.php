@@ -10,8 +10,17 @@ $username = $_SESSION['username'];
 
 $sql = "SELECT * FROM user WHERE username = '$username' and password = md5('$pass');";
 $result = mysqli_query($conn,$sql);
-
 if($result->num_rows > 0){
+
+	$sqlu = "SELECT * FROM user WHERE id ='$id';";
+	$resultu = mysqli_query($conn, $sqlu);
+	
+	if ($resultu->num_rows > 0) {
+		$rowu = $resultu->fetch_assoc();
+	
+		$sqll = "Insert into logs values(null, '".$_SESSION['name']." REMOVED ".$rowu['name']." from DATABASE',CAST('$datenow' as datetime));";
+		if ($conn->query($sqll) === TRUE) {}else{echo "Error: " . $sqll . "<br>" . $conn->error;}
+	}
 
 		$sql2 = "DELETE from user where id ='$id';";
 		$result2 = mysqli_query($conn,$sql2);
