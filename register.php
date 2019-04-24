@@ -4,8 +4,10 @@ include('conn.php');
 $rname = $_POST['caName'];
 $rusername = $_POST['caUsername'];
 $rpassword = $_POST['caPassword'];
+$rcampus = $_POST['campus'];
+$roffice = $_POST['office'];
 
-$sql = "insert into user values(null,'$rusername',md5('$rpassword'),'$rname',0);";
+$sql = "insert into user values(null,'$rusername',md5('$rpassword'),'$rname',$rcampus,$roffice,0);";
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 
@@ -23,4 +25,3 @@ if ($conn->connect_error) {
         header("location: index.php?register=0");
     }
 }
-?> 
