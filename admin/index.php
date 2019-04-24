@@ -31,6 +31,11 @@
     <link href="../assets/css/now-ui-kit.css?v=1.2.0" rel="stylesheet" />
     <!-- CSS Just for demo purpose, don't include it in your project -->
     <link href="../assets/demo/demo.css" rel="stylesheet" />
+
+    <style>
+
+    </style>
+
 </head>
 
 <body class="">
@@ -173,7 +178,7 @@
                                                 //     $filename = $row['file_name'];
                                                 // }
 
-                                                $filename = "<a href='../" . $row['file_path'] . "' rel='tooltip'  title='Download' onclick = updateDownloads('".$row['id']."'); download>".$row['file_name']."</a>";
+                                                $filename = "<a href='../" . $row['file_path'] . "' rel='tooltip'  title='Download' onclick = updateDownloads('" . $row['id'] . "'); download>" . $row['file_name'] . "</a>";
 
                                                 echo "<tr>
                                           <td>
@@ -209,9 +214,9 @@
                                           
                                           
                                           <td class='td-actions text-right'>
-                                           		<a href='#'><button type='button' rel='tooltip' class='btn btn-success btn-sm btn-round btn-icon' title='Details' data-dismiss='modal'>
-                                           			<i class='now-ui-icons arrows-1_cloud-download-93'></i>
-                                                </button></a>
+                                           		<button type='button' onclick='getRowForDetails(" . $rowi . ")' rel='tooltip' class='btn btn-success btn-sm btn-round btn-icon' title='Details' data-toggle='modal' data-target='#fileDetailsModal' data-dismiss='modal' >
+                                           			<i class='now-ui-icons design_bullet-list-67'></i>
+                                                </button>
  
                                           </td>
                                                 <td class='td-actions text-right'>
@@ -381,6 +386,25 @@
     </div>
 </div>
 
+<div class="modal fade bd-example-modal-lg" id="fileDetailsModal" tabindex="-1" role="dialog" aria-labelledby="fileDetailsModal" aria-hidden="f">
+    <div class="modal-dialog modal-lg" role="document">
+        <form></form>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="fileDetailsModalTitle"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="input-group" id="downloads"></div>
+                <div class="input-group" id="downloaded"></div>
+                <div class="input-group" id="download_log"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div id="deleteModal" class="modal fade modal-mini modal-danger" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -476,8 +500,6 @@
         </form>
     </div>
 </div>
-
-
 
 <script>
     $('.modal').on('hidden.bs.modal', function() {
@@ -684,9 +706,8 @@ if (isset($_GET['error']) && $_GET['error'] == 5) {
         document.getElementById("print_donor").innerHTML = "Donor: "+dnr;
         document.getElementById("print_batch_no").innerHTML = "Batch: "+bch;
         document.getElementById("print_amount").innerHTML = "Amount "+amt;
-        $("#display_validate_no_txt").val(reg);*/  
+        $("#display_validate_no_txt").val(reg);*/
         document.getElementById("docname").innerHTML = doc;
-        document.getElementById("docname").removeAttribute("a");
         $("#idno").val(id);
         $("#archived_idno").val(aid);
 
@@ -696,7 +717,7 @@ if (isset($_GET['error']) && $_GET['error'] == 5) {
 <script>
     function getRowForUptade(r) {
         var fid = document.getElementById("myTable").rows[r].cells.item(0).innerHTML;
-        var fname = document.getElementById("myTable").rows[r].cells.item(1).innerHTML;
+        var fname = document.getElementById("myTable").rows[r].cells.item(9).innerHTML;
         var fpor = document.getElementById("myTable").rows[r].cells.item(2).innerHTML;
         var fxtn = document.getElementById("myTable").rows[r].cells.item(6).innerHTML;
         var frev = document.getElementById("myTable").rows[r].cells.item(7).innerHTML;
@@ -736,28 +757,61 @@ if (isset($_GET['error']) && $_GET['error'] == 5) {
 </script>
 
 <script>
+    function updateDownloads(myObj) {
+        var obj, dbParam, xmlhttp;
+        obj = {
+            "fid": myObj
+        };
+        dbParam = JSON.stringify(obj);
+        //alert(dbParam);
+        xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                //myObj = JSON.parse(this.responseText);
+                //console.log(myObj);
+                //console.log(txt);
+            }
+        };
+        xmlhttp.open("POST", "../updatedownloads.php", true);
+        xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xmlhttp.send("x=" + dbParam);
 
-function updateDownloads(myObj){
-    var obj, dbParam, xmlhttp;
-      obj = {
-        "fid": myObj
-      };
-      dbParam = JSON.stringify(obj);
-      //alert(dbParam);
-      xmlhttp = new XMLHttpRequest();
-      xmlhttp.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-          //myObj = JSON.parse(this.responseText);
-          //console.log(myObj);
-          //console.log(txt);
-        }
-      };
-     xmlhttp.open("POST", "../updatedownloads.php", true);
-     xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-     xmlhttp.send("x=" + dbParam);
+    }
+</script>
 
-}
+<script>
+    function getRowForDetails(r) {
 
+        var id = document.getElementById("myTable").rows[r].cells.item(0).innerHTML;
+        var name = document.getElementById("myTable").rows[r].cells.item(9).innerHTML;
+        var newname = name.replace(/\s/g, "");
+        var newid = id.replace(/\s/g, "");
+        document.getElementById("fileDetailsModalTitle").innerHTML = name;
+        var obj, dbParam, xmlhttp, myObj , x, txt = "";
+        obj = {
+            "fid": newid
+        };
+        dbParam = JSON.stringify(obj);
+        //alert(dbParam);
+        xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                myObj = JSON.parse(this.responseText);
+                //document.getElementById("downloads").innerHTML = myObj->length;
+                $('#downloads').text("Downloaded " + myObj.length + " time/s");
+                for (x in myObj) {
+                    txt += myObj[x].time + " " + myObj[x].description + " " +"<br>";
+                }
+                document.getElementById("downloaded").innerHTML = txt;
+                //console.log(myObj);
+            } //else{
+            //     alert("error");
+            // }
+        };
+        xmlhttp.open("POST", "loaddownloaddata.php", true);
+        xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xmlhttp.send("x=" + dbParam);
+    }
 </script>
 
 <!-- <script>
