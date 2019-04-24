@@ -1,7 +1,5 @@
 <?php
-
 include('conn.php');
-
 session_start();
 
 $username = mysqli_real_escape_string($conn, $_POST['username']);
@@ -52,3 +50,8 @@ if ($result->num_rows > 0) {
 } else {
 	header("location: index.php?invalid=true");
 }
+
+$sqll = "Insert into logs values(null, '".$_SESSION['name']." logged in',CAST('$datenow' as datetime));";
+if ($conn->query($sqll) === TRUE) {}else{echo "Error: " . $sqll . "<br>" . $conn->error;}
+
+?>
