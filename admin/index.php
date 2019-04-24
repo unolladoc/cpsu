@@ -203,6 +203,10 @@
                                           <td style='display:none;'>
                                             " . $row['archived_by'] . "
                                           </td>
+                                          <td style='display:none;'>
+                                          " . $row['file_name'] . "
+                                          </td>
+                                          
                                           
                                           <td class='td-actions text-right'>
                                            		<a href='#'><button type='button' rel='tooltip' class='btn btn-success btn-sm btn-round btn-icon' title='Details' data-dismiss='modal'>
@@ -672,7 +676,7 @@ if (isset($_GET['error']) && $_GET['error'] == 5) {
     function getRowID(r) {
         var id = document.getElementById("myTable").rows[r].cells.item(0).innerHTML;
         var aid = document.getElementById("myTable").rows[r].cells.item(8).innerHTML;
-        var doc = document.getElementById("myTable").rows[r].cells.item(1).innerHTML;
+        var doc = document.getElementById("myTable").rows[r].cells.item(9).innerHTML;
         /*var bch = document.getElementById("myTable").rows[r].cells.item(2).innerHTML;
         var amt = document.getElementById("myTable").rows[r].cells.item(3).innerHTML;
         document.getElementById("display_validate_no").innerHTML = "Invalidate "+reg+"?";
@@ -680,8 +684,9 @@ if (isset($_GET['error']) && $_GET['error'] == 5) {
         document.getElementById("print_donor").innerHTML = "Donor: "+dnr;
         document.getElementById("print_batch_no").innerHTML = "Batch: "+bch;
         document.getElementById("print_amount").innerHTML = "Amount "+amt;
-        $("#display_validate_no_txt").val(reg);*/
+        $("#display_validate_no_txt").val(reg);*/  
         document.getElementById("docname").innerHTML = doc;
+        document.getElementById("docname").removeAttribute("a");
         $("#idno").val(id);
         $("#archived_idno").val(aid);
 

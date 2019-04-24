@@ -22,7 +22,7 @@ if($result->num_rows > 0){
 				if ($conn->query($sql4) === TRUE) {
 					$sql3 = "DELETE from files where id ='$id';";
 					if ($conn->query($sql3) === TRUE) {
-						$filetodelete = $row2['file_path'];
+						$filetodelete = "../" . $row2['file_path'];
 						unlink($filetodelete);
 						header("location: index.php?success=2");
 					}
