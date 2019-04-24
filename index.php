@@ -272,6 +272,10 @@
             <input type="text" class="form-control" name="caName" placeholder="Full Name" required>
           </div>
           <div class="form-group">
+              <label>Username</label>
+              <input type="text" class="form-control" name="caUsername" placeholder="Username" required>
+            </div>
+          <div class="form-group">
             <label for="">Campus</label>
             <select class="form-control form-control" name="campus" id="campuses" required>
               <?php
@@ -305,11 +309,6 @@
             <select class="form-control form-control" name="office" id="offices" required>
             </select>
           </div>
-          <div class="form-group">
-            <div class="form-group">
-              <label>Username</label>
-              <input type="text" class="form-control" name="caUsername" placeholder="Username" required>
-            </div>
             <div class="form-group">
               <label>Password</label>
               <input type="password" class="form-control" id="caPassword" name="caPassword" placeholder="Password" required>
@@ -318,7 +317,7 @@
               <label>Verify Password <span id="vperror" style="color: red;"></span></label>
               <input type="password" class="form-control" id="cavPassword" name="cavPassword" placeholder="Verify Password" required>
             </div>
-          </div>
+          
 
 
         </div>
