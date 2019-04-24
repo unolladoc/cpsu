@@ -3,7 +3,7 @@
 
 <head>
 
-    <?php 
+    <?php
     include('../conn.php');
     include('../session.php');
 
@@ -129,7 +129,7 @@
                             <div class="card-body">
                                 <div class="table-responsive">
                                     <table class="table" id="myTable">
-                                        <?php 
+                                        <?php
                                         $sql = "SELECT * FROM user;";
                                         $result = $conn->query($sql);
                                         $rowi = 1;
@@ -145,9 +145,12 @@
                                           Name
                                         </th>
                                         <th onclick="sortTable(2)">
-                                          Username
+                                          Campus
                                         </th>
                                         <th onclick="sortTable(3)">
+                                          Office
+                                        </th>
+                                        <th onclick="sortTable(4)">
                                           Access
                                         </th>
                                         <th class="text-right" >
@@ -170,9 +173,9 @@
                                                   </button>';
                                                 } else if ($row['type'] == 1) {
                                                     $access = "Admin";
-                                                    if($_SESSION['id']==$row['id']){
+                                                    if ($_SESSION['id'] == $row['id']) {
                                                         $actionbuttons = '-';
-                                                    }else{
+                                                    } else {
                                                         $actionbuttons = '<button type="button" onclick="getRowID(' . $rowi . ')" rel="tooltip" class="btn btn-warning btn-sm btn-round btn-icon" data-toggle="modal" title="Remove as Admin" data-target="#revokeadminaccessModal" data-dismiss="modal">
                                                         <i class="now-ui-icons users_single-02"></i>
                                                     </button>';
@@ -187,6 +190,22 @@
                                                 </button>
                                                     ';
                                                 }
+
+                                                $sql2 = "SELECT campus FROM campuses where id = " . $row['campus'];
+                                                $result2 = $conn->query($sql2);
+                                                $rcampus = "-";
+                                                if ($result2->num_rows > 0) {
+                                                    $row2 = $result2->fetch_assoc();
+                                                    $rcampus = $row2['campus'];
+                                                }
+                                                $sql3 = "SELECT office FROM offices where id = " . $row['office'];
+                                                $result3 = $conn->query($sql3);
+                                                $roffice = "-"; 
+                                                if ($result3->num_rows > 0) {
+                                                    $row3 = $result3->fetch_assoc();
+                                                    $roffice = $row3['office'];
+                                                }   
+                                                
                                                 echo "<tr>
                                           <td>
                                             " . $row['id'] . "
@@ -195,7 +214,10 @@
                                             " . $row['name'] . "
                                           </td>
                                           <td>
-                                            " . $row['username'] . "
+                                            " . $rcampus . "
+                                          </td>
+                                          <td>
+                                            " . $roffice . "
                                           </td>
                                           <td>
                                             " . $access . "
@@ -658,4 +680,4 @@ if (isset($_GET['error']) && $_GET['error'] == 5) {
     }
 </script>
 
-</html> 
+</html>
