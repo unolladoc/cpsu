@@ -3,7 +3,7 @@
 
 <head>
 
-    <?php 
+    <?php
     include('../conn.php');
     include('../session.php');
 
@@ -130,7 +130,7 @@
                             <div class="card-body">
                                 <div class="table-responsive">
                                     <table class="table" id="myTable">
-                                        <?php 
+                                        <?php
                                         $sql = "SELECT * FROM files ORDER BY datetime DESC";
                                         $result = $conn->query($sql);
                                         $rowi = 1;
@@ -140,19 +140,19 @@
 
                                             echo '<thead class=" text-primary">
                                         <th onclick="sortTable(0)">
-                                          ID
+                                          Control No.
                                         </th>
                                         <th onclick="sortTable(1)">
                                           Name
                                         </th>
                                         <th onclick="sortTable(2)">
-                                          File Type
+                                          Purpose
                                         </th>
                                         <th onclick="sortTable(3)">
-                                          Revision
+                                          Origin
                                         </th>
                                         <th onclick="sortTable(4)">
-                                          Purpose
+                                          Uploader
                                         </th>
                                         <th onclick="sortTable(5)">
                                           Uploaded
@@ -183,17 +183,24 @@
                                             " . $filename . "
                                           </td>
                                           <td>
-                                            " . $row['file_extension'] . "
-                                          </td>
-                                          <td>
-                                            " . $row['file_rev'] . "
-                                          </td>
-                                          <td>
                                             " . $row['file_purpose'] . "
+                                          </td>
+                                          <td>
+                                            " . $row['origin'] . "
+                                          </td>
+                                          <td>
+                                            " . $row['uploader'] . "
                                           </td>
                                           <td>
                                             " . $row['datetime'] . "
                                           </td>
+                                          <td style='display:none;'>
+                                            " . $row['file_extension'] . "
+                                          </td>
+                                          <td style='display:none;'>
+                                            " . $row['file_rev'] . "
+                                          </td>
+                                          
                                           <td class='td-actions text-right'>
                                            		<a href='../" . $row['file_path'] . "' download><button type='button' rel='tooltip' class='btn btn-success btn-sm btn-round btn-icon' title='Download' data-dismiss='modal'>
                                            			<i class='now-ui-icons arrows-1_cloud-download-93'></i>
@@ -668,9 +675,9 @@ if (isset($_GET['error']) && $_GET['error'] == 5) {
     function getRowForUptade(r) {
         var fid = document.getElementById("myTable").rows[r].cells.item(0).innerHTML;
         var fname = document.getElementById("myTable").rows[r].cells.item(1).innerHTML;
-        var fxtn = document.getElementById("myTable").rows[r].cells.item(2).innerHTML;
-        var frev = document.getElementById("myTable").rows[r].cells.item(3).innerHTML;
-        var fpor = document.getElementById("myTable").rows[r].cells.item(4).innerHTML;
+        var fpor = document.getElementById("myTable").rows[r].cells.item(2).innerHTML;
+        var fxtn = document.getElementById("myTable").rows[r].cells.item(6).innerHTML;
+        var frev = document.getElementById("myTable").rows[r].cells.item(7).innerHTML;
         /*var bch = document.getElementById("myTable").rows[r].cells.item(2).innerHTML;
         var amt = document.getElementById("myTable").rows[r].cells.item(3).innerHTML;
         document.getElementById("display_validate_no").innerHTML = "Invalidate "+reg+"?";
@@ -777,4 +784,4 @@ function toggleBarVisibility() {
     })();
 </script> -->
 
-</html> 
+</html>

@@ -1,5 +1,6 @@
 <?php
 include('conn.php');
+session_start();
 
 if (file_exists("files/")) {
     //echo "The file $filename exists";
@@ -21,6 +22,9 @@ if($_POST['Submit'])
         $fileextension = $_POST['upfileextension'];
         $filepurpose = $_POST['upfilepurpose'];
         $filerevision = $_POST['upfilerevision'];
+        $fileuploader = $_SESSION['name'];
+        $fileorigin = $_SESSION['campus'] . " Campus (" . $_SESSION['office'] . ")";
+        //$filedestination = "";
 
         $temp_name = basename($_FILES["upfilename"]["name"],"." . strtolower($fileextension));
         $basename_filename_name = preg_replace('/\s+/', '_', $temp_name);
@@ -68,7 +72,7 @@ if($_POST['Submit'])
                         $id = mt_rand();
                         $newid = sprintf("CPSU%X",$id);
 
-                        $sql = "INSERT INTO files values('$newid','$target_file_new','$newbasename_filename_name','$fileextension','$filepurpose','$filerevision',CAST('$datenow' as datetime));" ;
+                        $sql = "INSERT INTO files values('$newid','$target_file_new','$newbasename_filename_name','$fileextension','$filepurpose','$filerevision','$fileuploader','$fileorigin','',CAST('$datenow' as datetime),0);" ;
 
                         if ($conn->query($sql) === TRUE) {
                             //copy($filepath, $destinationpath);

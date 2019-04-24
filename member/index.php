@@ -63,7 +63,7 @@
                                 <span class="navbar-toggler-bar bar3"></span>
                             </button>
                         </div>
-                        Welcome <?php echo $_SESSION['name']; ?>
+                        Welcome &nbsp; <b> <?php echo $_SESSION['name']; ?></b>
                     </div>
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-bar navbar-kebab"></span>
@@ -128,25 +128,22 @@
 
                                             echo '<thead class=" text-primary">
                                         <th onclick="sortTable(0)">
-                                          ID
+                                          Control No.
                                         </th>
                                         <th onclick="sortTable(1)">
                                           Name
                                         </th>
                                         <th onclick="sortTable(2)">
-                                          File Type
+                                          Purpose
                                         </th>
                                         <th onclick="sortTable(3)">
-                                          Revision
+                                          Origin
                                         </th>
                                         <th onclick="sortTable(4)">
-                                          Purpose
+                                          Uploader
                                         </th>
                                         <th onclick="sortTable(5)">
                                           Uploaded
-                                        </th>
-                                        <th class="text-right" >
-                                          Action
                                         </th>
                                       </thead>
                                       <tbody>';
@@ -154,39 +151,27 @@
 
                                             while ($row = $result->fetch_assoc()) {
 
-                                                $actionbuttons = '
-                                                <button type="button" onclick="getRowForUptade(' . $rowi . ')" rel="tooltip" class="btn btn-info btn-sm btn-round btn-icon" data-toggle="modal" title="Update" data-target="#updateModal" data-dismiss="modal">
-                                                  <i class="now-ui-icons arrows-1_cloud-upload-94"></i>
-                                                  </button>
-                                                  <button type="button" onclick="getRowID(' . $rowi . ')" rel="tooltip" class="btn btn-danger btn-sm btn-round btn-icon" data-toggle="modal" title="Delete" data-target="#deleteModal" data-dismiss="modal">
-                                                      <i class="now-ui-icons ui-1_simple-remove"></i>
-                                                  </button>';
+                                                  $filename = '<a href="../' . $row['file_path'] . '" rel="tooltip" title="Click to Download" download>' .  $row['file_name'] . '</a>';
 
-
-                                                echo "<tr>
-                                          <td>
-                                            " . $row['id'] . "
-                                          </td>
-                                          <td>
-                                            " . $row['file_name'] . "
-                                          </td>
-                                          <td>
-                                            " . $row['file_extension'] . "
-                                          </td>
-                                          <td>
-                                            " . $row['file_rev'] . "
-                                          </td>
-                                          <td>
-                                            " . $row['file_purpose'] . "
-                                          </td>
-                                          <td>
-                                            " . $row['datetime'] . "
-                                          </td>
-                                          <td class='td-actions text-right'>
-                                           		<a href='../" . $row['file_path'] . "' download><button type='button' rel='tooltip' class='btn btn-success btn-sm btn-round btn-icon' title='Download' data-dismiss='modal'>
-                                           			<i class='now-ui-icons arrows-1_cloud-download-93'></i>
-                                                </button></a>
-                                          </td>
+                                                  echo "<tr>
+                                                  <td>
+                                                    " . $row['id'] . "
+                                                  </td>
+                                                  <td>
+                                                    " . $filename . "
+                                                  </td>
+                                                  <td>
+                                                    " . $row['file_purpose'] . "
+                                                  </td>
+                                                  <td>
+                                                    " . $row['origin'] . "
+                                                  </td>
+                                                  <td>
+                                                    " . $row['uploader'] . "
+                                                  </td>
+                                                  <td>
+                                                    " . $row['datetime'] . "
+                                                  </td>
                                         </tr>";
                                                 $rowi++;
                                             }
