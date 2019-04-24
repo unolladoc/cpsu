@@ -323,7 +323,7 @@
 
 <div class="modal fade bd-example-modal-lg" id="updateModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
-        <form method="post" enctype="multipart/form-data" action="../update.php" id="updateFileForm">
+        <form method="post" enctype="multipart/form-data" action="update.php" id="updateFileForm">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">Update</h5>
@@ -386,7 +386,7 @@
                 </div>
             </div>
             <div class="modal-body">
-                <form method="post" action="../delete.php">
+                <form method="post" action="delete.php">
                     <div class="form-group row">
                         <div class="col-sm-12 text-center">Delete?<h4 id="docname"></h4>
                         </div>
@@ -415,7 +415,7 @@
 
 <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" id="addFileModal" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog modal-lg">
-        <form method="post" enctype="multipart/form-data" action="../upload.php" id="addFileForm" name="">
+        <form method="post" enctype="multipart/form-data" action="upload.php" id="addFileForm" name="">
             <input type="hidden" value="addFileForm" name="<?php echo ini_get("session.upload_progress.name"); ?>">
             <div class="modal-content">
                 <div class="modal-header">
