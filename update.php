@@ -19,6 +19,7 @@ if($_POST['Submit'])
         //$filepath = realpath($_POST['filename']);
         include('conn.php');
 
+        $fileid = $_POST['upidno'];
         $fileextension = $_POST['upfileextension'];
         $filepurpose = $_POST['upfilepurpose'];
         $filerevision = $_POST['upfilerevision'];
@@ -72,12 +73,17 @@ if($_POST['Submit'])
                         $id = mt_rand();
                         $newid = sprintf("CPSU%X",$id);
 
-                        $sql = "INSERT INTO files values('$newid','$target_file_new','$newbasename_filename_name','$fileextension','$filepurpose','$filerevision','$fileuploader','$fileorigin','',CAST('$datenow' as datetime),0);" ;
+                        $sql = "INSERT INTO files values('$newid','$target_file_new','$newbasename_filename_name','$fileextension','$filepurpose','$filerevision','$fileuploader','$fileorigin','',CAST('$datenow' as datetime),0,'$fileid');" ;
 
                         if ($conn->query($sql) === TRUE) {
                             //copy($filepath, $destinationpath);
                             //echo "New record created successfully";
-                            header("location: admin/index.php?success=10");
+                            $sql2 = "UPDATE files SET archive = '1' WHERE id='$fileid'";
+                            if ($conn->query($sql2) === TRUE) {
+                                header("location: admin/index.php?success=10");
+                            }else {
+                                echo "Error: " . $sql2 . "<br>" . $conn->error;
+                            }
                         } else {
                             echo "Error: " . $sql . "<br>" . $conn->error;
                             //header("location: admin/index.php?error=1");

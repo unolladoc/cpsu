@@ -131,7 +131,7 @@
                                 <div class="table-responsive">
                                     <table class="table" id="myTable">
                                         <?php
-                                        $sql = "SELECT * FROM files ORDER BY datetime DESC";
+                                        $sql = "SELECT * FROM files where archive = 0 ORDER BY datetime DESC";
                                         $result = $conn->query($sql);
                                         $rowi = 1;
 
@@ -199,6 +199,9 @@
                                           </td>
                                           <td style='display:none;'>
                                             " . $row['file_rev'] . "
+                                          </td>
+                                          <td style='display:none;'>
+                                            " . $row['archived_by'] . "
                                           </td>
                                           
                                           <td class='td-actions text-right'>
@@ -396,7 +399,7 @@
                             <input type="hidden" class="form-control" id="idno" name="idno">
                         </div>
                         <div class="col-sm-12">
-                            <input type="hidden" class="form-control" id="" name="" value="">
+                            <input type="hidden" class="form-control" id="archived_idno" name="" value="archived_idno">
                         </div>
                     </div>
 
@@ -656,6 +659,7 @@ if (isset($_GET['error']) && $_GET['error'] == 5) {
 <script>
     function getRowID(r) {
         var id = document.getElementById("myTable").rows[r].cells.item(0).innerHTML;
+        var aid = document.getElementById("myTable").rows[r].cells.item(8).innerHTML;
         var doc = document.getElementById("myTable").rows[r].cells.item(1).innerHTML;
         /*var bch = document.getElementById("myTable").rows[r].cells.item(2).innerHTML;
         var amt = document.getElementById("myTable").rows[r].cells.item(3).innerHTML;
@@ -667,6 +671,7 @@ if (isset($_GET['error']) && $_GET['error'] == 5) {
         $("#display_validate_no_txt").val(reg);*/
         document.getElementById("docname").innerHTML = doc;
         $("#idno").val(id);
+        $("#archived_idno").val(aid);
 
     }
 </script>
@@ -688,12 +693,11 @@ if (isset($_GET['error']) && $_GET['error'] == 5) {
         $("#display_validate_no_txt").val(reg);*/
         //document.getElementById("docname").innerHTML = doc;
         $('#upfilename').text("File Name: " + fname);
-        $("#upidno").val(fid);
         $('#upfilerevisionlbl').text("Revision: " + frev.replace(/\s/g, ""));
         $('#upfilerevision').val(parseInt(frev.replace(/\s/g, "")) + 1);
         $('#upfileextension').val(fxtn.replace(/\s/g, ""));
         $('#upfilepurpose').val(fpor.replace(/\s/g, ""));
-
+        $("#upidno").val(fid.replace(/\s/g, ""));
 
     }
 </script>

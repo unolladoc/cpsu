@@ -4,6 +4,7 @@ include 'conn.php';
 session_start();
 
 $id = preg_replace('/\s/', '', $_POST['idno']);
+//$aid = preg_replace('/\s/', '', $_POST['archived_idno']);
 $pass = mysqli_real_escape_string($conn,$_POST['password']);
 
 $username = $_SESSION['username'];
@@ -15,11 +16,19 @@ if($result->num_rows > 0){
 	$sql2 = "SELECT * from files where id ='$id';";
 	$result2 = mysqli_query($conn,$sql2);
 	if($row2 = $result2->fetch_assoc()){
+
 		$filetodelete = $row2['file_path'];
 		unlink($filetodelete);
 		$sql3 = "DELETE from files where id ='$id';";
 		$result3 = mysqli_query($conn,$sql3);
-		header("location: admin/index.php?success=2");
+		$archivedby = $row2['archived_by'];
+		$sql4 = "UPDATE files SET archive = '0' WHERE id= '$archivedby'";
+		//echo $sql4;
+                            if ($conn->query($sql4) === TRUE) {
+								header("location: admin/index.php?success=2");
+                            }else {
+                                echo "Error: " . $sql4 . "<br>" . $conn->error;
+							}	
 	}else{
 
 	}
