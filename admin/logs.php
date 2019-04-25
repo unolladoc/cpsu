@@ -46,7 +46,7 @@
                     <li>
                         <a href="index.php">
                             <i class="now-ui-icons files_single-copy-04"></i>
-                            <p>Document List</p>
+                            <p>Logs</p>
                         </a>
                     </li>
                     <li>
@@ -60,14 +60,14 @@
                             <p>Create NEW (Google Doc)</p>
                         </a>
                     </li>
-                    <li class="active">
-                        <a href="#">
+                    <li>
+                        <a href="members.php">
                             <i class="now-ui-icons users_single-02"></i>
                             <p>Members</p>
                         </a>
                     </li>
-                    <li>
-                        <a href="logs.php">
+                    <li class="active">
+                        <a href="#">
                             <i class="now-ui-icons files_paper"></i>
                             <p>Logs</p>
                         </a>
@@ -131,7 +131,7 @@
                                 <div class="card-header" role="tab" id="headingTwo">
 
                                     <div class="card-header">
-                                        <h4 class="card-title"> Member List</h4>
+                                        <h4 class="card-title"> Logs</h4>
                                         <!--<i class="now-ui-icons arrows-1_minimal-down"></i>-->
                                     </div>
 
@@ -142,7 +142,7 @@
                                 <div class="table-responsive">
                                     <table class="table" id="myTable">
                                         <?php
-                                        $sql = "SELECT * FROM user;";
+                                        $sql = "SELECT * FROM logs;";
                                         $result = $conn->query($sql);
                                         $rowi = 1;
 
@@ -151,22 +151,13 @@
 
                                             echo '<thead class=" text-primary">
                                         <th onclick="sortTable(0)">
-                                          ID
+                                          Log ID
                                         </th>
                                         <th onclick="sortTable(1)">
-                                          Name
+                                          Date & Time
                                         </th>
                                         <th onclick="sortTable(2)">
-                                          Campus
-                                        </th>
-                                        <th onclick="sortTable(3)">
-                                          Office
-                                        </th>
-                                        <th onclick="sortTable(4)">
-                                          Access
-                                        </th>
-                                        <th class="text-right" >
-                                          Action
+                                          Description
                                         </th>
                                       </thead>
                                       <tbody>';
@@ -174,68 +165,15 @@
 
                                             while ($row = $result->fetch_assoc()) {
 
-                                                if ($row['type'] == 0) {
-                                                    $access = "UNVERIFIED";
-                                                    $actionbuttons = '
-                                                  <button type="button" onclick="getRowID(' . $rowi . ')" rel="tooltip" class="btn btn-success btn-sm btn-round btn-icon" data-toggle="modal" title="Approve" data-target="#approveModal" data-dismiss="modal">
-                                                      <i class="now-ui-icons ui-1_check"></i>
-                                                  </button>
-                                                  <button type="button" onclick="getRowID(' . $rowi . ')" rel="tooltip" class="btn btn-danger btn-sm btn-round btn-icon" data-toggle="modal" title="Remove User" data-target="#deleteModal" data-dismiss="modal">
-                                                      <i class="now-ui-icons ui-1_simple-remove"></i>
-                                                  </button>';
-                                                } else if ($row['type'] == 1) {
-                                                    $access = "Admin";
-                                                    if ($_SESSION['id'] == $row['id']) {
-                                                        $actionbuttons = '-';
-                                                    } else {
-                                                        $actionbuttons = '<button type="button" onclick="getRowID(' . $rowi . ')" rel="tooltip" class="btn btn-warning btn-sm btn-round btn-icon" data-toggle="modal" title="Remove as Admin" data-target="#revokeadminaccessModal" data-dismiss="modal">
-                                                        <i class="now-ui-icons users_single-02"></i>
-                                                    </button>';
-                                                    }
-                                                } else if ($row['type'] == 2) {
-                                                    $access = "Guest";
-                                                    $actionbuttons = '<button type="button" onclick="getRowID(' . $rowi . ')" rel="tooltip" class="btn btn-info btn-sm btn-round btn-icon" data-toggle="modal" title="Make Admin" data-target="#adminaccessModal" data-dismiss="modal">
-                                                    <i class="now-ui-icons users_single-02"></i>
-                                                </button>
-                                                <button type="button" onclick="getRowID(' . $rowi . ')" rel="tooltip" class="btn btn-warning btn-sm btn-round btn-icon" data-toggle="modal" title="Remove Access" data-target="#revokeaccessModal" data-dismiss="modal">
-                                                    <i class="now-ui-icons ui-1_simple-remove"></i>
-                                                </button>
-                                                    ';
-                                                }
-
-                                                $sql2 = "SELECT campus FROM campuses where id = " . $row['campus'];
-                                                $result2 = $conn->query($sql2);
-                                                $rcampus = "-";
-                                                if ($result2->num_rows > 0) {
-                                                    $row2 = $result2->fetch_assoc();
-                                                    $rcampus = $row2['campus'];
-                                                }
-                                                $sql3 = "SELECT office FROM offices where id = " . $row['office'];
-                                                $result3 = $conn->query($sql3);
-                                                $roffice = "-"; 
-                                                if ($result3->num_rows > 0) {
-                                                    $row3 = $result3->fetch_assoc();
-                                                    $roffice = $row3['office'];
-                                                }   
-                                                
                                                 echo "<tr>
                                           <td>
                                             " . $row['id'] . "
                                           </td>
                                           <td>
-                                            " . $row['name'] . "
+                                            " . $row['time'] . "
                                           </td>
                                           <td>
-                                            " . $rcampus . "
-                                          </td>
-                                          <td>
-                                            " . $roffice . "
-                                          </td>
-                                          <td>
-                                            " . $access . "
-                                          </td>
-                                          <td class='td-actions text-right'>
-                                          " . $actionbuttons . "                                           		
+                                            " .  $row['description'] . "
                                           </td>
                                         </tr>";
                                                 $rowi++;
@@ -338,261 +276,6 @@
 
 </body>
 
-<div id="deleteModal" class="modal fade modal-mini modal-danger" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header justify-content-center">
-                <div class="modal-profile">
-                    <i class="now-ui-icons users_circle-08"></i>
-                </div>
-            </div>
-            <div class="modal-body">
-                <form method="post" action="remove.php">
-                    <div class="form-group row">
-                        <div class="col-sm-12 text-center">Remove User?<h4 id="name"></h4>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <div class="col-sm-12">
-                            <input type="password" class="form-control" id="inputPassword" placeholder="Verify Password" name="password">
-                        </div>
-                        <div class="col-sm-12">
-                            <input type="hidden" class="form-control" id="idno" name="idno">
-                        </div>
-                    </div>
-
-            </div>
-            <div class="modal-footer">
-                <button type="submit" class="btn btn-link btn-neutral">Proceed</button>
-                <button type="button" class="btn btn-link btn-neutral" data-dismiss="modal">Close</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div id="approveModal" class="modal fade modal-mini modal-success" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header justify-content-center">
-                <div class="modal-profile">
-                    <i class="now-ui-icons users_circle-08"></i>
-                </div>
-            </div>
-            <div class="modal-body">
-                <form method="post" action="approve.php">
-                    <div class="form-group row">
-                        <div class="col-sm-12 text-center">Approve User?<h4 id="name2"></h4>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <div class="col-sm-12">
-                            <input type="password" class="form-control" id="inputPassword" placeholder="Verify Password" name="password2">
-                        </div>
-                        <div class="col-sm-12">
-                            <input type="hidden" class="form-control" id="idno2" name="idno2">
-                        </div>
-                    </div>
-
-            </div>
-            <div class="modal-footer">
-                <button type="submit" class="btn btn-link btn-neutral">Proceed</button>
-                <button type="button" class="btn btn-link btn-neutral" data-dismiss="modal">Close</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div id="revokeaccessModal" class="modal fade modal-mini modal-warning" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header justify-content-center">
-                <div class="modal-profile">
-                    <i class="now-ui-icons users_circle-08"></i>
-                </div>
-            </div>
-            <div class="modal-body">
-                <form method="post" action="revokeaccess.php">
-                    <div class="form-group row">
-                        <div class="col-sm-12 text-center">Revoke User Access?<h4 id="name3"></h4>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <div class="col-sm-12">
-                            <input type="password" class="form-control" id="inputPassword" placeholder="Verify Password" name="password3">
-                        </div>
-                        <div class="col-sm-12">
-                            <input type="hidden" class="form-control" id="idno3" name="idno3">
-                        </div>
-                    </div>
-
-            </div>
-            <div class="modal-footer">
-                <button type="submit" class="btn btn-link btn-neutral">Proceed</button>
-                <button type="button" class="btn btn-link btn-neutral" data-dismiss="modal">Close</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div id="adminaccessModal" class="modal fade modal-mini modal-info" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header justify-content-center">
-                <div class="modal-profile">
-                    <i class="now-ui-icons users_circle-08"></i>
-                </div>
-            </div>
-            <div class="modal-body">
-                <form method="post" action="makeadmin.php">
-                    <div class="form-group row">
-                        <div class="col-sm-12 text-center">Make ADMINISTRATOR?<h4 id="name4"></h4>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <div class="col-sm-12">
-                            <input type="password" class="form-control" id="inputPassword" placeholder="Verify Password" name="password4">
-                        </div>
-                        <div class="col-sm-12">
-                            <input type="hidden" class="form-control" id="idno4" name="idno4">
-                        </div>
-                    </div>
-
-            </div>
-            <div class="modal-footer">
-                <button type="submit" class="btn btn-link btn-neutral">Proceed</button>
-                <button type="button" class="btn btn-link btn-neutral" data-dismiss="modal">Close</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div id="revokeadminaccessModal" class="modal fade modal-mini modal-warning" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header justify-content-center">
-                <div class="modal-profile">
-                    <i class="now-ui-icons users_circle-08"></i>
-                </div>
-            </div>
-            <div class="modal-body">
-                <form method="post" action="revokeadminaccess.php">
-                    <div class="form-group row">
-                        <div class="col-sm-12 text-center">Remove as ADMINISTRATOR?<h4 id="name5"></h4>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <div class="col-sm-12">
-                            <input type="password" class="form-control" id="inputPassword" placeholder="Verify Password" name="password5">
-                        </div>
-                        <div class="col-sm-12">
-                            <input type="hidden" class="form-control" id="idno5" name="idno5">
-                        </div>
-                    </div>
-
-            </div>
-            <div class="modal-footer">
-                <button type="submit" class="btn btn-link btn-neutral">Proceed</button>
-                <button type="button" class="btn btn-link btn-neutral" data-dismiss="modal">Close</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-
-<script>
-    $('.modal').on('hidden.bs.modal', function() {
-        $(this).find('form')[0].reset();
-    });
-</script>
-
-<?php
-
-if (isset($_GET['success']) && $_GET['success'] == 1) {
-    echo "<script>
-            $.notify({
-            
-            title: '<strong>Success</strong>',
-            message: 'A user has been approved' 
-            },{
-            
-            type: 'success'
-            });
-          </script> ";
-}
-if (isset($_GET['success']) && $_GET['success'] == 2) {
-    echo "<script>
-            $.notify({
-            
-            title: '<strong>User Removed</strong>',
-            message: 'A user has been removed successfully' 
-            },{
-            
-            type: 'warning'
-            });
-          </script> ";
-}
-if (isset($_GET['success']) && $_GET['success'] == 3) {
-    echo "<script>
-            $.notify({
-            
-            title: 'Access Revoke',
-            message: '<strong>A user has been revoked on all accesss</strong>'  
-            },{
-            
-            type: 'warning'
-            });
-          </script> ";
-}
-
-if (isset($_GET['success']) && $_GET['success'] == 4) {
-    echo "<script>
-            $.notify({
-            
-            title: 'Administrative Access',
-            message: '<strong>A user has been granted administrative access</strong>'  
-            },{
-            
-            type: 'primary'
-            });
-          </script> ";
-}
-
-if (isset($_GET['success']) && $_GET['success'] == 5) {
-    echo "<script>
-            $.notify({
-            
-            title: 'Revoked Administrative Access',
-            message: '<strong>A user has been removed as administrator</strong>'  
-            },{
-            
-            type: 'warning'
-            });
-          </script> ";
-}
-
-if (isset($_GET['error']) && $_GET['error'] == 5) {
-
-    echo "<script>
-            $.notify({
-            
-            title: 'Invalid Password',
-            message: '<strong>Unable to Verify</strong>' 
-            },{
-            
-            type: 'danger',
-            allow_dismiss: false
-
-            });
-
-          </script> ";
-}
-
-?>
-
 <script>
     function myFunction() {
         // Declare variables 
@@ -608,7 +291,7 @@ if (isset($_GET['error']) && $_GET['error'] == 5) {
 
             if (td.length > 0) {
                 //txtValue = td.textContent || td.innerText;
-                if (td[0].innerHTML.toUpperCase().indexOf(filter) > -1 || td[1].innerHTML.toUpperCase().indexOf(filter) > -1) {
+                if (td[0].innerHTML.toUpperCase().indexOf(filter) > -1 || td[1].innerHTML.toUpperCase().indexOf(filter) > -1 || td[2].innerHTML.toUpperCase().indexOf(filter) > -1) {
                     tr[i].style.display = "";
                 } else {
                     tr[i].style.display = "none";
@@ -672,23 +355,6 @@ if (isset($_GET['error']) && $_GET['error'] == 5) {
                 }
             }
         }
-    }
-</script>
-
-<script>
-    function getRowID(r) {
-        var id = document.getElementById("myTable").rows[r].cells.item(0).innerHTML;
-        var doc = document.getElementById("myTable").rows[r].cells.item(1).innerHTML;
-        document.getElementById("name").innerHTML = doc;
-        document.getElementById("name2").innerHTML = doc;
-        document.getElementById("name3").innerHTML = doc;
-        document.getElementById("name4").innerHTML = doc;
-        document.getElementById("name5").innerHTML = doc;
-        $("#idno").val(id);
-        $("#idno2").val(id);
-        $("#idno3").val(id);
-        $("#idno4").val(id);
-        $("#idno5").val(id);
     }
 </script>
 

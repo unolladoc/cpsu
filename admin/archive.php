@@ -19,7 +19,7 @@
     <link rel="icon" type="../image/png" href="../assets/img/favicon.png">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <title>
-        Home - <?php echo $_SESSION['name']; ?>
+        Archive - <?php echo $_SESSION['name']; ?>
     </title>
     <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />
     <!--     Fonts and icons     -->
@@ -51,14 +51,14 @@
             </div>
             <div class="sidebar-wrapper">
                 <ul class="nav">
-                    <li class="active">
-                        <a href="#">
+                    <li>
+                        <a href="../">
                             <i class="now-ui-icons files_single-copy-04"></i>
                             <p>Document List</p>
                         </a>
                     </li>
-                    <li>
-                        <a href="archive.php">
+                    <li class="active">
+                        <a href="#">
                             <i class="now-ui-icons files_box"></i>
                             <p>Archive</p>
                         </a>
@@ -95,7 +95,7 @@
                                 <span class="navbar-toggler-bar bar3"></span>
                             </button>
                         </div>
-                        <button class="btn btn-info btn-round btn-lg" data-toggle="modal" data-target="#addFileModal" data-dismiss="modal" onclick="">Add File</button>
+                        
                     </div>
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-bar navbar-kebab"></span>
@@ -140,7 +140,7 @@
                                 <div class="card-header" role="tab" id="headingTwo">
 
                                     <div class="card-header">
-                                        <h4 class="card-title"> Document List</h4>
+                                        <h4 class="card-title"> Archive List</h4>
                                         <!--<i class="now-ui-icons arrows-1_minimal-down"></i>-->
                                     </div>
 
@@ -151,7 +151,7 @@
                                 <div class="table-responsive">
                                     <table class="table" id="myTable">
                                         <?php
-                                        $sql = "SELECT * FROM files where archive = 0 ORDER BY datetime DESC";
+                                        $sql = "SELECT * FROM files where archive = 1 ORDER BY datetime DESC";
                                         $result = $conn->query($sql);
                                         $rowi = 1;
 
@@ -177,7 +177,6 @@
                                         <th onclick="sortTable(5)">
                                           Uploaded
                                         </th>
-                                        <th></th>
                                         <th>
                                           Action
                                         </th>
@@ -227,21 +226,12 @@
                                           " . $row['file_name'] . "
                                           </td>
                                           
-                                          
                                           <td class='td-actions text-right'>
                                            		<button type='button' onclick='getRowForDetails(" . $rowi . ")' rel='tooltip' class='btn btn-success btn-sm btn-round btn-icon' title='Details' data-toggle='modal' data-target='#fileDetailsModal' data-dismiss='modal' >
                                            			<i class='now-ui-icons design_bullet-list-67'></i>
                                                 </button>
- 
-                                          </td>
-                                                <td class='td-actions text-right'>
-                                           		 <button type='button' onclick='getRowForUptade(" . $rowi . ")' rel='tooltip' class='btn btn-info btn-sm btn-round btn-icon' data-toggle='modal' title='Update' data-target='#updateModal' data-dismiss='modal'>
-                                                  <i class='now-ui-icons arrows-1_cloud-upload-94'></i>
-                                                  </button>
-                                                  <button type='button' onclick='getRowID(" . $rowi . ")' rel='tooltip' class='btn btn-danger btn-sm btn-round btn-icon' data-toggle='modal' title='Delete' data-target='#deleteModal' data-dismiss='modal'>
-                                                      <i class='now-ui-icons ui-1_simple-remove'></i>
-                                                  </button>
-                                          </td>
+                                        </td>
+                                        <!--removed update and delete button-->
                                         </tr>";
                                                 $rowi++;
                                             }
@@ -345,62 +335,6 @@
 </body>
 
 
-<div class="modal fade bd-example-modal-lg" id="updateModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <form method="post" enctype="multipart/form-data" action="update.php" id="updateFileForm">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Update</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div>
-                        <label id="upfilename"></label><br>
-                        <label id="upfilerevisionlbl"></label>
-                    </div>
-                    <!--<button class="btn btn-primary btn-round">Browse File</button>--><br>
-                    <label for="exampleFormControlSelect1">File Name</label>
-                    <div class="input-group">
-                        <input class="form-control" type="file" name="upfilename" id="upfilename" onchange="" required>
-                    </div>
-                    <input type="hidden" name="upidno" id="upidno">
-                    <div class="col-md-4 pull-right">
-                        <label for="exampleFormControlSelect1">File Extension</label>
-                        <div class="input-group">
-                            <input type="text" class="form-control form-control-lg" id="upfileextension" name="upfileextension" required>
-                        </div>
-                    </div>
-                    <div class="col-md-4 pull-right">
-                        <label for="exampleFormControlSelect1">File Revision</label>
-                        <div class="input-group">
-                            <input type="text" class="form-control form-control-lg" id="upfilerevision" name="upfilerevision" required>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <label for="exampleFormControlSelect1">File Type</label>
-                        <div class="input-group">
-                            <select class="form-control form-control" name="upfilepurpose" id="upfilepurpose" required>
-                                <option value="">Select...</option>
-                                <option value="Letter">Letter</option>
-                                <option value="Form">Form</option>
-                                <option value="Memo">Memo</option>
-                            </select>
-                            <!--<input type="text" class="form-control form-control-lg" id="" name="filepurpose" value="Accreditation" required>-->
-                        </div>
-                    </div>
-
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                    <input type="Submit" class="btn btn-primary" name="Submit" value="Submit">
-                </div>
-            </div>
-        </form>
-    </div>
-</div>
-
 <div class="modal fade bd-example-modal-lg" id="fileDetailsModal" tabindex="-1" role="dialog" aria-labelledby="fileDetailsModal" aria-hidden="f">
     <div class="modal-dialog modal-lg" role="document">
         <form></form>
@@ -422,41 +356,7 @@
     </div>
 </div>
 
-<div id="deleteModal" class="modal fade modal-mini modal-danger" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header justify-content-center">
-                <div class="modal-profile">
-                    <i class="now-ui-icons users_circle-08"></i>
-                </div>
-            </div>
-            <div class="modal-body">
-                <form method="post" action="delete.php">
-                    <div class="form-group row">
-                        <div class="col-sm-12 text-center">Delete?<h4 id="docname"></h4>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <div class="col-sm-12">
-                            <input type="password" class="form-control" id="inputPassword" placeholder="Verify Password" name="password">
-                        </div>
-                        <div class="col-sm-12">
-                            <input type="hidden" class="form-control" id="idno" name="idno">
-                        </div>
-                        <div class="col-sm-12">
-                            <input type="hidden" class="form-control" id="archived_idno" name="" value="archived_idno">
-                        </div>
-                    </div>
-
-            </div>
-            <div class="modal-footer">
-                <button type="submit" class="btn btn-link btn-neutral">Proceed</button>
-                <button type="button" class="btn btn-link btn-neutral" data-dismiss="modal">Close</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
+<!-- deletemodal removed -->
 
 <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" id="addFileModal" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog modal-lg">
@@ -524,110 +424,7 @@
     });
 </script>
 
-<?php
-
-if (isset($_GET['success']) && $_GET['success'] == 1) {
-    echo "<script>
-            $.notify({
-            
-            title: '<strong>Success</strong>',
-            message: 'File Uploaded Successfully' 
-            },{
-            
-            type: 'success'
-            });
-          </script> ";
-}
-if (isset($_GET['success']) && $_GET['success'] == 10) {
-    echo "<script>
-            $.notify({
-            
-            title: '<strong>Success</strong>',
-            message: 'File Updated Successfully' 
-            },{
-            
-            type: 'info'
-            });
-          </script> ";
-}
-if (isset($_GET['success']) && $_GET['success'] == 2) {
-    echo "<script>
-            $.notify({
-            
-            title: '<strong>File Deletion</strong>',
-            message: 'File Successfully Deleted' 
-            },{
-            
-            type: 'warning'
-            });
-          </script> ";
-}
-if (isset($_GET['error']) && $_GET['error'] == 2) {
-
-    echo "<script>
-            $.notify({
-            
-            title: 'ERROR',
-            message: '<strong>File Already Exist</strong>' 
-            },{
-            
-            type: 'danger',
-            allow_dismiss: false
-
-            });
-
-          </script> ";
-}
-if (isset($_GET['error']) && $_GET['error'] == 3) {
-
-    echo "<script>
-            $.notify({
-            
-            title: 'File Too Large',
-            message: '<strong>25MB Maximum Size</strong>' 
-            },{
-            
-            type: 'danger',
-            allow_dismiss: false
-
-            });
-
-          </script> ";
-}
-if (isset($_GET['error']) && $_GET['error'] == 4) {
-
-    echo "<script>
-            $.notify({
-            
-            title: 'File Not Supported',
-            message: '<strong>Upload JPEG, JPG, DOC, DOCX, PDF Only</strong>' 
-            },{
-            
-            type: 'danger',
-            allow_dismiss: false
-
-            });
-
-          </script> ";
-}
-if (isset($_GET['error']) && $_GET['error'] == 5) {
-
-    echo "<script>
-            $.notify({
-            
-            title: 'Unable to Verify',
-            message: '<strong>File Not Deleted</strong>' 
-            },{
-            
-            type: 'danger',
-            allow_dismiss: false
-
-            });
-
-          </script> ";
-}
-
-?>
+<!-- removed notifications -->
 
 <script>
     function myFunction() {
@@ -712,68 +509,6 @@ if (isset($_GET['error']) && $_GET['error'] == 5) {
 </script>
 
 <script>
-    function getRowID(r) {
-        var id = document.getElementById("myTable").rows[r].cells.item(0).innerHTML;
-        var aid = document.getElementById("myTable").rows[r].cells.item(8).innerHTML;
-        var doc = document.getElementById("myTable").rows[r].cells.item(9).innerHTML;
-        /*var bch = document.getElementById("myTable").rows[r].cells.item(2).innerHTML;
-        var amt = document.getElementById("myTable").rows[r].cells.item(3).innerHTML;
-        document.getElementById("display_validate_no").innerHTML = "Invalidate "+reg+"?";
-        document.getElementById("print_validate_no").innerHTML = "Control Number: "+reg;
-        document.getElementById("print_donor").innerHTML = "Donor: "+dnr;
-        document.getElementById("print_batch_no").innerHTML = "Batch: "+bch;
-        document.getElementById("print_amount").innerHTML = "Amount "+amt;
-        $("#display_validate_no_txt").val(reg);*/
-        document.getElementById("docname").innerHTML = doc;
-        $("#idno").val(id);
-        $("#archived_idno").val(aid);
-
-    }
-</script>
-
-<script>
-    function getRowForUptade(r) {
-        var fid = document.getElementById("myTable").rows[r].cells.item(0).innerHTML;
-        var fname = document.getElementById("myTable").rows[r].cells.item(9).innerHTML;
-        var fpor = document.getElementById("myTable").rows[r].cells.item(2).innerHTML;
-        var fxtn = document.getElementById("myTable").rows[r].cells.item(6).innerHTML;
-        var frev = document.getElementById("myTable").rows[r].cells.item(7).innerHTML;
-        /*var bch = document.getElementById("myTable").rows[r].cells.item(2).innerHTML;
-        var amt = document.getElementById("myTable").rows[r].cells.item(3).innerHTML;
-        document.getElementById("display_validate_no").innerHTML = "Invalidate "+reg+"?";
-        document.getElementById("print_validate_no").innerHTML = "Control Number: "+reg;
-        document.getElementById("print_donor").innerHTML = "Donor: "+dnr;
-        document.getElementById("print_batch_no").innerHTML = "Batch: "+bch;
-        document.getElementById("print_amount").innerHTML = "Amount "+amt;
-        $("#display_validate_no_txt").val(reg);*/
-        //document.getElementById("docname").innerHTML = doc;
-        $('#upfilename').text("File Name: " + fname);
-        $('#upfilerevisionlbl').text("Revision: " + frev.replace(/\s/g, ""));
-        $('#upfilerevision').val(parseInt(frev.replace(/\s/g, "")) + 1);
-        $('#upfileextension').val(fxtn.replace(/\s/g, ""));
-        $('#upfilepurpose').val(fpor.replace(/\s/g, ""));
-        $("#upidno").val(fid.replace(/\s/g, ""));
-
-    }
-</script>
-
-<script>
-    document.getElementById('filename').onchange = function() {
-
-        //var last = this.value.lastIndexOf(".");
-        //var filepath = this.value;
-        var fileextension = this.value.slice(this.value.lastIndexOf(".") + 1).toUpperCase();
-        //alert('Selected file extension: ' + fileextension);
-        document.getElementById("fileextension").value = fileextension;
-        //document.getElementById("filepath").value = filepath;
-        document.getElementById("filerevision").value = "1";
-        //document.getElementById("filerevision").disabled = true;
-        //document.getElementById("fileextension").disabled = true;
-
-    };
-</script>
-
-<script>
     function updateDownloads(myObj) {
         var obj, dbParam, xmlhttp;
         obj = {
@@ -830,75 +565,5 @@ if (isset($_GET['error']) && $_GET['error'] == 5) {
         xmlhttp.send("x=" + dbParam);
     }
 </script>
-
-<!-- <script>
-
-$.uploadifive({ onProgress: function(file, e) { fn.onProgress(file, e.loaded);} });
-
-</script>
-
-<script>
-
-var fnProgress = function(file, bytes) {
-    var percentage = (bytesLoaded / file.size) * 100;
-
-    // Update DOM
-    $('#progress').css({ 'width': percentage + '%' });
-    $('#status').html(Math.round(percentage + '%'));
-}
-
-</script> -->
-
-<!-- <script>
-function toggleBarVisibility() {
-    var e = document.getElementById("progressBar");
-    e.style.display = (e.style.display == "block");// ? "none" : "block";
-}
-
-
-    function createRequestObject() {
-        var http;
-        if (navigator.appName == "Microsoft Internet Explorer") {
-            http = new ActiveXObject("Microsoft.XMLHTTP");
-        } else {
-            http = new XMLHttpRequest();
-        }
-        return http;
-    }
-
-    function sendRequest() {
-        var http = createRequestObject();
-        http.open("GET", "progress.php");
-        http.onreadystatechange = function() {
-            handleResponse(http);
-        };
-        http.send(null);
-    }
-
-    function handleResponse(http) {
-        var response;
-        if (http.readyState == 4) {
-            response = http.responseText;
-            document.getElementById("progress").style.width = response + "%";
-            document.getElementById("status").innerHTML = response + "%";
-            document.getElementById("uploading").innerHTML = "Uploading...";
-            if (response < 100) {
-                setTimeout("sendRequest()", 1000);
-            } else {
-                toggleBarVisibility();
-                document.getElementById("status").innerHTML = "Done.";
-            }
-        }
-    }
-
-    function startUpload() {
-        toggleBarVisibility();
-        setTimeout("sendRequest()", 1000);
-    }
-
-    (function() {
-        document.getElementById("addFileForm").onsubmit = startUpload;
-    })();
-</script> -->
 
 </html>
