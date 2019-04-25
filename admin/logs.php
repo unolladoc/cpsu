@@ -46,7 +46,7 @@
                     <li>
                         <a href="index.php">
                             <i class="now-ui-icons files_single-copy-04"></i>
-                            <p>Logs</p>
+                            <p>Document List</p>
                         </a>
                     </li>
                     <li>
