@@ -272,9 +272,9 @@
             <input type="text" class="form-control" name="caName" placeholder="Full Name" required>
           </div>
           <div class="form-group">
-              <label>Username</label>
-              <input type="text" class="form-control" name="caUsername" placeholder="Username" required>
-            </div>
+            <label>Username</label>
+            <input type="text" class="form-control" name="caUsername" placeholder="Username" required>
+          </div>
           <div class="form-group">
             <label for="">Campus</label>
             <select class="form-control form-control" name="campus" id="campuses" required>
@@ -309,15 +309,15 @@
             <select class="form-control form-control" name="office" id="offices" required>
             </select>
           </div>
-            <div class="form-group">
-              <label>Password</label>
-              <input type="password" class="form-control" id="caPassword" name="caPassword" placeholder="Password" required>
-            </div>
-            <div class="form-group">
-              <label>Verify Password <span id="vperror" style="color: red;"></span></label>
-              <input type="password" class="form-control" id="cavPassword" name="cavPassword" placeholder="Verify Password" required>
-            </div>
-          
+          <div class="form-group">
+            <label>Password</label>
+            <input type="password" class="form-control" id="caPassword" name="caPassword" placeholder="Password" required>
+          </div>
+          <div class="form-group">
+            <label>Verify Password <span id="vperror" style="color: red;"></span></label>
+            <input type="password" class="form-control" id="cavPassword" name="cavPassword" placeholder="Verify Password" required>
+          </div>
+
 
 
         </div>
@@ -364,7 +364,7 @@
   });
 </script>
 
-<script>
+<!-- <script>
   $(document).ready(function() {
     $("#campuses").change(function() {
       var cid = $("#campuses").val();
@@ -381,7 +381,7 @@
           myObj = JSON.parse(this.responseText);
           //console.log(myObj);
           for (x in myObj) {
-            $('#offices').append('<option value='+ myObj[x].id +'>' + myObj[x].office + '</option>');
+            $('#offices').append('<option value=' + myObj[x].id + '>' + myObj[x].office + '</option>');
           }
           //console.log(txt);
         }
@@ -389,26 +389,33 @@
       xmlhttp.open("POST", "loaddata.php", true);
       xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
       xmlhttp.send("x=" + dbParam);
-
-
-
-      //alert(cid);
-      // $.ajax({
-      //     url: 'loaddata.php',
-      //     method: 'post',
-      //     data: 'cid=' + cid
-      // }).done(function(data) {  
-      //     datas = JSON.parse(data);
-      //     console.log(datas);
-      //     //$('#offices').empty();
-      //     //alert(datas.length);
-      //     //$('#offices').append('<option>' + datas.office + '</option>');
-      //     // $.each(datas, function(key, o) {
-      //     //     $('#offices').append('<option>' + o.office + '</option>');
-      //     // })
-      // })
     })
   })
+</script> -->
+
+<script>
+  jQuery(document).ready(function($) {
+    $("#campuses").change(function() {
+      var cid = $("#campuses").val();
+      $.ajax({
+        url: "loaddata1.php",
+        type: "POST",
+        data: "campus=" + cid,
+        success: function(response) {
+          console.log(response);
+          //$('#offices').append('<option value=' + myObj[x].id + '>' + myObj[x].office + '</option>');
+          $.each(response, function(i, value) {
+            $('<option></option>', {
+              html: value.office
+            }).attr('value', value.id).appendTo('#offices');
+          });;
+        },
+        error: function(err) {
+          console.log("Error" + err);
+        }
+      });
+    });
+  });
 </script>
 
 </html>
