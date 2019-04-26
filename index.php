@@ -398,7 +398,7 @@
     $("#campuses").change(function() {
       var cid = $("#campuses").val();
       $.ajax({
-        url: "loaddata1.php",
+        url: "loaddata2.php",
         type: "POST",
         data: "campus=" + cid,
         success: function(response) {
