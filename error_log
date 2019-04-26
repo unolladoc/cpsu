@@ -1478,3 +1478,11 @@ Stack trace:
 Stack trace:
 #0 {main}
   thrown in /home/ltlaqd11ukyp/public_html/loaddata1.php on line 12
+[26-Apr-2019 12:21:38 Asia/Manila] PHP Fatal error:  Uncaught Error: Call to undefined method mysqli_stmt::get_result() in /home/ltlaqd11ukyp/public_html/loaddata1.php:12
+Stack trace:
+#0 {main}
+  thrown in /home/ltlaqd11ukyp/public_html/loaddata1.php on line 12
+[26-Apr-2019 13:01:59 Asia/Manila] PHP Fatal error:  Uncaught Error: Call to undefined method mysqli_stmt::get_result() in /home/ltlaqd11ukyp/public_html/loaddata1.php:12
+Stack trace:
+#0 {main}
+  thrown in /home/ltlaqd11ukyp/public_html/loaddata1.php on line 12

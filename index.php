@@ -397,12 +397,14 @@
   jQuery(document).ready(function($) {
     $("#campuses").change(function() {
       var cid = $("#campuses").val();
+      $('#offices').empty();
       $.ajax({
         url: "loaddata2.php",
         type: "POST",
         data: "campus=" + cid,
         success: function(response) {
-          console.log(response);
+          $('#offices').append('<option value="">Select...</option>')
+          //console.log(response);
           //$('#offices').append('<option value=' + myObj[x].id + '>' + myObj[x].office + '</option>');
           $.each(response, function(i, value) {
             $('<option></option>', {

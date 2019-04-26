@@ -547,7 +547,7 @@
     }
 </script>
 
-<script>
+<!-- <script>
     function getRowForDetails(r) {
 
         var id = document.getElementById("myTable").rows[r].cells.item(0).innerHTML;
@@ -582,6 +582,40 @@
         xmlhttp.open("POST", "loaddownloaddata.php", true);
         xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         xmlhttp.send("x=" + dbParam);
+    }
+</script> -->
+
+<script>
+    function getRowForDetails(r) {
+        var id = document.getElementById("myTable").rows[r].cells.item(0).innerHTML;
+        var name = document.getElementById("myTable").rows[r].cells.item(9).innerHTML;
+        var desc = document.getElementById("myTable").rows[r].cells.item(10).innerHTML;
+        var newname = name.replace(/\s/g, "");
+        var newid = id.replace(/\s/g, "");
+        var txt = "";
+        document.getElementById("fileDetailsModalTitle").innerHTML = "Control No: " + id;
+        $('#dfilename').text("Name: " + name);
+        $('#dfiledesc').text("Description: " + desc);
+        $.ajax({
+        url: "loaddownloaddata2.php",
+        type: "POST",
+        data: "fid=" + newid,
+        success: function(response) {
+          console.log(response);
+          $('#downloads').text("Downloaded " + response.length + " time/s");
+        $.each(response, function(i, value) {
+            txt += value.time + " " + value.description + " " + "<br>";
+            // $('<option></option>', {
+            //   html: value.office
+            // }).attr('value', value.id).appendTo('#offices');
+          });
+          document.getElementById("download_log").innerHTML = txt;
+        },
+        error: function(err) {
+          console.log("Error" + err);
+        }
+      });
+
     }
 </script>
 
