@@ -95,7 +95,7 @@
                                 <span class="navbar-toggler-bar bar3"></span>
                             </button>
                         </div>
-                        
+
                     </div>
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-bar navbar-kebab"></span>
@@ -138,12 +138,24 @@
                         <div class="card">
                             <div class="card card-plain">
                                 <div class="card-header" role="tab" id="headingTwo">
-
                                     <div class="card-header">
                                         <h4 class="card-title"> Archive List</h4>
                                         <!--<i class="now-ui-icons arrows-1_minimal-down"></i>-->
                                     </div>
-
+                                    <div class="col-md-3">
+                                        <select class="form-control form-control" id="filepurposefilter" onchange="filterText();">
+                                            <option value="all">Show All Documents</option>
+                                            <?php
+                                            $sqlt = "Select * from m_typeofdoc;";
+                                            $resultt = $conn->query($sqlt);
+                                            if ($resultt->num_rows > 0) {
+                                                while ($rowt = $resultt->fetch_assoc()) {
+                                                    echo "<option value='" . $rowt['type'] . "'>" . $rowt['type'] . "</option>";
+                                                }
+                                            }
+                                            ?>
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
 
@@ -192,9 +204,9 @@
                                                 //     $filename = $row['file_name'];
                                                 // }
 
-                                                $filename = "<a href='../" . $row['file_path'] . "' rel='tooltip'  title='Download' onclick = updateDownloads('" . $row['id'] . "'); download>" . $row['file_name'] . "</a>";
+                                                $filename = "<a href='../" . $row['file_path'] . "' rel='tooltip'  title='Click to Download' onclick = updateDownloads('" . $row['id'] . "'); download>" . $row['file_name'] . "</a>";
 
-                                                echo "<tr>
+                                                echo "<tr class='trcontent'>
                                           <td>
                                             " . $row['id'] . "
                                           </td>
@@ -224,6 +236,9 @@
                                           </td>
                                           <td style='display:none;'>
                                           " . $row['file_name'] . "
+                                          </td>
+                                          <td style='display:none;'>
+                                          " . $row['file_desc'] . "
                                           </td>
                                           
                                           <td class='td-actions text-right'>
@@ -346,8 +361,9 @@
                 </button>
             </div>
             <div class="modal-body">
+                <div class="input-group" id="dfilename"></div>
                 <div class="input-group" id="downloads"></div>
-                <div class="input-group" id="downloaded"></div>
+                <div class="input-group" id="dfiledesc"></div>
                 <div class="input-group scroll">
                     <div id="download_log"></div>
                 </div>
@@ -536,9 +552,12 @@
 
         var id = document.getElementById("myTable").rows[r].cells.item(0).innerHTML;
         var name = document.getElementById("myTable").rows[r].cells.item(9).innerHTML;
+        var desc = document.getElementById("myTable").rows[r].cells.item(10).innerHTML;
         var newname = name.replace(/\s/g, "");
         var newid = id.replace(/\s/g, "");
-        document.getElementById("fileDetailsModalTitle").innerHTML = name;
+        document.getElementById("fileDetailsModalTitle").innerHTML = "Control No: " + id;
+        $('#dfilename').text("Name: " + name);
+        $('#dfiledesc').text("Description: " + desc);
         var obj, dbParam, xmlhttp, myObj, x, txt = "";
         obj = {
             "fid": newid
@@ -563,6 +582,25 @@
         xmlhttp.open("POST", "loaddownloaddata.php", true);
         xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         xmlhttp.send("x=" + dbParam);
+    }
+</script>
+
+<script>
+    function filterText() {
+        document.getElementById('myInput').value = '';
+        var rex = new RegExp($('#filepurposefilter').val());
+        if (rex == "/all/") {
+            clearFilter()
+        } else {
+            $('.trcontent').hide();
+            $('.trcontent').filter(function() {
+                return rex.test($(this).text());
+            }).show();
+        }
+    }
+
+    function clearFilter() {
+        $('.trcontent').show();
     }
 </script>
 

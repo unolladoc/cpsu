@@ -111,6 +111,20 @@
                                             <h4 class="card-title"> Document List</h4>
                                             <!--<i class="now-ui-icons arrows-1_minimal-down"></i>-->
                                         </div>
+                                        <div class="col-md-3">
+                                        <select class="form-control form-control" id="filepurposefilter" onchange="filterText();">
+                                            <option value="all">Show All Documents</option>
+                                            <?php
+                                            $sqlt = "Select * from m_typeofdoc;";
+                                            $resultt = $conn->query($sqlt);
+                                            if ($resultt->num_rows > 0) {
+                                                while ($rowt = $resultt->fetch_assoc()) {
+                                                    echo "<option value='" . $rowt['type'] . "'>" . $rowt['type'] . "</option>";
+                                                }
+                                            }
+                                            ?>
+                                        </select>
+                                    </div>
                                     </a>
                                 </div>
                             </div>
@@ -151,14 +165,17 @@
 
                                             while ($row = $result->fetch_assoc()) {
 
-                                                $filename = "<a href='../" . $row['file_path'] . "' rel='tooltip'  title='Download' onclick = updateDownloads('".$row['id']."'); download>".$row['file_name']."</a>";
+                                                $filename = "<a href='../" . $row['file_path'] . "' rel='tooltip'  title='Click to Download' onclick = updateDownloads('".$row['id']."'); download>".$row['file_name']."</a>";
 
-                                                  echo "<tr>
+                                                  echo "<tr class='trcontent'>
                                                   <td>
                                                     " . $row['id'] . "
                                                   </td>
                                                   <td>
-                                                    " . $filename . "
+                                                    " . $filename . " &nbsp;
+                                                    <a tabindex='0' role='button' data-toggle='popover' data-trigger='focus' title='Description' data-content='".$row['file_desc']."'>
+                                                    <i class='now-ui-icons travel_info' rel='tooltip'  title='Click for Description'></i>
+                                                    </a>
                                                   </td>
                                                   <td>
                                                     " . $row['file_purpose'] . "
@@ -280,6 +297,14 @@
 </script>
 
 <script>
+
+$('.popover-dismiss').popover({
+  trigger: 'focus'
+})
+
+</script>
+
+<script>
     function myFunction() {
         // Declare variables 
         var input, filter, table, tr, td, i, txtValue;
@@ -362,7 +387,6 @@
 </script>
 
 <script>
-
 function updateDownloads(myObj){
     var obj, dbParam, xmlhttp;
       obj = {
@@ -381,9 +405,26 @@ function updateDownloads(myObj){
      xmlhttp.open("POST", "../updatedownloads.php", true);
      xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
      xmlhttp.send("x=" + dbParam);
-
 }
+</script>
 
+<script>
+    function filterText() {
+        document.getElementById('myInput').value = '';
+        var rex = new RegExp($('#filepurposefilter').val());
+        if (rex == "/all/") {
+            clearFilter()
+        } else {
+            $('.trcontent').hide();
+            $('.trcontent').filter(function() {
+                return rex.test($(this).text());
+            }).show();
+        }
+    }
+
+    function clearFilter() {
+        $('.trcontent').show();
+    }
 </script>
 
 </html> 

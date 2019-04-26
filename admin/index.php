@@ -143,7 +143,20 @@
                                         <h4 class="card-title"> Document List</h4>
                                         <!--<i class="now-ui-icons arrows-1_minimal-down"></i>-->
                                     </div>
-
+                                    <div class="col-md-3">
+                                        <select class="form-control form-control" id="filepurposefilter" onchange="filterText();">
+                                            <option value="all">Show All Documents</option>
+                                            <?php
+                                            $sqlt = "Select * from m_typeofdoc;";
+                                            $resultt = $conn->query($sqlt);
+                                            if ($resultt->num_rows > 0) {
+                                                while ($rowt = $resultt->fetch_assoc()) {
+                                                    echo "<option value='" . $rowt['type'] . "'>" . $rowt['type'] . "</option>";
+                                                }
+                                            }
+                                            ?>
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
 
@@ -193,9 +206,9 @@
                                                 //     $filename = $row['file_name'];
                                                 // }
 
-                                                $filename = "<a href='../" . $row['file_path'] . "' rel='tooltip'  title='Download' onclick = updateDownloads('" . $row['id'] . "'); download>" . $row['file_name'] . "</a>";
+                                                $filename = "<a href='../" . $row['file_path'] . "' rel='tooltip'  title='Click to Download' onclick = updateDownloads('" . $row['id'] . "'); download>" . $row['file_name'] . "</a>";
 
-                                                echo "<tr>
+                                                echo "<tr class='trcontent'>
                                           <td>
                                             " . $row['id'] . "
                                           </td>
@@ -226,7 +239,9 @@
                                           <td style='display:none;'>
                                           " . $row['file_name'] . "
                                           </td>
-                                          
+                                          <td style='display:none;'>
+                                          " . $row['file_desc'] . "
+                                          </td>
                                           
                                           <td class='td-actions text-right'>
                                            		<button type='button' onclick='getRowForDetails(" . $rowi . ")' rel='tooltip' class='btn btn-success btn-sm btn-round btn-icon' title='Details' data-toggle='modal' data-target='#fileDetailsModal' data-dismiss='modal' >
@@ -365,6 +380,10 @@
                     <div class="input-group">
                         <input class="form-control" type="file" name="upfilename" id="upfilename" onchange="" required>
                     </div>
+                    <div class="form-group">
+                        <label for="exampleFormControlTextarea1">File Description</label>
+                        <textarea class="form-control" id="upfiledesc" name="upfiledesc" rows="3" required></textarea>
+                    </div>
                     <input type="hidden" name="upidno" id="upidno">
                     <div class="col-md-4 pull-right">
                         <label for="exampleFormControlSelect1">File Extension</label>
@@ -383,9 +402,15 @@
                         <div class="input-group">
                             <select class="form-control form-control" name="upfilepurpose" id="upfilepurpose" required>
                                 <option value="">Select...</option>
-                                <option value="Letter">Letter</option>
-                                <option value="Form">Form</option>
-                                <option value="Memo">Memo</option>
+                                <?php
+                                $sqlt = "Select * from m_typeofdoc;";
+                                $resultt = $conn->query($sqlt);
+                                if ($resultt->num_rows > 0) {
+                                    while ($rowt = $resultt->fetch_assoc()) {
+                                        echo "<option value='" . $rowt['type'] . "'>" . $rowt['type'] . "</option>";
+                                    }
+                                }
+                                ?>
                             </select>
                             <!--<input type="text" class="form-control form-control-lg" id="" name="filepurpose" value="Accreditation" required>-->
                         </div>
@@ -412,8 +437,9 @@
                 </button>
             </div>
             <div class="modal-body">
+                <div class="input-group" id="dfilename"></div>
                 <div class="input-group" id="downloads"></div>
-                <div class="input-group" id="downloaded"></div>
+                <div class="input-group" id="dfiledesc"></div>
                 <div class="input-group scroll">
                     <div id="download_log"></div>
                 </div>
@@ -483,7 +509,10 @@
                     <div class="input-group">
                         <input class="form-control" type="file" name="filename" id="filename" onchange="" required>
                     </div>
-
+                    <div class="form-group">
+                        <label for="exampleFormControlTextarea1">File Description</label>
+                        <textarea class="form-control" id="filedesc" name="filedesc" rows="3" required></textarea>
+                    </div>
                     <div class="col-md-4 pull-right">
                         <label for="exampleFormControlSelect1">File Extension</label>
                         <div class="input-group">
@@ -501,9 +530,15 @@
                         <div class="input-group">
                             <select class="form-control form-control" name="filepurpose" required>
                                 <option value="">Select...</option>
-                                <option value="Letter">Letter</option>
-                                <option value="Form">Form</option>
-                                <option value="Memo">Memo</option>
+                                <?php
+                                $sqlt = "Select * from m_typeofdoc;";
+                                $resultt = $conn->query($sqlt);
+                                if ($resultt->num_rows > 0) {
+                                    while ($rowt = $resultt->fetch_assoc()) {
+                                        echo "<option value='" . $rowt['type'] . "'>" . $rowt['type'] . "</option>";
+                                    }
+                                }
+                                ?>
                             </select>
                             <!--<input type="text" class="form-control form-control-lg" id="" name="filepurpose" value="Accreditation" required>-->
                         </div>
@@ -636,12 +671,10 @@ if (isset($_GET['error']) && $_GET['error'] == 5) {
         input = document.getElementById("myInput");
         filter = input.value.toUpperCase();
         table = document.getElementById("myTable");
-        tr = table.getElementsByTagName("tr");
-
+        tr = table.getElementsByTagName("tr");    
         // Loop through all table rows, and hide those who don't match the search query
         for (i = 0; i < tr.length; i++) {
             td = tr[i].getElementsByTagName("td");
-
             if (td.length > 0) {
                 //txtValue = td.textContent || td.innerText;
                 if (td[0].innerHTML.toUpperCase().indexOf(filter) > -1 || td[1].innerHTML.toUpperCase().indexOf(filter) > -1) {
@@ -650,6 +683,7 @@ if (isset($_GET['error']) && $_GET['error'] == 5) {
                     tr[i].style.display = "none";
                 }
             }
+
         }
     }
 </script>
@@ -738,6 +772,7 @@ if (isset($_GET['error']) && $_GET['error'] == 5) {
         var fpor = document.getElementById("myTable").rows[r].cells.item(2).innerHTML;
         var fxtn = document.getElementById("myTable").rows[r].cells.item(6).innerHTML;
         var frev = document.getElementById("myTable").rows[r].cells.item(7).innerHTML;
+        var fdesc = document.getElementById("myTable").rows[r].cells.item(10).innerHTML;
         /*var bch = document.getElementById("myTable").rows[r].cells.item(2).innerHTML;
         var amt = document.getElementById("myTable").rows[r].cells.item(3).innerHTML;
         document.getElementById("display_validate_no").innerHTML = "Invalidate "+reg+"?";
@@ -753,7 +788,7 @@ if (isset($_GET['error']) && $_GET['error'] == 5) {
         $('#upfileextension').val(fxtn.replace(/\s/g, ""));
         $('#upfilepurpose').val(fpor.replace(/\s/g, ""));
         $("#upidno").val(fid.replace(/\s/g, ""));
-
+        $("#upfiledesc").val(fdesc.trim());
     }
 </script>
 
@@ -801,9 +836,12 @@ if (isset($_GET['error']) && $_GET['error'] == 5) {
 
         var id = document.getElementById("myTable").rows[r].cells.item(0).innerHTML;
         var name = document.getElementById("myTable").rows[r].cells.item(9).innerHTML;
+        var desc = document.getElementById("myTable").rows[r].cells.item(10).innerHTML;
         var newname = name.replace(/\s/g, "");
         var newid = id.replace(/\s/g, "");
-        document.getElementById("fileDetailsModalTitle").innerHTML = name;
+        document.getElementById("fileDetailsModalTitle").innerHTML = "Control No: " + id;
+        $('#dfilename').text("Name: " + name);
+        $('#dfiledesc').text("Description: " + desc);
         var obj, dbParam, xmlhttp, myObj, x, txt = "";
         obj = {
             "fid": newid
@@ -831,74 +869,23 @@ if (isset($_GET['error']) && $_GET['error'] == 5) {
     }
 </script>
 
-<!-- <script>
-
-$.uploadifive({ onProgress: function(file, e) { fn.onProgress(file, e.loaded);} });
-
-</script>
-
 <script>
-
-var fnProgress = function(file, bytes) {
-    var percentage = (bytesLoaded / file.size) * 100;
-
-    // Update DOM
-    $('#progress').css({ 'width': percentage + '%' });
-    $('#status').html(Math.round(percentage + '%'));
-}
-
-</script> -->
-
-<!-- <script>
-function toggleBarVisibility() {
-    var e = document.getElementById("progressBar");
-    e.style.display = (e.style.display == "block");// ? "none" : "block";
-}
-
-
-    function createRequestObject() {
-        var http;
-        if (navigator.appName == "Microsoft Internet Explorer") {
-            http = new ActiveXObject("Microsoft.XMLHTTP");
+    function filterText() {
+        document.getElementById('myInput').value = '';
+        var rex = new RegExp($('#filepurposefilter').val());
+        if (rex == "/all/") {
+            clearFilter()
         } else {
-            http = new XMLHttpRequest();
-        }
-        return http;
-    }
-
-    function sendRequest() {
-        var http = createRequestObject();
-        http.open("GET", "progress.php");
-        http.onreadystatechange = function() {
-            handleResponse(http);
-        };
-        http.send(null);
-    }
-
-    function handleResponse(http) {
-        var response;
-        if (http.readyState == 4) {
-            response = http.responseText;
-            document.getElementById("progress").style.width = response + "%";
-            document.getElementById("status").innerHTML = response + "%";
-            document.getElementById("uploading").innerHTML = "Uploading...";
-            if (response < 100) {
-                setTimeout("sendRequest()", 1000);
-            } else {
-                toggleBarVisibility();
-                document.getElementById("status").innerHTML = "Done.";
-            }
+            $('.trcontent').hide();
+            $('.trcontent').filter(function() {
+                return rex.test($(this).text());
+            }).show();
         }
     }
 
-    function startUpload() {
-        toggleBarVisibility();
-        setTimeout("sendRequest()", 1000);
+    function clearFilter() {
+        $('.trcontent').show();
     }
-
-    (function() {
-        document.getElementById("addFileForm").onsubmit = startUpload;
-    })();
-</script> -->
+</script>
 
 </html>
