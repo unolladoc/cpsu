@@ -276,7 +276,7 @@
                                           <td style='display:none;'>
                                           " . $year . "
                                           </td>
-                                          <td>
+                                          <td style='display:none;'>
                                           " . $month . "
                                           </td>
                                           
