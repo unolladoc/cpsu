@@ -1,0 +1,63 @@
+[25-Apr-2019 10:40:40 Asia/Manila] PHP Fatal error:  Uncaught Error: Call to undefined method mysqli_stmt::get_result() in /home/ltlaqd11ukyp/public_html/admin/loaddownloaddata.php:17
+Stack trace:
+#0 {main}
+  thrown in /home/ltlaqd11ukyp/public_html/admin/loaddownloaddata.php on line 17
+[25-Apr-2019 10:40:45 Asia/Manila] PHP Fatal error:  Uncaught Error: Call to undefined method mysqli_stmt::get_result() in /home/ltlaqd11ukyp/public_html/admin/loaddownloaddata.php:17
+Stack trace:
+#0 {main}
+  thrown in /home/ltlaqd11ukyp/public_html/admin/loaddownloaddata.php on line 17
+[25-Apr-2019 10:40:53 Asia/Manila] PHP Fatal error:  Uncaught Error: Call to undefined method mysqli_stmt::get_result() in /home/ltlaqd11ukyp/public_html/admin/loaddownloaddata.php:17
+Stack trace:
+#0 {main}
+  thrown in /home/ltlaqd11ukyp/public_html/admin/loaddownloaddata.php on line 17
+[25-Apr-2019 10:41:06 Asia/Manila] PHP Fatal error:  Uncaught Error: Call to undefined method mysqli_stmt::get_result() in /home/ltlaqd11ukyp/public_html/admin/loaddownloaddata.php:17
+Stack trace:
+#0 {main}
+  thrown in /home/ltlaqd11ukyp/public_html/admin/loaddownloaddata.php on line 17
+[25-Apr-2019 10:42:46 Asia/Manila] PHP Fatal error:  Uncaught Error: Call to undefined method mysqli_stmt::get_result() in /home/ltlaqd11ukyp/public_html/admin/loaddownloaddata.php:17
+Stack trace:
+#0 {main}
+  thrown in /home/ltlaqd11ukyp/public_html/admin/loaddownloaddata.php on line 17
+[25-Apr-2019 10:43:13 Asia/Manila] PHP Fatal error:  Uncaught Error: Call to undefined method mysqli_stmt::get_result() in /home/ltlaqd11ukyp/public_html/admin/loaddownloaddata.php:17
+Stack trace:
+#0 {main}
+  thrown in /home/ltlaqd11ukyp/public_html/admin/loaddownloaddata.php on line 17
+[25-Apr-2019 10:43:25 Asia/Manila] PHP Notice:  Undefined index: x in /home/ltlaqd11ukyp/public_html/admin/loaddownloaddata.php on line 5
+[25-Apr-2019 10:43:25 Asia/Manila] PHP Notice:  Trying to get property 'fid' of non-object in /home/ltlaqd11ukyp/public_html/admin/loaddownloaddata.php on line 9
+[25-Apr-2019 10:43:25 Asia/Manila] PHP Notice:  Undefined variable: file_name in /home/ltlaqd11ukyp/public_html/admin/loaddownloaddata.php on line 15
+[25-Apr-2019 10:43:25 Asia/Manila] PHP Fatal error:  Uncaught Error: Call to undefined method mysqli_stmt::get_result() in /home/ltlaqd11ukyp/public_html/admin/loaddownloaddata.php:17
+Stack trace:
+#0 {main}
+  thrown in /home/ltlaqd11ukyp/public_html/admin/loaddownloaddata.php on line 17
+[25-Apr-2019 10:43:44 Asia/Manila] PHP Fatal error:  Uncaught Error: Call to undefined method mysqli_stmt::get_result() in /home/ltlaqd11ukyp/public_html/admin/loaddownloaddata.php:17
+Stack trace:
+#0 {main}
+  thrown in /home/ltlaqd11ukyp/public_html/admin/loaddownloaddata.php on line 17
+[25-Apr-2019 10:46:52 Asia/Manila] PHP Fatal error:  Uncaught Error: Call to undefined method mysqli_stmt::get_result() in /home/ltlaqd11ukyp/public_html/admin/loaddownloaddata.php:17
+Stack trace:
+#0 {main}
+  thrown in /home/ltlaqd11ukyp/public_html/admin/loaddownloaddata.php on line 17
+[25-Apr-2019 10:47:05 Asia/Manila] PHP Fatal error:  Uncaught Error: Call to undefined method mysqli_stmt::get_result() in /home/ltlaqd11ukyp/public_html/admin/loaddownloaddata.php:17
+Stack trace:
+#0 {main}
+  thrown in /home/ltlaqd11ukyp/public_html/admin/loaddownloaddata.php on line 17
+[25-Apr-2019 11:22:22 Asia/Manila] PHP Fatal error:  Uncaught Error: Call to undefined method mysqli_stmt::get_result() in /home/ltlaqd11ukyp/public_html/admin/loaddownloaddata.php:17
+Stack trace:
+#0 {main}
+  thrown in /home/ltlaqd11ukyp/public_html/admin/loaddownloaddata.php on line 17
+[25-Apr-2019 14:44:28 Asia/Manila] PHP Fatal error:  Uncaught Error: Call to undefined method mysqli_stmt::get_result() in /home/ltlaqd11ukyp/public_html/admin/loaddownloaddata.php:17
+Stack trace:
+#0 {main}
+  thrown in /home/ltlaqd11ukyp/public_html/admin/loaddownloaddata.php on line 17
+[25-Apr-2019 15:01:26 Asia/Manila] PHP Notice:  Undefined index: type in /home/ltlaqd11ukyp/public_html/admin/logs.php on line 10
+[25-Apr-2019 15:01:26 Asia/Manila] PHP Notice:  Undefined index: name in /home/ltlaqd11ukyp/public_html/admin/logs.php on line 22
+[26-Apr-2019 14:49:05 Asia/Manila] PHP Fatal error:  Uncaught Error: Call to undefined method mysqli_stmt::get_result() in /home/ltlaqd11ukyp/public_html/admin/loaddownloaddata.php:17
+Stack trace:
+#0 {main}
+  thrown in /home/ltlaqd11ukyp/public_html/admin/loaddownloaddata.php on line 17
+[26-Apr-2019 15:11:50 Asia/Manila] PHP Fatal error:  Uncaught Error: Call to undefined method mysqli_stmt::get_result() in /home/ltlaqd11ukyp/public_html/admin/loaddownloaddata.php:17
+Stack trace:
+#0 {main}
+  thrown in /home/ltlaqd11ukyp/public_html/admin/loaddownloaddata.php on line 17
+[26-Apr-2019 16:46:25 Asia/Manila] PHP Notice:  Undefined index: type in /home/ltlaqd11ukyp/public_html/admin/index.php on line 10
+[26-Apr-2019 16:46:25 Asia/Manila] PHP Notice:  Undefined index: name in /home/ltlaqd11ukyp/public_html/admin/index.php on line 22
