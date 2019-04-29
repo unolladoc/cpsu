@@ -112,7 +112,7 @@
                                             <!--<i class="now-ui-icons arrows-1_minimal-down"></i>-->
                                         </div>
                                         <div class="col-md-3">
-                                        <select class="form-control form-control" id="filepurposefilter" onchange="filterText();">
+                                        <select class="form-control form-control" id="filepurposefilter" onchange="myFunction();">
                                             <option value="all">Show All Documents</option>
                                             <?php
                                             $sqlt = "Select * from m_typeofdoc;";
@@ -307,24 +307,31 @@ $('.popover-dismiss').popover({
 <script>
     function myFunction() {
         // Declare variables 
-        var input, filter, table, tr, td, i, txtValue;
+        var input, filter, input2, filter2, table, tr, td, i, txtValue;
         input = document.getElementById("myInput");
         filter = input.value.toUpperCase();
         table = document.getElementById("myTable");
         tr = table.getElementsByTagName("tr");
 
+        input2 = document.getElementById("filepurposefilter");
+        if (input2.value.toUpperCase() != "ALL") {
+            filter2 = input2.value.toUpperCase();
+        } else {
+            filter2 = "";
+        }
+
         // Loop through all table rows, and hide those who don't match the search query
         for (i = 0; i < tr.length; i++) {
             td = tr[i].getElementsByTagName("td");
-
             if (td.length > 0) {
                 //txtValue = td.textContent || td.innerText;
-                if (td[0].innerHTML.toUpperCase().indexOf(filter) > -1 || td[1].innerHTML.toUpperCase().indexOf(filter) > -1) {
+                if ((td[0].innerHTML.toUpperCase().indexOf(filter) > -1 || td[1].innerHTML.toUpperCase().indexOf(filter) > -1) && (td[2].innerHTML.toUpperCase().indexOf(filter2) > -1)) {
                     tr[i].style.display = "";
                 } else {
                     tr[i].style.display = "none";
                 }
             }
+
         }
     }
 </script>
@@ -408,7 +415,7 @@ function updateDownloads(myObj){
 }
 </script>
 
-<script>
+<!-- <script>
     function filterText() {
         document.getElementById('myInput').value = '';
         var rex = new RegExp($('#filepurposefilter').val());
@@ -425,6 +432,6 @@ function updateDownloads(myObj){
     function clearFilter() {
         $('.trcontent').show();
     }
-</script>
+</script> -->
 
 </html> 

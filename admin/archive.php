@@ -142,20 +142,50 @@
                                         <h4 class="card-title"> Archive List</h4>
                                         <!--<i class="now-ui-icons arrows-1_minimal-down"></i>-->
                                     </div>
-                                    <div class="col-md-3">
-                                        <select class="form-control form-control" id="filepurposefilter" onchange="filterText();">
-                                            <option value="all">Show All Documents</option>
-                                            <?php
-                                            $sqlt = "Select * from m_typeofdoc;";
-                                            $resultt = $conn->query($sqlt);
-                                            if ($resultt->num_rows > 0) {
-                                                while ($rowt = $resultt->fetch_assoc()) {
-                                                    echo "<option value='" . $rowt['type'] . "'>" . $rowt['type'] . "</option>";
+                                        <div class="col-md-4 pull-left">
+                                            <select class="form-control form-control" id="filepurposefilter" onchange="myFunction();">
+                                                <option value="all">Show All Documents</option>
+                                                <?php
+                                                $sqlt = "Select * from m_typeofdoc;";
+                                                $resultt = $conn->query($sqlt);
+                                                if ($resultt->num_rows > 0) {
+                                                    while ($rowt = $resultt->fetch_assoc()) {
+                                                        echo "<option value='" . $rowt['type'] . "'>" . $rowt['type'] . "</option>";
+                                                    }
                                                 }
-                                            }
-                                            ?>
-                                        </select>
-                                    </div>
+                                                ?>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-4 pull-left">
+                                            <select class="form-control form-control" id="yearfilter" onchange="myFunction();">
+                                                <option value="all">Show All Year</option>
+                                                <?php
+                                                $sqlt = "SELECT DISTINCT YEAR(datetime) AS year from files ORDER BY year ASC;";
+                                                $resultt = $conn->query($sqlt);
+                                                if ($resultt->num_rows > 0) {
+                                                    while ($rowt = $resultt->fetch_assoc()) {
+                                                        echo "<option value='" . $rowt['year'] . "'>" . $rowt['year'] . "</option>";
+                                                    }
+                                                }
+                                                ?>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-4 pull-left">
+                                            <select class="form-control form-control" id="monthfilter" onchange="myFunction();">
+                                                <option value="all">Show All Month</option>
+                                                <?php
+                                                $sqlt = "SELECT DISTINCT Month(datetime) AS mon from files ORDER BY mon ASC;";
+                                                $resultt = $conn->query($sqlt);
+                                                if ($resultt->num_rows > 0) {
+                                                    while ($rowt = $resultt->fetch_assoc()) {
+                                                        $dateObj   = DateTime::createFromFormat('!m', $rowt['mon']);
+                                                        $monthName = $dateObj->format('F');
+                                                        echo "<option value='" . $monthName . "'>" . $monthName . "</option>";
+                                                    }
+                                                }
+                                                ?>
+                                            </select>
+                                        </div>
                                 </div>
                             </div>
 
@@ -205,6 +235,9 @@
                                                 // }
 
                                                 $filename = "<a href='../" . $row['file_path'] . "' rel='tooltip'  title='Click to Download' onclick = updateDownloads('" . $row['id'] . "'); download>" . $row['file_name'] . "</a>";
+                                                $convertdatetime = new DateTime($row['datetime']);
+                                                $year = $convertdatetime->format('Y');
+                                                $month = $convertdatetime->format('F');
 
                                                 echo "<tr class='trcontent'>
                                           <td>
@@ -239,6 +272,12 @@
                                           </td>
                                           <td style='display:none;'>
                                           " . $row['file_desc'] . "
+                                          </td>
+                                          <td style='display:none;'>
+                                          " . $year . "
+                                          </td>
+                                          <td>
+                                          " . $month . "
                                           </td>
                                           
                                           <td class='td-actions text-right'>
@@ -445,11 +484,32 @@
 <script>
     function myFunction() {
         // Declare variables 
-        var input, filter, table, tr, td, i, txtValue;
+        var input, filter, input2, filter2, input3, filter3, input4, filter4, table, tr, td, i, txtValue;
         input = document.getElementById("myInput");
         filter = input.value.toUpperCase();
         table = document.getElementById("myTable");
         tr = table.getElementsByTagName("tr");
+
+        input2 = document.getElementById("filepurposefilter");
+        if (input2.value.toUpperCase() != "ALL") {
+            filter2 = input2.value.toUpperCase();
+        } else {
+            filter2 = "";
+        }
+
+        input3 = document.getElementById("yearfilter");
+        if (input3.value.toUpperCase() != "ALL") {
+            filter3 = input3.value.toUpperCase();
+        } else {
+            filter3 = "";
+        }
+
+        input4 = document.getElementById("monthfilter");
+        if (input4.value.toUpperCase() != "ALL") {
+            filter4 = input4.value.toUpperCase();
+        } else {
+            filter4 = "";
+        }
 
         // Loop through all table rows, and hide those who don't match the search query
         for (i = 0; i < tr.length; i++) {
@@ -457,7 +517,7 @@
 
             if (td.length > 0) {
                 //txtValue = td.textContent || td.innerText;
-                if (td[0].innerHTML.toUpperCase().indexOf(filter) > -1 || td[1].innerHTML.toUpperCase().indexOf(filter) > -1) {
+                if ((td[0].innerHTML.toUpperCase().indexOf(filter) > -1 || td[1].innerHTML.toUpperCase().indexOf(filter) > -1) && (td[2].innerHTML.toUpperCase().indexOf(filter2) > -1 && td[11].innerHTML.toUpperCase().indexOf(filter3) > -1 && td[12].innerHTML.toUpperCase().indexOf(filter4) > -1)) {
                     tr[i].style.display = "";
                 } else {
                     tr[i].style.display = "none";
@@ -543,7 +603,6 @@
         xmlhttp.open("POST", "../updatedownloads.php", true);
         xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         xmlhttp.send("x=" + dbParam);
-
     }
 </script>
 
@@ -597,38 +656,42 @@
         $('#dfilename').text("Name: " + name);
         $('#dfiledesc').text("Description: " + desc);
         $.ajax({
-        url: "loaddownloaddata2.php",
-        type: "POST",
-        data: "fid=" + newid,
-        success: function(response) {
-          console.log(response);
-          $('#downloads').text("Downloaded " + response.length + " time/s");
-        $.each(response, function(i, value) {
-            txt += value.time + " " + value.description + " " + "<br>";
-            // $('<option></option>', {
-            //   html: value.office
-            // }).attr('value', value.id).appendTo('#offices');
-          });
-          document.getElementById("download_log").innerHTML = txt;
-        },
-        error: function(err) {
-          console.log("Error" + err);
-        }
-      });
+            url: "loaddownloaddata2.php",
+            type: "POST",
+            data: "fid=" + newid,
+            success: function(response) {
+                console.log(response);
+                $('#downloads').text("Downloaded " + response.length + " time/s");
+                $.each(response, function(i, value) {
+                    txt += value.time + " " + value.description + " " + "<br>";
+                    // $('<option></option>', {
+                    //   html: value.office
+                    // }).attr('value', value.id).appendTo('#offices');
+                });
+                document.getElementById("download_log").innerHTML = txt;
+            },
+            error: function(err) {
+                console.log("Error" + err);
+            }
+        });
 
     }
 </script>
 
-<script>
+<!-- <script>
     function filterText() {
         document.getElementById('myInput').value = '';
         var rex = new RegExp($('#filepurposefilter').val());
+        var rex = new RegExp($('#yearfilter').val());
         if (rex == "/all/") {
-            clearFilter()
+            clearFilter();
         } else {
             $('.trcontent').hide();
             $('.trcontent').filter(function() {
                 return rex.test($(this).text());
+            }).show();
+            $('.trcontent').filter(function() {
+                return rex2.test($(this).text());
             }).show();
         }
     }
@@ -636,6 +699,6 @@
     function clearFilter() {
         $('.trcontent').show();
     }
-</script>
+</script> -->
 
 </html>
