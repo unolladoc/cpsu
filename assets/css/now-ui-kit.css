@@ -1691,7 +1691,7 @@ fieldset[disabled] .navbar .navbar-nav>a.btn.active {
 }
 
 .btn-primary {
-  background-color: #f96332;
+  background-color: #095006;
   color: #FFFFFF;
 }
 
@@ -1706,7 +1706,7 @@ fieldset[disabled] .navbar .navbar-nav>a.btn.active {
 .show>.btn-primary.dropdown-toggle,
 .show>.btn-primary.dropdown-toggle:focus,
 .show>.btn-primary.dropdown-toggle:hover {
-  background-color: #fa7a50;
+  background-color: #358d4b;
   color: #FFFFFF;
   box-shadow: none;
 }
@@ -3387,12 +3387,12 @@ small {
 }
 
 a {
-  color: #f96332;
+  color: #095006;
 }
 
 a:hover,
 a:focus {
-  color: #f96332;
+  color: #095006;
 }
 
 h1,
@@ -5949,13 +5949,13 @@ img {
 .clear-filter[filter-color="orange"] {
   background: rgba(44, 44, 44, 0.2);
   /* For browsers that do not support gradients */
-  background: -webkit-linear-gradient(90deg, rgba(44, 44, 44, 0.2), rgba(224, 23, 3, 0.6));
+  background: -webkit-linear-gradient(90deg, rgba(44, 44, 44, 0.2), rgba(21, 224, 3, 0.6));
   /* For Safari 5.1 to 6.0 */
-  background: -o-linear-gradient(90deg, rgba(44, 44, 44, 0.2), rgba(224, 23, 3, 0.6));
+  background: -o-linear-gradient(90deg, rgba(44, 44, 44, 0.2), rgba(21, 224, 3, 0.6));
   /* For Opera 11.1 to 12.0 */
-  background: -moz-linear-gradient(90deg, rgba(44, 44, 44, 0.2), rgba(224, 23, 3, 0.6));
+  background: -moz-linear-gradient(90deg, rgba(44, 44, 44, 0.2), rgba(21, 224, 3, 0.6));
   /* For Firefox 3.6 to 15 */
-  background: linear-gradient(0deg, rgba(44, 44, 44, 0.2), rgba(224, 23, 3, 0.6));
+  background: linear-gradient(0deg, rgba(44, 44, 44, 0.2), rgba(21, 224, 3, 0.6));
   /* Standard syntax */
 }
 

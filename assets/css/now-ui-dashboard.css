@@ -2821,13 +2821,13 @@ Created using IcoMoon - icomoon.io
       color: #2CA8FF; }
   .sidebar[data-color="green"]:after,
   .off-canvas-sidebar[data-color="green"]:after {
-    background: #18ce0f; }
+    background: #095006; }
   .sidebar[data-color="green"] .nav li.active > a:not([data-toggle="collapse"]),
   .off-canvas-sidebar[data-color="green"] .nav li.active > a:not([data-toggle="collapse"]) {
-    color: #18ce0f; }
+    color: #095006; }
     .sidebar[data-color="green"] .nav li.active > a:not([data-toggle="collapse"]) i,
     .off-canvas-sidebar[data-color="green"] .nav li.active > a:not([data-toggle="collapse"]) i {
-      color: #18ce0f; }
+      color: #095006; }
   .sidebar[data-color="orange"]:after,
   .off-canvas-sidebar[data-color="orange"]:after {
     background: #f96332; }

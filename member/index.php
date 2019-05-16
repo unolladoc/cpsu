@@ -34,7 +34,7 @@
 
 <body class="">
     <div class="wrapper ">
-        <div class="sidebar" data-color="orange">
+        <div class="sidebar" data-color="green">
             <div class="logo">
                 <a href="#" class="simple-text logo-normal">
                     CPSU

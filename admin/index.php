@@ -30,7 +30,7 @@
     <link href="../assets/css/now-ui-dashboard.css?v=1.2.0" rel="stylesheet" />
     <link href="../assets/css/now-ui-kit.css?v=1.2.0" rel="stylesheet" />
     <!-- CSS Just for demo purpose, don't include it in your project -->
-    <link href="../assets/demo/demo.css" rel="stylesheet" />
+    <!-- <link href="../assets/demo/demo.css" rel="stylesheet" /> -->
 
     <style>
         .scroll {
@@ -43,7 +43,7 @@
 
 <body class="">
     <div class="wrapper ">
-        <div class="sidebar" data-color="orange">
+        <div class="sidebar" data-color="green">
             <div class="logo">
                 <a href="#" class="simple-text logo-normal">
                     CPSU
@@ -313,9 +313,9 @@
     <!--  Notifications Plugin    -->
     <script src="../assets/js/plugins/bootstrap-notify.js"></script>
     <!-- Control Center for Now Ui Dashboard: parallax effects, scripts for the example pages etc -->
-    <script src="../assets/js/now-ui-dashboard.min.js?v=1.2.0" type="text/javascript"></script>
+    <!-- <script src="../assets/js/now-ui-dashboard.min.js?v=1.2.0" type="text/javascript"></script> -->
     <!-- Now Ui Dashboard DEMO methods, don't include it in your project! -->
-    <script src="../assets/demo/demo.js"></script>
+    <!-- <script src="../assets/demo/demo.js"></script> -->
     <!-- Add for converting number to amount -->
     <script src="../assets/js/js-webshim/minified/polyfiller.js"></script>
     <!--
@@ -352,10 +352,10 @@
     <!--  Notifications Plugin    -->
     <script src="../assets/js/plugins/bootstrap-notify.js"></script>
     <!-- Control Center for Now Ui Dashboard: parallax effects, scripts for the example pages etc -->
-    <script src="../assets/js/now-ui-dashboard.js?v=1.1.0" type="text/javascript"></script>
+    <!-- <script src="../assets/js/now-ui-dashboard.js?v=1.1.0" type="text/javascript"></script> -->
     <!-- Now Ui Dashboard DEMO methods, don't include it in your project! -->
-    <script src="../assets/js/demo.js"></script>
-    <script src="../assets/js/now-ui-kit.js?v=1.2.0" type="text/javascript"></script>
+    <!-- <script src="../assets/js/demo.js"></script> -->
+    <!-- <script src="../assets/js/now-ui-kit.js?v=1.2.0" type="text/javascript"></script> -->
 
 </body>
 
