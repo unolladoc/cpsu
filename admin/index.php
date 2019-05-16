@@ -631,14 +631,15 @@
                                     <input type="text" class="fileDest" style="display:none;">
                                 </div>
                                 <script>
-                                    var cities = new Bloodhound({
+                                    var val = new Bloodhound({
                                         datumTokenizer: Bloodhound.tokenizers.obj.whitespace('text'),
                                         queryTokenizer: Bloodhound.tokenizers.whitespace,
                                         remote: {
-                                            url: '../loaddata3.php'
+                                            url: '../loaddata3.php?q=val',
+                                            wildcard: 'val'
                                         }
                                     });
-                                    cities.initialize();
+                                    val.initialize();
                                     var elt = $('.fileDest');
                                     elt.tagsinput({
                                         itemValue: 'value',
@@ -646,7 +647,7 @@
                                         typeaheadjs: {
                                             name: 'cities',
                                             displayKey: 'text',
-                                            source: cities.ttAdapter()
+                                            source: val.ttAdapter()
                                         }
                                     });
                                 </script>
