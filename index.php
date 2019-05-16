@@ -279,7 +279,6 @@
             <label for="">Campus</label>
             <select class="form-control form-control" name="campus" id="campuses" required>
               <?php
-
               $sql = "SELECT * from campuses";
               $result = $conn->query($sql);
 
@@ -404,7 +403,7 @@
         data: "campus=" + cid,
         success: function(response) {
           $('#offices').append('<option value="">Select...</option>')
-          //console.log(response);
+          console.log(response);
           //$('#offices').append('<option value=' + myObj[x].id + '>' + myObj[x].office + '</option>');
           $.each(response, function(i, value) {
             $('<option></option>', {

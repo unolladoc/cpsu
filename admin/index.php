@@ -27,10 +27,11 @@
     <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
     <!-- CSS Files -->
     <link href="../assets/css/bootstrap.min.css" rel="stylesheet" />
+    <!-- <link href="../assets/css/bootstrap-tagsinput.css" /> -->
     <link href="../assets/css/now-ui-dashboard.css?v=1.2.0" rel="stylesheet" />
     <link href="../assets/css/now-ui-kit.css?v=1.2.0" rel="stylesheet" />
     <!-- CSS Just for demo purpose, don't include it in your project -->
-    <!-- <link href="../assets/demo/demo.css" rel="stylesheet" /> -->
+    <link href="../assets/demo/demo.css" rel="stylesheet" />
 
     <style>
         .scroll {
@@ -305,6 +306,11 @@
     <script src="../assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>
     <script src="../assets/js/angular.min.js"></script>
     <script src="../assets/js/jquery.uploadifive.min.js"></script>
+    <script src="../assets/js/bootstrap-tagsinput.min.js"></script>
+    <script src="../assets/js/bloodhound.min.js"></script>
+    <script src="../assets/js/typeahead.bundle.min.js"></script>
+    <!-- <script src="../assets/js/app.js"></script> -->
+    <!-- <script src="../assets/js/app_bs3.js"></script> -->
     <!--  Google Maps Plugin    
   <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE"></script>
   -->
@@ -511,7 +517,61 @@
                     </div>
                     <div class="form-group">
                         <label for="exampleFormControlTextarea1">File Description</label>
-                        <textarea class="form-control" id="filedesc" name="filedesc" rows="3" required></textarea>
+                        <textarea class="form-control" id="filedesc" name="filedesc" rows="2" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleFormControlTextarea1">File Destination</label>
+                        <div class="form-check">
+                            <label class="form-check-label">
+                                <input class="form-check-input" type="checkbox" id="fileDestinationCheckbox" value="all" onclick="unhideFileDesination()" checked> All Campuses
+                                <span class="form-check-sign"></span>
+                            </label>
+                            <div class="col-md-12 form-group" id="customFileDestination" style="display:none; padding:20px;">
+                                <input type="text" id="fileDest" class="tagsinput form-control" data-role="tagsinput" data-color="danger">
+                                    <script>
+                                        var cities = new Bloodhound({
+                                            datumTokenizer: Bloodhound.tokenizers.obj.whitespace('text'),
+                                            queryTokenizer: Bloodhound.tokenizers.whitespace,
+                                            prefetch: '../loaddata3.php'
+                                        });
+                                        cities.initialize();
+                                        var elt = $('#fileDest');
+                                        elt.tagsinput({
+                                            itemValue: 'value',
+                                            itemText: 'text',
+                                            typeaheadjs: {
+                                                name: 'cities',
+                                                displayKey: 'text',
+                                                source: cities.ttAdapter()
+                                            }
+                                        });
+                                    </script>
+                               
+                                <!-- <div class="col-md-3 pull-right">
+                                    Button
+                                </div>
+                                <div class="col-md-5 pull-right">
+                                    <select class="form-control form-control" name="office" id="offices"></select>
+                                </div>
+                                <div class="col-md-4 pull-right">
+                                    <select class="form-control form-control" name="campus" id="campuses">
+                                        <?php
+                                        // $sql = "SELECT * from campuses";
+                                        // $result = $conn->query($sql);
+
+                                        // if ($result->num_rows > 0) {
+
+                                        //     echo "<option value=''>Select Campus...</option>";
+
+                                        //     while ($row = $result->fetch_assoc()) {
+                                        //         echo "<option value='" . $row['id'] . "' id='" . $row['campus'] . "'>" . $row['campus'] . "</option>";
+                                        //     }
+                                        // }
+                                        ?>
+                                    </select>
+                                </div> -->
+                            </div>
+                        </div>
                     </div>
                     <div class="col-md-4 pull-right">
                         <label for="exampleFormControlSelect1">File Extension</label>
@@ -888,24 +948,24 @@ if (isset($_GET['error']) && $_GET['error'] == 5) {
         $('#dfilename').text("Name: " + name);
         $('#dfiledesc').text("Description: " + desc);
         $.ajax({
-        url: "loaddownloaddata2.php",
-        type: "POST",
-        data: "fid=" + newid,
-        success: function(response) {
-          console.log(response);
-          $('#downloads').text("Downloaded " + response.length + " time/s");
-        $.each(response, function(i, value) {
-            txt += value.time + " " + value.description + " " + "<br>";
-            // $('<option></option>', {
-            //   html: value.office
-            // }).attr('value', value.id).appendTo('#offices');
-          });
-          document.getElementById("download_log").innerHTML = txt;
-        },
-        error: function(err) {
-          console.log("Error" + err);
-        }
-      });
+            url: "loaddownloaddata2.php",
+            type: "POST",
+            data: "fid=" + newid,
+            success: function(response) {
+                console.log(response);
+                $('#downloads').text("Downloaded " + response.length + " time/s");
+                $.each(response, function(i, value) {
+                    txt += value.time + " " + value.description + " " + "<br>";
+                    // $('<option></option>', {
+                    //   html: value.office
+                    // }).attr('value', value.id).appendTo('#offices');
+                });
+                document.getElementById("download_log").innerHTML = txt;
+            },
+            error: function(err) {
+                console.log("Error" + err);
+            }
+        });
 
     }
 </script>
@@ -927,6 +987,45 @@ if (isset($_GET['error']) && $_GET['error'] == 5) {
     function clearFilter() {
         $('.trcontent').show();
     }
+</script> -->
+
+<script>
+    function unhideFileDesination() {
+        var checkBox = document.getElementById("fileDestinationCheckbox");
+        var text = document.getElementById("customFileDestination");
+        if (checkBox.checked == false) {
+            text.style.display = "block";
+        } else {
+            text.style.display = "none";
+        }
+    }
+</script>
+
+<!-- <script>
+    jQuery(document).ready(function($) {
+        $("#campuses").change(function() {
+            var cid = $("#campuses").val();
+            $('#offices').empty();
+            $.ajax({
+                url: "../loaddata2.php",
+                type: "POST",
+                data: "campus=" + cid,
+                success: function(response) {
+                    $('#offices').append('<option value="">All Offices</option>')
+                    //console.log(response);
+                    //$('#offices').append('<option value=' + myObj[x].id + '>' + myObj[x].office + '</option>');
+                    $.each(response, function(i, value) {
+                        $('<option></option>', {
+                            html: value.office
+                        }).attr('value', value.id).appendTo('#offices');
+                    });;
+                },
+                error: function(err) {
+                    console.log("Error" + err);
+                }
+            });
+        });
+    });
 </script> -->
 
 </html>
