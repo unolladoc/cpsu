@@ -19,9 +19,8 @@ $tmp = array();
 $tmp2 = array();
 
 while ($stmt->fetch()) {
-    $tmp["id"] = $id;
-    $tmp["office"] = "";
-    $tmp["campus"] = $campus;
+    $tmp["value"] = $id;
+    $tmp["text"] = $campus;
     array_push($tmpoutput, $tmp);
 }
 
@@ -29,9 +28,8 @@ $stmt2->execute();
 $stmt2->bind_result($id2, $office2, $campus2);
 
 while ($stmt2->fetch()) {
-    $tmp2["id"] = $id2;
-    $tmp2["office"] = $office2;
-    $tmp2["campus"] = $campus2;
+    $tmp2["value"] = $id2;
+    $tmp2["text"] = $office2 . " (".$campus2.")";
     array_push($tmpoutput2, $tmp2);
 }
 

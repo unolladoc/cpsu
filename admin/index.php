@@ -27,7 +27,8 @@
     <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
     <!-- CSS Files -->
     <link href="../assets/css/bootstrap.min.css" rel="stylesheet" />
-    <!-- <link href="../assets/css/bootstrap-tagsinput.css" /> -->
+    <link href="../assets/css/bootstrap-tagsinput.css" />
+    <link href="../assets/css/app.css" />
     <link href="../assets/css/now-ui-dashboard.css?v=1.2.0" rel="stylesheet" />
     <link href="../assets/css/now-ui-kit.css?v=1.2.0" rel="stylesheet" />
     <!-- CSS Just for demo purpose, don't include it in your project -->
@@ -37,6 +38,105 @@
         .scroll {
             height: 200px;
             overflow-y: scroll;
+        }
+
+        .label-info {
+            background-color: #095006;
+        }
+
+        .bootstrap-tagsinput .tag {
+            margin-right: 2px;
+            color: white;
+        }
+
+        .label {
+            display: inline;
+            padding: .2em .6em .3em;
+            font-size: 75%;
+            font-weight: 700;
+            line-height: 1;
+            color: #fff;
+            text-align: center;
+            white-space: nowrap;
+            vertical-align: baseline;
+            border-radius: .25em;
+        }
+
+        .bootstrap-tagsinput .tag [data-role="remove"] {
+            margin-left: 8px;
+            cursor: pointer;
+        }
+
+        .bootstrap-tagsinput input {
+            border: none;
+            box-shadow: none;
+            outline: none;
+            background-color: transparent;
+            padding: 0 6px;
+            margin: 0;
+            width: auto;
+            max-width: inherit;
+        }
+
+        .bootstrap-tagsinput {
+            width: 100%;
+        }
+
+        .accordion {
+            margin-bottom: -3px;
+        }
+
+        .accordion-group {
+            border: none;
+        }
+
+        .twitter-typeahead .tt-query,
+        .twitter-typeahead .tt-hint {
+            margin-bottom: 0;
+        }
+
+        .twitter-typeahead .tt-hint {
+            display: none;
+        }
+
+        .tt-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            z-index: 1000;
+            display: none;
+            float: left;
+            min-width: 160px;
+            padding: 5px 0;
+            margin: 2px 0 0;
+            list-style: none;
+            font-size: 14px;
+            background-color: #ffffff;
+            border: 1px solid #cccccc;
+            border: 1px solid rgba(0, 0, 0, 0.15);
+            border-radius: 4px;
+            -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+            background-clip: padding-box;
+            cursor: pointer;
+        }
+
+        .tt-suggestion {
+            display: block;
+            padding: 3px 20px;
+            clear: both;
+            font-weight: normal;
+            line-height: 1.428571429;
+            color: #333333;
+            white-space: nowrap;
+        }
+
+        .tt-suggestion:hover,
+        .tt-suggestion:focus {
+            color: #ffffff;
+            text-decoration: none;
+            outline: 0;
+            background-color: #428bca;
         }
     </style>
 
@@ -309,8 +409,8 @@
     <script src="../assets/js/bootstrap-tagsinput.min.js"></script>
     <script src="../assets/js/bloodhound.min.js"></script>
     <script src="../assets/js/typeahead.bundle.min.js"></script>
-    <!-- <script src="../assets/js/app.js"></script> -->
-    <!-- <script src="../assets/js/app_bs3.js"></script> -->
+    <script src="../assets/js/app.js"></script>
+    <script src="../assets/js/app_bs3.js"></script>
     <!--  Google Maps Plugin    
   <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE"></script>
   -->
@@ -527,26 +627,30 @@
                                 <span class="form-check-sign"></span>
                             </label>
                             <div class="col-md-12 form-group" id="customFileDestination" style="display:none; padding:20px;">
-                                <input type="text" id="fileDest" class="tagsinput form-control" data-role="tagsinput" data-color="danger">
-                                    <script>
-                                        var cities = new Bloodhound({
-                                            datumTokenizer: Bloodhound.tokenizers.obj.whitespace('text'),
-                                            queryTokenizer: Bloodhound.tokenizers.whitespace,
-                                            prefetch: '../loaddata3.php'
-                                        });
-                                        cities.initialize();
-                                        var elt = $('#fileDest');
-                                        elt.tagsinput({
-                                            itemValue: 'value',
-                                            itemText: 'text',
-                                            typeaheadjs: {
-                                                name: 'cities',
-                                                displayKey: 'text',
-                                                source: cities.ttAdapter()
-                                            }
-                                        });
-                                    </script>
-                               
+                                <div class="bs-example">
+                                    <input type="text" class="fileDest" style="display:none;">
+                                </div>
+                                <script>
+                                    var cities = new Bloodhound({
+                                        datumTokenizer: Bloodhound.tokenizers.obj.whitespace('text'),
+                                        queryTokenizer: Bloodhound.tokenizers.whitespace,
+                                        remote: {
+                                            url: '../loaddata3.php'
+                                        }
+                                    });
+                                    cities.initialize();
+                                    var elt = $('.fileDest');
+                                    elt.tagsinput({
+                                        itemValue: 'value',
+                                        itemText: 'text',
+                                        typeaheadjs: {
+                                            name: 'cities',
+                                            displayKey: 'text',
+                                            source: cities.ttAdapter()
+                                        }
+                                    });
+                                </script>
+
                                 <!-- <div class="col-md-3 pull-right">
                                     Button
                                 </div>
