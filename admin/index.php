@@ -67,6 +67,11 @@
             cursor: pointer;
         }
 
+        .bootstrap-tagsinput .tag [data-role="remove"]::after {
+            content: "x";
+            padding: 0px 2px;
+        }
+
         .bootstrap-tagsinput input {
             border: none;
             box-shadow: none;
@@ -592,7 +597,7 @@
 
 <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" id="addFileModal" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog modal-lg">
-        <form method="post" enctype="multipart/form-data" action="upload.php" id="addFileForm" name="">
+        <form method="post" enctype="multipart/form-data" action="upload1.php" id="addFileForm" name="">
             <input type="hidden" value="addFileForm" name="<?php echo ini_get("session.upload_progress.name"); ?>">
             <div class="modal-content">
                 <div class="modal-header">
@@ -623,12 +628,13 @@
                         <label for="exampleFormControlTextarea1">File Destination</label>
                         <div class="form-check">
                             <label class="form-check-label">
-                                <input class="form-check-input" type="checkbox" id="fileDestinationCheckbox" value="all" onclick="unhideFileDesination()" checked> All Campuses
+                                <input class="form-check-input" type="checkbox" name="allcampus" id="fileDestinationCheckbox" value="all" onclick="unhideFileDesination()" checked> All Campuses
                                 <span class="form-check-sign"></span>
                             </label>
-                            <div class="col-md-12 form-group" id="customFileDestination" style="display:none; padding:20px;">
+                            <div class="col-md-12 form-group" id="customFileDestination" style="display:none; padding:10px;">
                                 <div class="bs-example">
-                                    <input type="text" class="fileDest" style="display:none;">
+                                    <input type="text" id="fileDest" class="fileDest" name="customcampus" style="display:none;" placeholder="Type Campus/Office">
+                                    <input type="hidden" id="fileDestHid" name="">
                                 </div>
                                 <script>
                                     var val = new Bloodhound({
@@ -651,9 +657,9 @@
                                         }
                                     });
                                 </script>
-
-                                <!-- <div class="col-md-3 pull-right">
-                                    Button
+                                
+                                 <!--<div class="col-md-3">
+                                 <button type="button" name="alert tags" onclick="test()">
                                 </div>
                                 <div class="col-md-5 pull-right">
                                     <select class="form-control form-control" name="office" id="offices"></select>
@@ -1100,8 +1106,10 @@ if (isset($_GET['error']) && $_GET['error'] == 5) {
         var text = document.getElementById("customFileDestination");
         if (checkBox.checked == false) {
             text.style.display = "block";
+            $("#fileDest").attr('required', '');
         } else {
             text.style.display = "none";
+            $("#fileDest").removeAttr('required'); 
         }
     }
 </script>
@@ -1132,5 +1140,12 @@ if (isset($_GET['error']) && $_GET['error'] == 5) {
         });
     });
 </script> -->
+
+<script>
+function test(){
+    var items = $(".fileDest").tagsinput('items');
+    $("#fileDestHid").val(items);
+}
+</script>
 
 </html>

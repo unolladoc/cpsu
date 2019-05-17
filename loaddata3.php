@@ -2,7 +2,7 @@
 include('conn.php');
 header("Content-Type: application/json; charset=UTF-8");
 //$obj = $_POST["campus"];
-$query = $_GET['q'];
+$query = "%". $_GET['q'] ."%";
 
 $tmpoutput = array();
 $tmpoutput2 = array();
@@ -10,9 +10,9 @@ $output = array();
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 $stmt = $conn->prepare("SELECT id, campus from campuses where campus LIKE ?");
-$stmt->bind_param("s", "%".$query."%");
+$stmt->bind_param("s", $query);
 $stmt2 = $conn->prepare("SELECT offices.id, offices.office, campuses.campus from offices inner join campuses on offices.campus=campuses.id where offices.office LIKE ?");
-$stmt2->bind_param("s", "%".$query."%");
+$stmt2->bind_param("s", $query);
 $stmt->execute();
 $stmt->bind_result($id, $campus);
 
