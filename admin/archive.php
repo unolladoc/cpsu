@@ -234,6 +234,32 @@
                                                 //     $filename = $row['file_name'];
                                                 // }
 
+                                                $dest = json_decode($row['destination']);
+                                                $destination = "";
+                                                $destvalue = "";
+                                                foreach($dest as $value){
+                                                    $destvalue .= $value;
+                                                    if (next($dest )) {
+                                                        $destvalue .= ", ";
+                                                    }
+                                                    $sql1 = "SELECT campus FROM campuses where id = $value";
+                                                    $result1 = $conn->query($sql1);
+                                                    if($result1->num_rows>0){
+                                                        $row1 = $result1->fetch_assoc();
+                                                        $destination .= "(".$row1['campus'].")";
+                                                    }
+                                                    $sql2 = "SELECT offices.office, campuses.campus from offices inner join campuses on offices.campus=campuses.id where offices.id = $value";
+                                                    $result2 = $conn->query($sql2);
+                                                    if($result2->num_rows>0){
+                                                        $row2 = $result2->fetch_assoc();
+                                                        $destination .= "(".$row2['office']. "(".$row2['campus']."))";
+                                                    }
+                                                }
+                                                if($destination == ""){
+                                                    $destination = "All Campus";
+                                                    $destvalue = "all";
+                                                }
+
                                                 $filename = "<a href='../" . $row['file_path'] . "' rel='tooltip'  title='Click to Download' onclick = updateDownloads('" . $row['id'] . "'); download>" . $row['file_name'] . "</a>";
                                                 $convertdatetime = new DateTime($row['datetime']);
                                                 $year = $convertdatetime->format('Y');
@@ -278,6 +304,9 @@
                                           </td>
                                           <td style='display:none;'>
                                           " . $month . "
+                                          </td>
+                                          <td style='display:none;'>
+                                          " . $destination . "
                                           </td>
                                           
                                           <td class='td-actions text-right'>
@@ -401,6 +430,7 @@
             </div>
             <div class="modal-body">
                 <div class="input-group" id="dfilename"></div>
+                <div class="input-group" id="dfiledest"></div>
                 <div class="input-group" id="downloads"></div>
                 <div class="input-group" id="dfiledesc"></div>
                 <div class="input-group scroll">
@@ -649,11 +679,13 @@
         var id = document.getElementById("myTable").rows[r].cells.item(0).innerHTML;
         var name = document.getElementById("myTable").rows[r].cells.item(9).innerHTML;
         var desc = document.getElementById("myTable").rows[r].cells.item(10).innerHTML;
+        var dest = document.getElementById("myTable").rows[r].cells.item(13).innerHTML;
         var newname = name.replace(/\s/g, "");
         var newid = id.replace(/\s/g, "");
         var txt = "";
         document.getElementById("fileDetailsModalTitle").innerHTML = "Control No: " + id;
         $('#dfilename').text("Name: " + name);
+        $('#dfiledest').text("Destination: " + dest);
         $('#dfiledesc').text("Description: " + desc);
         $.ajax({
             url: "loaddownloaddata2.php",

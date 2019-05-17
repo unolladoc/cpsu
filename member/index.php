@@ -132,7 +132,7 @@
                             <div class="card-body">
                                 <div class="table-responsive">
                                     <table class="table" id="myTable">
-                                        <?php 
+                                        <?php
                                         $sql = "SELECT * FROM files where archive = 0 ORDER BY datetime DESC";
                                         $result = $conn->query($sql);
                                         $rowi = 1;
@@ -167,7 +167,8 @@
 
                                                 $filename = "<a href='../" . $row['file_path'] . "' rel='tooltip'  title='Click to Download' onclick = updateDownloads('".$row['id']."'); download>".$row['file_name']."</a>";
 
-                                                  echo "<tr class='trcontent'>
+                                                if(in_array(0,json_decode($row['destination']))){
+                                                    echo "<tr class='trcontent'>
                                                   <td>
                                                     " . $row['id'] . "
                                                   </td>
@@ -189,7 +190,35 @@
                                                   <td>
                                                     " . $row['datetime'] . "
                                                   </td>
-                                        </tr>";
+                                                </tr>";
+                                                }
+                                                if(in_array($_SESSION['campusid'],json_decode($row['destination'])) || in_array($_SESSION['officeid'],json_decode($row['destination']))){
+                                                    echo "<tr class='trcontent'>
+                                                  <td>
+                                                    " . $row['id'] . "
+                                                  </td>
+                                                  <td>
+                                                    " . $filename . " &nbsp;
+                                                    <a tabindex='0' role='button' data-toggle='popover' data-trigger='focus' title='Description' data-content='".$row['file_desc']."'>
+                                                    <i class='now-ui-icons travel_info' rel='tooltip'  title='Click for Description'></i>
+                                                    </a>
+                                                  </td>
+                                                  <td>
+                                                    " . $row['file_purpose'] . "
+                                                  </td>
+                                                  <td>
+                                                    " . $row['origin'] . "
+                                                  </td>
+                                                  <td>
+                                                    " . $row['uploader'] . "
+                                                  </td>
+                                                  <td>
+                                                    " . $row['datetime'] . "
+                                                  </td>
+                                                </tr>";
+                                                }
+                                                  
+                                                
                                                 $rowi++;
                                             }
                                         } else {

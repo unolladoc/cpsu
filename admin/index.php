@@ -312,6 +312,32 @@
                                                 //     $filename = $row['file_name'];
                                                 // }
 
+                                                $dest = json_decode($row['destination']);
+                                                $destination = "";
+                                                $destvalue = "";
+                                                foreach($dest as $value){
+                                                    $destvalue .= $value;
+                                                    if (next($dest )) {
+                                                        $destvalue .= ", ";
+                                                    }
+                                                    $sql1 = "SELECT campus FROM campuses where id = $value";
+                                                    $result1 = $conn->query($sql1);
+                                                    if($result1->num_rows>0){
+                                                        $row1 = $result1->fetch_assoc();
+                                                        $destination .= "(".$row1['campus'].")";
+                                                    }
+                                                    $sql2 = "SELECT offices.office, campuses.campus from offices inner join campuses on offices.campus=campuses.id where offices.id = $value";
+                                                    $result2 = $conn->query($sql2);
+                                                    if($result2->num_rows>0){
+                                                        $row2 = $result2->fetch_assoc();
+                                                        $destination .= "(".$row2['office']. "(".$row2['campus']."))";
+                                                    }
+                                                }
+                                                if($destination == ""){
+                                                    $destination = "All Campus";
+                                                    $destvalue = "all";
+                                                }
+
                                                 $filename = "<a href='../" . $row['file_path'] . "' rel='tooltip'  title='Click to Download' onclick = updateDownloads('" . $row['id'] . "'); download>" . $row['file_name'] . "</a>";
 
                                                 echo "<tr class='trcontent'>
@@ -347,6 +373,12 @@
                                           </td>
                                           <td style='display:none;'>
                                           " . $row['file_desc'] . "
+                                          </td>
+                                          <td style='display:none;'>
+                                          " . $destination . "
+                                          </td>
+                                          <td style='display:none;'>
+                                          " . $destvalue . "
                                           </td>
                                           
                                           <td class='td-actions text-right'>
@@ -484,6 +516,7 @@
                 <div class="modal-body">
                     <div>
                         <label id="upfilename"></label><br>
+                        <label id="upfiledest"></label><br>
                         <label id="upfilerevisionlbl"></label>
                     </div>
                     <!--<button class="btn btn-primary btn-round">Browse File</button>--><br>
@@ -496,6 +529,7 @@
                         <textarea class="form-control" id="upfiledesc" name="upfiledesc" rows="3" required></textarea>
                     </div>
                     <input type="hidden" name="upidno" id="upidno">
+                    <input type="hidden" name="upfiledestval" id="upfiledestval">
                     <div class="col-md-4 pull-right">
                         <label for="exampleFormControlSelect1">File Extension</label>
                         <div class="input-group">
@@ -549,6 +583,7 @@
             </div>
             <div class="modal-body">
                 <div class="input-group" id="dfilename"></div>
+                <div class="input-group" id="dfiledest"></div>
                 <div class="input-group" id="downloads"></div>
                 <div class="input-group" id="dfiledesc"></div>
                 <div class="input-group scroll">
@@ -597,7 +632,7 @@
 
 <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" id="addFileModal" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog modal-lg">
-        <form method="post" enctype="multipart/form-data" action="upload1.php" id="addFileForm" name="">
+        <form method="post" enctype="multipart/form-data" action="upload.php" id="addFileForm" name="">
             <input type="hidden" value="addFileForm" name="<?php echo ini_get("session.upload_progress.name"); ?>">
             <div class="modal-content">
                 <div class="modal-header">
@@ -952,6 +987,8 @@ if (isset($_GET['error']) && $_GET['error'] == 5) {
         var fxtn = document.getElementById("myTable").rows[r].cells.item(6).innerHTML;
         var frev = document.getElementById("myTable").rows[r].cells.item(7).innerHTML;
         var fdesc = document.getElementById("myTable").rows[r].cells.item(10).innerHTML;
+        var fdest = document.getElementById("myTable").rows[r].cells.item(11).innerHTML;
+        var fdestval = document.getElementById("myTable").rows[r].cells.item(12).innerHTML;
         /*var bch = document.getElementById("myTable").rows[r].cells.item(2).innerHTML;
         var amt = document.getElementById("myTable").rows[r].cells.item(3).innerHTML;
         document.getElementById("display_validate_no").innerHTML = "Invalidate "+reg+"?";
@@ -962,12 +999,14 @@ if (isset($_GET['error']) && $_GET['error'] == 5) {
         $("#display_validate_no_txt").val(reg);*/
         //document.getElementById("docname").innerHTML = doc;
         $('#upfilename').text("File Name: " + fname);
+        $('#upfiledest').text("File Destination: " + fdest);
         $('#upfilerevisionlbl').text("Revision: " + frev.replace(/\s/g, ""));
         $('#upfilerevision').val(parseInt(frev.replace(/\s/g, "")) + 1);
         $('#upfileextension').val(fxtn.replace(/\s/g, ""));
         $('#upfilepurpose').val(fpor.replace(/\s/g, ""));
         $("#upidno").val(fid.replace(/\s/g, ""));
         $("#upfiledesc").val(fdesc.trim());
+        $("#upfiledestval").val(fdestval.trim());
     }
 </script>
 
@@ -1052,11 +1091,13 @@ if (isset($_GET['error']) && $_GET['error'] == 5) {
         var id = document.getElementById("myTable").rows[r].cells.item(0).innerHTML;
         var name = document.getElementById("myTable").rows[r].cells.item(9).innerHTML;
         var desc = document.getElementById("myTable").rows[r].cells.item(10).innerHTML;
+        var dest = document.getElementById("myTable").rows[r].cells.item(11).innerHTML;
         var newname = name.replace(/\s/g, "");
         var newid = id.replace(/\s/g, "");
         var txt = "";
         document.getElementById("fileDetailsModalTitle").innerHTML = "Control No: " + id;
         $('#dfilename').text("Name: " + name);
+        $('#dfiledest').text("Destination: " + dest);
         $('#dfiledesc').text("Description: " + desc);
         $.ajax({
             url: "loaddownloaddata2.php",

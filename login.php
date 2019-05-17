@@ -36,12 +36,18 @@ if ($result->num_rows > 0) {
 			$_SESSION['type'] = $row['type'];
 			$_SESSION['campus'] = $rcampus;
 			$_SESSION['office'] = $roffice;
+			$_SESSION['campusid'] = $row['campus'];
+			$_SESSION['officeid'] = $row['office'];
 			header("location: admin/");
 		} else if ($row['type'] == 2) {
 			$_SESSION['id'] = $row['id'];
 			$_SESSION['name'] = $row['name'];
 			$_SESSION['username'] = $row['username'];
 			$_SESSION['type'] = $row['type'];
+			$_SESSION['campus'] = $rcampus;
+			$_SESSION['office'] = $roffice;
+			$_SESSION['campusid'] = $row['campus'];
+			$_SESSION['officeid'] = $row['office'];
 			header("location: member/");
 		}
 	} else {
