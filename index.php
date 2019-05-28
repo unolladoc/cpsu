@@ -115,7 +115,7 @@
                               <div class="alert-icon">
                                 <i class="now-ui-icons ui-1_bell-53"></i>
                               </div>
-                              <strong>Invalid Username or Password</strong>
+                              <strong>Invalid Email or Password</strong>
                               <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                 <span aria-hidden="true">
                                   <i class="now-ui-icons ui-1_simple-remove"></i>
@@ -176,7 +176,7 @@
                       <i class="now-ui-icons users_circle-08"></i>
                     </span>
                   </div>
-                  <input type="text" class="form-control" placeholder="Username..." name="username">
+                  <input type="text" class="form-control" placeholder="Email..." name="username">
                 </div>
                 <div class="input-group no-border input-lg">
                   <div class="input-group-prepend">
@@ -272,8 +272,8 @@
             <input type="text" class="form-control" name="caName" placeholder="Full Name" required>
           </div>
           <div class="form-group">
-            <label>Username</label>
-            <input type="text" class="form-control" name="caUsername" placeholder="Username" required>
+            <label>Email Address</label>
+            <input type="email" class="form-control" name="caUsername" placeholder="Email Address" required>
           </div>
           <div class="form-group">
             <label for="">Campus</label>
