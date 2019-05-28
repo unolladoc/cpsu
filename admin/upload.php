@@ -23,7 +23,7 @@ if($_POST['Submit'])
         $filepurpose = $_POST['filepurpose'];
         $filerevision = $_POST['filerevision'];
         $filedescription = $_POST['filedesc'];
-        $fileuploader = $_SESSION['name'];
+        $fileuploader = $_SESSION['id'];
         $fileorigin = $_SESSION['officeid'];
 
         if(isset($_POST['allcampus'])){
@@ -81,7 +81,7 @@ if($_POST['Submit'])
                         $id = mt_rand();
                         $newid = sprintf("CPSU%X",$id);
 
-                        $sql = "INSERT INTO files values('$newid','$target_path_new','$newbasename_filename_name','$filedescription','$fileextension','$filepurpose','$filerevision','$fileuploader','$fileorigin','$filedestination',0,CAST('$datenow' as datetime),0,0,'');" ;
+                        $sql = "INSERT INTO files values('$newid','$target_path_new','$newbasename_filename_name','$filedescription','$fileextension','$filepurpose','$filerevision',$fileuploader,'$fileorigin','$filedestination',0,CAST('$datenow' as datetime),0,0,'');" ;
 
                         if ($conn->query($sql) === TRUE) {
                             //copy($filepath, $destinationpath);
