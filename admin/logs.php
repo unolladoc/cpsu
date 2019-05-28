@@ -142,7 +142,7 @@
                                 <div class="table-responsive">
                                     <table class="table" id="myTable">
                                         <?php
-                                        $sql = "SELECT * FROM logs;";
+                                        $sql = "SELECT * FROM logs ORDER BY time DESC;";
                                         $result = $conn->query($sql);
                                         $rowi = 1;
 
@@ -165,12 +165,15 @@
 
                                             while ($row = $result->fetch_assoc()) {
 
+                                                $time = strtotime($row['time']);
+                                                $datetime = date("d-M-Y H:i:s", $time);    
+
                                                 echo "<tr>
                                           <td>
                                             " . $row['id'] . "
                                           </td>
                                           <td>
-                                            " . $row['time'] . "
+                                            " . $datetime . "
                                           </td>
                                           <td>
                                             " .  $row['description'] . "

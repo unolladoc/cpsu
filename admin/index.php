@@ -19,7 +19,7 @@
     <link rel="icon" type="../image/png" href="../assets/img/favicon.png">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <title>
-        Home - <?php echo $_SESSION['name']; ?>
+        Administrator - <?php echo $_SESSION['name']; ?>
     </title>
     <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />
     <!--     Fonts and icons     -->
@@ -249,7 +249,7 @@
                                         <h4 class="card-title"> Document List</h4>
                                         <!--<i class="now-ui-icons arrows-1_minimal-down"></i>-->
                                     </div>
-                                    <div class="col-md-3">
+                                    <div class="col-md-3 pull-left">
                                         <select class="form-control form-control" id="filepurposefilter" onchange="myFunction();">
                                             <option value="all">Show All Documents</option>
                                             <?php
@@ -261,6 +261,13 @@
                                                 }
                                             }
                                             ?>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3 pull-left">
+                                        <select class="form-control form-control" id="inoutfilter" onchange="myFunction();">
+                                            <option value="all">Incoming & Outgoing</option>
+                                            <option value="1">Incoming Documents</option>
+                                            <option value="0">Outgoing Documents</option>
                                         </select>
                                     </div>
                                 </div>
@@ -338,7 +345,23 @@
                                                     $destvalue = "all";
                                                 }
 
+                                                $sql3 = "SELECT offices.office, campuses.campus from offices inner join campuses on offices.campus=campuses.id where offices.id = ".$row['origin'];
+                                                $result3 = $conn->query($sql3);
+                                                if($result3->num_rows>0){
+                                                    $row3 = $result3->fetch_assoc();
+                                                    $origin = $row3['office']. "(".$row3['campus'].")";
+                                                }
+
                                                 $filename = "<a href='../" . $row['file_path'] . "' rel='tooltip'  title='Click to Download' onclick = updateDownloads('" . $row['id'] . "'); download>" . $row['file_name'] . "</a>";
+                                                
+                                                if($row['inout']==0){
+                                                    $inout = "Outgoing";
+                                                }elseif($row['inout']==1){
+                                                    $inout = "Incoming";
+                                                }
+
+                                                $time = strtotime($row['datetime']);
+                                                $datetime = date("d-M-Y h:i A", $time);
 
                                                 echo "<tr class='trcontent'>
                                           <td>
@@ -348,16 +371,16 @@
                                             " . $filename . "
                                           </td>
                                           <td>
-                                            " . $row['file_purpose'] . "
+                                            " . $inout ." ". $row['file_purpose'] . "
                                           </td>
                                           <td>
-                                            " . $row['origin'] . "
+                                            " . $origin . "
                                           </td>
                                           <td>
                                             " . $row['uploader'] . "
                                           </td>
                                           <td>
-                                            " . $row['datetime'] . "
+                                            " . $datetime . "
                                           </td>
                                           <td style='display:none;'>
                                             " . $row['file_extension'] . "
@@ -380,7 +403,13 @@
                                           <td style='display:none;'>
                                           " . $destvalue . "
                                           </td>
-                                          
+                                          <td style='display:none;'>
+                                          " . $row['inout'] . "
+                                          </td>
+                                          <td style='display:none;'>
+                                          " . $row['file_purpose'] . "
+                                          </td>
+
                                           <td class='td-actions text-right'>
                                            		<button type='button' onclick='getRowForDetails(" . $rowi . ")' rel='tooltip' class='btn btn-success btn-sm btn-round btn-icon' title='Details' data-toggle='modal' data-target='#fileDetailsModal' data-dismiss='modal' >
                                            			<i class='now-ui-icons design_bullet-list-67'></i>
@@ -516,6 +545,7 @@
                 <div class="modal-body">
                     <div>
                         <label id="upfilename"></label><br>
+                        <input type="hidden" id="oldfilename" name="oldfilename">
                         <label id="upfiledest"></label><br>
                         <label id="upfilerevisionlbl"></label>
                     </div>
@@ -873,7 +903,7 @@ if (isset($_GET['error']) && $_GET['error'] == 5) {
 <script>
     function myFunction() {
         // Declare variables 
-        var input, filter, input2, filter2, table, tr, td, i, txtValue;
+        var input, filter, input2, filter2, input3, filter3, table, tr, td, i, txtValue;
         input = document.getElementById("myInput");
         filter = input.value.toUpperCase();
         table = document.getElementById("myTable");
@@ -886,12 +916,19 @@ if (isset($_GET['error']) && $_GET['error'] == 5) {
             filter2 = "";
         }
 
+        input3 = document.getElementById("inoutfilter");
+        if (input3.value.toUpperCase() != "ALL") {
+            filter3 = input3.value.toUpperCase();
+        } else {
+            filter3 = "";
+        }
+
         // Loop through all table rows, and hide those who don't match the search query
         for (i = 0; i < tr.length; i++) {
             td = tr[i].getElementsByTagName("td");
             if (td.length > 0) {
                 //txtValue = td.textContent || td.innerText;
-                if ((td[0].innerHTML.toUpperCase().indexOf(filter) > -1 || td[1].innerHTML.toUpperCase().indexOf(filter) > -1) && (td[2].innerHTML.toUpperCase().indexOf(filter2) > -1)) {
+                if ((td[0].innerHTML.toUpperCase().indexOf(filter) > -1 || td[1].innerHTML.toUpperCase().indexOf(filter) > -1) && (td[2].innerHTML.toUpperCase().indexOf(filter2) > -1 && td[13].innerHTML.toUpperCase().indexOf(filter3) > -1)) {
                     tr[i].style.display = "";
                 } else {
                     tr[i].style.display = "none";
@@ -983,7 +1020,7 @@ if (isset($_GET['error']) && $_GET['error'] == 5) {
     function getRowForUptade(r) {
         var fid = document.getElementById("myTable").rows[r].cells.item(0).innerHTML;
         var fname = document.getElementById("myTable").rows[r].cells.item(9).innerHTML;
-        var fpor = document.getElementById("myTable").rows[r].cells.item(2).innerHTML;
+        var fpor = document.getElementById("myTable").rows[r].cells.item(14).innerHTML;
         var fxtn = document.getElementById("myTable").rows[r].cells.item(6).innerHTML;
         var frev = document.getElementById("myTable").rows[r].cells.item(7).innerHTML;
         var fdesc = document.getElementById("myTable").rows[r].cells.item(10).innerHTML;
@@ -999,6 +1036,7 @@ if (isset($_GET['error']) && $_GET['error'] == 5) {
         $("#display_validate_no_txt").val(reg);*/
         //document.getElementById("docname").innerHTML = doc;
         $('#upfilename').text("File Name: " + fname);
+        $("#oldfilename").val(fname.replace(/\s/g, ""));
         $('#upfiledest').text("File Destination: " + fdest);
         $('#upfilerevisionlbl').text("Revision: " + frev.replace(/\s/g, ""));
         $('#upfilerevision').val(parseInt(frev.replace(/\s/g, "")) + 1);

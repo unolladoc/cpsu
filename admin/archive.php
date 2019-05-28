@@ -260,10 +260,20 @@
                                                     $destvalue = "all";
                                                 }
 
+                                                $sql3 = "SELECT offices.office, campuses.campus from offices inner join campuses on offices.campus=campuses.id where offices.id = ".$row['origin'];
+                                                $result3 = $conn->query($sql3);
+                                                if($result3->num_rows>0){
+                                                    $row3 = $result3->fetch_assoc();
+                                                    $origin = $row3['office']. "(".$row3['campus'].")";
+                                                }
+
                                                 $filename = "<a href='../" . $row['file_path'] . "' rel='tooltip'  title='Click to Download' onclick = updateDownloads('" . $row['id'] . "'); download>" . $row['file_name'] . "</a>";
                                                 $convertdatetime = new DateTime($row['datetime']);
                                                 $year = $convertdatetime->format('Y');
                                                 $month = $convertdatetime->format('F');
+
+                                                $time = strtotime($row['datetime']);
+                                                $datetime = date("d-M-Y h:i A", $time);
 
                                                 echo "<tr class='trcontent'>
                                           <td>
@@ -276,13 +286,13 @@
                                             " . $row['file_purpose'] . "
                                           </td>
                                           <td>
-                                            " . $row['origin'] . "
+                                            " . $origin . "
                                           </td>
                                           <td>
                                             " . $row['uploader'] . "
                                           </td>
                                           <td>
-                                            " . $row['datetime'] . "
+                                            " . $datetime . "
                                           </td>
                                           <td style='display:none;'>
                                             " . $row['file_extension'] . "

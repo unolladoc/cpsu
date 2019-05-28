@@ -18,7 +18,7 @@
     <link rel="icon" type="../image/png" href="../assets/img/favicon.png">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <title>
-        Home - Guest
+        Member - <?php echo $_SESSION['name']; ?>
     </title>
     <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />
     <!--     Fonts and icons     -->
@@ -43,9 +43,15 @@
             <div class="sidebar-wrapper">
                 <ul class="nav">
                     <li class="active">
-                        <a href="#">
+                        <a href="../">
                             <i class="now-ui-icons files_single-copy-04"></i>
                             <p>Document List</p>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="request.php">
+                            <i class="now-ui-icons files_single-copy-04"></i>
+                            <p>Requests</p>
                         </a>
                     </li>
                 </ul>
@@ -63,7 +69,8 @@
                                 <span class="navbar-toggler-bar bar3"></span>
                             </button>
                         </div>
-                        Welcome &nbsp; <b> <?php echo $_SESSION['name']; ?></b>
+                        <button class="btn btn-info btn-round btn-lg" data-toggle="modal" data-target="#sendRequestModal" data-dismiss="modal" onclick="">Send Request</button>
+                        &nbsp; Welcome &nbsp; <b> <?php echo $_SESSION['name']; ?></b>
                     </div>
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-bar navbar-kebab"></span>
@@ -165,6 +172,16 @@
 
                                             while ($row = $result->fetch_assoc()) {
 
+                                                $sql3 = "SELECT offices.office, campuses.campus from offices inner join campuses on offices.campus=campuses.id where offices.id = ".$row['origin'];
+                                                $result3 = $conn->query($sql3);
+                                                if($result3->num_rows>0){
+                                                    $row3 = $result3->fetch_assoc();
+                                                    $origin = $row3['office']. "(".$row3['campus'].")";
+                                                }
+
+                                                $time = strtotime($row['datetime']);
+                                                $datetime = date("d-M-Y h:i A", $time);
+
                                                 $filename = "<a href='../" . $row['file_path'] . "' rel='tooltip'  title='Click to Download' onclick = updateDownloads('".$row['id']."'); download>".$row['file_name']."</a>";
 
                                                 if(in_array(0,json_decode($row['destination']))){
@@ -182,13 +199,13 @@
                                                     " . $row['file_purpose'] . "
                                                   </td>
                                                   <td>
-                                                    " . $row['origin'] . "
+                                                    " . $origin . "
                                                   </td>
                                                   <td>
                                                     " . $row['uploader'] . "
                                                   </td>
                                                   <td>
-                                                    " . $row['datetime'] . "
+                                                    " . $datetime . "
                                                   </td>
                                                 </tr>";
                                                 }
@@ -213,7 +230,7 @@
                                                     " . $row['uploader'] . "
                                                   </td>
                                                   <td>
-                                                    " . $row['datetime'] . "
+                                                    " . $datetime . "
                                                   </td>
                                                 </tr>";
                                                 }
@@ -318,6 +335,140 @@
     <script src="../assets/js/now-ui-kit.js?v=1.2.0" type="text/javascript"></script>
 
 </body>
+
+<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" id="sendRequestModal" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-lg">
+        <form method="post" enctype="multipart/form-data" action="upload.php" id="addFileForm" name="">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Send Request</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="progress-container progress-primary" id="progressBar">
+                        <span class="progress-badge" id="uploading"></span>
+                        <div class="progress">
+                            <div class="progress-bar" id="progress" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                                <span class="progress-value" id="status"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <!--<button class="btn btn-primary btn-round">Browse File</button>--><br>
+                    <label for="exampleFormControlSelect1">File Name</label>
+                    <div class="input-group">
+                        <input class="form-control" type="file" name="filename" id="filename" onchange="" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleFormControlTextarea1">File Description</label>
+                        <textarea class="form-control" id="filedesc" name="filedesc" rows="2" required></textarea>
+                    </div>
+                    <div class="col-md-4 pull-right">
+                        <label for="exampleFormControlSelect1">File Extension</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control form-control-lg" id="fileextension" name="fileextension" required>
+                        </div>
+                    </div>
+                    <div class="col-md-4 pull-right">
+                        <label for="exampleFormControlSelect1">File Revision</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control form-control-lg" id="filerevision" name="filerevision" required>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="exampleFormControlSelect1">File Type</label>
+                        <div class="input-group">
+                            <select class="form-control form-control" name="filepurpose" required>
+                                <option value="">Select...</option>
+                                <?php
+                                $sqlt = "Select * from m_typeofdoc;";
+                                $resultt = $conn->query($sqlt);
+                                if ($resultt->num_rows > 0) {
+                                    while ($rowt = $resultt->fetch_assoc()) {
+                                        echo "<option value='" . $rowt['type'] . "'>" . $rowt['type'] . "</option>";
+                                    }
+                                }
+                                ?>
+                            </select>
+                            <!--<input type="text" class="form-control form-control-lg" id="" name="filepurpose" value="Accreditation" required>-->
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="modal-footer">
+                            <input type="Submit" class="btn btn-primary" name="Submit" value="Submit" onclick="">
+                        </div>
+                    </div>
+                </div>
+        </form>
+    </div>
+</div>
+
+<?php
+
+if (isset($_GET['success']) && $_GET['success'] == 1) {
+    echo "<script>
+            $.notify({
+            
+            title: '<strong>Success</strong>',
+            message: 'Request Successfully Sent' 
+            },{
+            
+            type: 'success'
+            });
+          </script> ";
+}
+
+
+if (isset($_GET['error']) && $_GET['error'] == 2) {
+
+    echo "<script>
+            $.notify({
+            
+            title: 'ERROR',
+            message: '<strong>Request Already Exist</strong>' 
+            },{
+            
+            type: 'danger',
+            allow_dismiss: false
+
+            });
+
+          </script> ";
+}
+if (isset($_GET['error']) && $_GET['error'] == 3) {
+
+    echo "<script>
+            $.notify({
+            
+            title: 'File Too Large',
+            message: '<strong>25MB Maximum Size</strong>' 
+            },{
+            
+            type: 'danger',
+            allow_dismiss: false
+
+            });
+
+          </script> ";
+}
+if (isset($_GET['error']) && $_GET['error'] == 4) {
+
+    echo "<script>
+            $.notify({
+            
+            title: 'File Not Supported',
+            message: '<strong>Upload JPEG, JPG, DOC, DOCX, PDF Only</strong>' 
+            },{
+            
+            type: 'danger',
+            allow_dismiss: false
+
+            });
+
+          </script> ";
+}
+?>
 
 <script>
     $('.modal').on('hidden.bs.modal', function() {
@@ -462,5 +613,21 @@ function updateDownloads(myObj){
         $('.trcontent').show();
     }
 </script> -->
+
+<script>
+    document.getElementById('filename').onchange = function() {
+
+        //var last = this.value.lastIndexOf(".");
+        //var filepath = this.value;
+        var fileextension = this.value.slice(this.value.lastIndexOf(".") + 1).toUpperCase();
+        //alert('Selected file extension: ' + fileextension);
+        document.getElementById("fileextension").value = fileextension;
+        //document.getElementById("filepath").value = filepath;
+        document.getElementById("filerevision").value = "1";
+        //document.getElementById("filerevision").disabled = true;
+        //document.getElementById("fileextension").disabled = true;
+
+    };
+</script>
 
 </html> 
