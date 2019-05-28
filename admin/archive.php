@@ -267,6 +267,13 @@
                                                     $origin = $row3['office']. "(".$row3['campus'].")";
                                                 }
 
+                                                $sql4 = "SELECT name from user where id = ".$row['uploader'];
+                                                $result4 = $conn->query($sql4);
+                                                if($result4->num_rows>0){
+                                                    $row4 = $result4->fetch_assoc();
+                                                    $uploader = $row4['name'];
+                                                }
+
                                                 $filename = "<a href='../" . $row['file_path'] . "' rel='tooltip'  title='Click to Download' onclick = updateDownloads('" . $row['id'] . "'); download>" . $row['file_name'] . "</a>";
                                                 $convertdatetime = new DateTime($row['datetime']);
                                                 $year = $convertdatetime->format('Y');
@@ -289,7 +296,7 @@
                                             " . $origin . "
                                           </td>
                                           <td>
-                                            " . $row['uploader'] . "
+                                            " . $uploader . "
                                           </td>
                                           <td>
                                             " . $datetime . "

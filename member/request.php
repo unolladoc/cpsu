@@ -18,7 +18,7 @@
     <link rel="icon" type="../image/png" href="../assets/img/favicon.png">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <title>
-        Member - <?php echo $_SESSION['name']; ?>
+        Member Request - <?php echo $_SESSION['name']; ?>
     </title>
     <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />
     <!--     Fonts and icons     -->
@@ -42,14 +42,14 @@
             </div>
             <div class="sidebar-wrapper">
                 <ul class="nav">
-                    <li class="active">
-                        <a href="#">
+                    <li>
+                        <a href="../">
                             <i class="now-ui-icons files_single-copy-04"></i>
                             <p>Document List</p>
                         </a>
                     </li>
-                    <li>
-                        <a href="request.php">
+                    <li class="active">
+                        <a href="#">
                             <i class="now-ui-icons files_single-copy-04"></i>
                             <p>Requests</p>
                         </a>
@@ -140,7 +140,8 @@
                                 <div class="table-responsive">
                                     <table class="table" id="myTable">
                                         <?php
-                                        $sql = "SELECT * FROM files where archive = 0 ORDER BY datetime DESC";
+                                        $uploaderid = $_SESSION['id'];
+                                        $sql = "SELECT * FROM files where archive = 0 AND uploader = $uploaderid ORDER BY datetime DESC";
                                         $result = $conn->query($sql);
                                         $rowi = 1;
 
@@ -158,17 +159,16 @@
                                           Purpose
                                         </th>
                                         <th onclick="sortTable(3)">
-                                          Origin
+                                          Status
                                         </th>
                                         <th onclick="sortTable(4)">
-                                          Uploader
-                                        </th>
-                                        <th onclick="sortTable(5)">
                                           Uploaded
+                                        </th>
+                                        <th>
+                                          Actions
                                         </th>
                                       </thead>
                                       <tbody>';
-
 
                                             while ($row = $result->fetch_assoc()) {
 
@@ -179,19 +179,17 @@
                                                     $origin = $row3['office']. "(".$row3['campus'].")";
                                                 }
 
-                                                $sql4 = "SELECT name from user where id = ".$row['uploader'];
-                                                $result4 = $conn->query($sql4);
-                                                if($result4->num_rows>0){
-                                                    $row4 = $result4->fetch_assoc();
-                                                    $uploader = $row4['name'];
-                                                }
-
                                                 $time = strtotime($row['datetime']);
                                                 $datetime = date("d-M-Y h:i A", $time);
 
+                                                if($row['downloads'] > 0){
+                                                    $status = "Downloaded";
+                                                }else{
+                                                    $status = "Pending";
+                                                }
+
                                                 $filename = "<a href='../" . $row['file_path'] . "' rel='tooltip'  title='Click to Download' onclick = updateDownloads('".$row['id']."'); download>".$row['file_name']."</a>";
 
-                                                if(in_array(0,json_decode($row['destination']))){
                                                     echo "<tr class='trcontent'>
                                                   <td>
                                                     " . $row['id'] . "
@@ -206,43 +204,16 @@
                                                     " . $row['file_purpose'] . "
                                                   </td>
                                                   <td>
-                                                    " . $origin . "
-                                                  </td>
-                                                  <td>
-                                                    " . $uploader . "
+                                                    " . $status . "
                                                   </td>
                                                   <td>
                                                     " . $datetime . "
                                                   </td>
-                                                </tr>";
-                                                }
-                                                if(in_array($_SESSION['campusid'],json_decode($row['destination'])) || in_array($_SESSION['officeid'],json_decode($row['destination']))){
-                                                    echo "<tr class='trcontent'>
                                                   <td>
-                                                    " . $row['id'] . "
-                                                  </td>
-                                                  <td>
-                                                    " . $filename . " &nbsp;
-                                                    <a tabindex='0' role='button' data-toggle='popover' data-trigger='focus' title='Description' data-content='".$row['file_desc']."'>
-                                                    <i class='now-ui-icons travel_info' rel='tooltip'  title='Click for Description'></i>
-                                                    </a>
-                                                  </td>
-                                                  <td>
-                                                    " . $row['file_purpose'] . "
-                                                  </td>
-                                                  <td>
-                                                    " . $row['origin'] . "
-                                                  </td>
-                                                  <td>
-                                                    " . $row['uploader'] . "
-                                                  </td>
-                                                  <td>
-                                                    " . $datetime . "
+                                                    CAncel
                                                   </td>
                                                 </tr>";
-                                                }
-                                                  
-                                                
+                            
                                                 $rowi++;
                                             }
                                         } else {
