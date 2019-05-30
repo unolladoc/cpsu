@@ -18,7 +18,7 @@ if($result->num_rows > 0){
 	if ($resultu->num_rows > 0) {
 		$rowu = $resultu->fetch_assoc();
 	
-		$sqll = "Insert into logs values(null, '".$_SESSION['name']." REMOVED ".$rowu['name']." from DATABASE',CAST('$datenow' as datetime));";
+		$sqll = "Insert into logs values(null, '".$_SESSION['name']." REMOVED USER ".$rowu['name']." from DATABASE',CAST('$datenow' as datetime), '".$_SESSION['id']."', 'DELETED USER');";
 		if ($conn->query($sqll) === TRUE) {}else{echo "Error: " . $sqll . "<br>" . $conn->error;}
 	}
 

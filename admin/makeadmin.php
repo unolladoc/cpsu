@@ -26,7 +26,7 @@ $resultu = mysqli_query($conn, $sqlu);
 if ($resultu->num_rows > 0) {
 	$rowu = $resultu->fetch_assoc();
 
-	$sqll = "Insert into logs values(null, '".$_SESSION['name']." approved ".$rowu['name']." as ADMIN',CAST('$datenow' as datetime));";
+	$sqll = "Insert into logs values(null, '".$_SESSION['name']." approved ".$rowu['name']." as ADMIN',CAST('$datenow' as datetime), '".$_SESSION['id']."', 'MADE ADMIN');";
 	if ($conn->query($sqll) === TRUE) {}else{echo "Error: " . $sqll . "<br>" . $conn->error;}
 }
 

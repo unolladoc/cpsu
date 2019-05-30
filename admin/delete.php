@@ -24,6 +24,8 @@ if($result->num_rows > 0){
 					if ($conn->query($sql3) === TRUE) {
 						$filetodelete = "../" . $row2['file_path'];
 						unlink($filetodelete);
+						$sqll = "Insert into logs values(null, '".$_SESSION['name']." DELETED ".$row2['file_name']." from DATABASE',CAST('$datenow' as datetime), '".$_SESSION['id']."', 'DELETE FILE');";
+						if ($conn->query($sqll) === TRUE) {}else{echo "Error: " . $sqll . "<br>" . $conn->error;}
 						header("location: index.php?success=2");
 					}
 				}else {
@@ -36,8 +38,5 @@ if($result->num_rows > 0){
 }else{
 	header("location: index.php?error=5");
 }
-
-$sqll = "Insert into logs values(null, '".$_SESSION['name']." DELETED ".$row2['file_name']." from DATABASE',CAST('$datenow' as datetime));";
-if ($conn->query($sqll) === TRUE) {}else{echo "Error: " . $sqll . "<br>" . $conn->error;}
 
 ?>

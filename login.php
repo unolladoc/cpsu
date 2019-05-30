@@ -51,14 +51,14 @@ if ($result->num_rows > 0) {
 			header("location: member/");
 		}
 
-		$sqll = "Insert into logs values(null, '".$_SESSION['name']." logged in',CAST('$datenow' as datetime));";
+		$sqll = "Insert into logs values(null, '".$_SESSION['name']." logged in',CAST('$datenow' as datetime), '".$_SESSION['id']."', 'LOGIN');";
 		if ($conn->query($sqll) === TRUE) {} else{echo "Error: " . $sqll . "<br>" . $conn->error;}
 
 	} else {
 		header("location: index.php?error");
 	}
 } else {
-	$sqll = "Insert into logs values(null, '".$username." attempted to log in',CAST('$datenow' as datetime));";
+	$sqll = "Insert into logs values(null, '".$username." attempted to log in',CAST('$datenow' as datetime), '".$_SESSION['id']."', 'ATTEMPT LOGIN');";
 	if ($conn->query($sqll) === TRUE) {}else{echo "Error: " . $sqll . "<br>" . $conn->error;}
 	header("location: index.php?invalid=true");
 }
