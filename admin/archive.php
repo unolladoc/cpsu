@@ -53,8 +53,23 @@
                 <ul class="nav">
                     <li>
                         <a href="../">
-                            <i class="now-ui-icons files_single-copy-04"></i>
-                            <p>Document List</p>
+                        <i class="now-ui-icons files_single-copy-04"></i>
+                            <?php 
+                            $sqld = "SELECT * FROM files WHERE downloads < 1 AND finout = 1;";
+                            $resultd = $conn->query($sqld);
+                            $n=0;
+                            if ($resultd->num_rows > 0) {
+                                while ($rowd = $resultd->fetch_assoc()) {
+                                    $n++;
+                                }
+                                if($n==0){
+                                    $noticount = "";
+                                }else{
+                                    $noticount = "<strong>(".$n.")</strong>";
+                                }
+                            }
+                            ?>
+                            <p>Document List <?php echo $noticount ?></p>
                         </a>
                     </li>
                     <li class="active">

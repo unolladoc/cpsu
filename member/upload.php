@@ -88,7 +88,7 @@ if($_POST['Submit'])
                         if ($conn->query($sql) === TRUE) {
                             //copy($filepath, $destinationpath);
                             //echo "New record created successfully";
-                            header("location: index.php?success=1");
+                            header("location: request.php?success=1");
                         } else {
                             echo "Error: " . $sql . "<br>" . $conn->error;
                             //header("location: home.php?error=1");
@@ -102,7 +102,7 @@ if($_POST['Submit'])
                         echo "Sorry, there was an error uploading your file.";
                     }
             }
-        $sqll = "Insert into logs values(null, '".$_SESSION['name']." sent a request file ".$newbasename_filename_name."',CAST('$datenow' as datetime));";
+        $sqll = "Insert into logs values(null, '".$_SESSION['name']." request a file ".$newbasename_filename_name."',CAST('$datenow' as datetime), ".$_SESSION['id'].", 'REQUEST','$newid');";
         if ($conn->query($sqll) === TRUE) {}else{echo "Error: " . $sqll . "<br>" . $conn->error;}
     }
 }

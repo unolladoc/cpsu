@@ -108,7 +108,7 @@ if($_POST['Submit'])
                     }
             }
         $sqll = "Insert into logs values(null, '".$_SESSION['name']." UPDATED ".
-        $oldname ." to ".$newbasename_filename_name."',CAST('$datenow' as datetime), '".$_SESSION['id']."', 'UPDATE FILE');";
+        $oldname ." to ".$newbasename_filename_name."',CAST('$datenow' as datetime), ".$_SESSION['id'].", 'UPDATE FILE','$fileid');";
         if ($conn->query($sqll) === TRUE) {}else{echo "Error: " . $sqll . "<br>" . $conn->error;}
     }
 }

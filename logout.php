@@ -1,7 +1,7 @@
 <?php
 include('session.php');
 
-$sqll = "Insert into logs values(null, '".$_SESSION['name']." logged out',CAST('$datenow' as datetime), '".$_SESSION['id']."', 'LOGOUT');";
+$sqll = "Insert into logs values(null, '".$_SESSION['name']." logged out',CAST('$datenow' as datetime), ".$_SESSION['id'].", 'LOGOUT','');";
 if ($conn->query($sqll) === TRUE) {}else{echo "Error: " . $sqll . "<br>" . $conn->error;}
 
 session_destroy();

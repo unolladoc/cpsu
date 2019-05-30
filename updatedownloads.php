@@ -17,7 +17,7 @@ $resultu = mysqli_query($conn, $sqlu);
 if ($resultu->num_rows > 0) {
 	$rowu = $resultu->fetch_assoc();
 
-	$sqll = "Insert into logs values(null, '".$_SESSION['name']." DOWNLOADED ".$rowu['file_name']."',CAST('$datenow' as datetime), '".$_SESSION['id']."', 'DOWNLOAD');";
+	$sqll = "Insert into logs values(null, '".$_SESSION['name']." DOWNLOADED ".$rowu['file_name']."',CAST('$datenow' as datetime), ".$_SESSION['id'].", 'DOWNLOAD','".$rowu['id']."');";
 	if ($conn->query($sqll) === TRUE) {}else{echo "Error: " . $sqll . "<br>" . $conn->error;}
 }
 

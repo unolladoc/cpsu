@@ -3,7 +3,7 @@
 
 <head>
 
-    <?php 
+    <?php
     include('../conn.php');
     include('../session.php');
 
@@ -119,19 +119,19 @@
                                             <!--<i class="now-ui-icons arrows-1_minimal-down"></i>-->
                                         </div>
                                         <div class="col-md-3">
-                                        <select class="form-control form-control" id="filepurposefilter" onchange="myFunction();">
-                                            <option value="all">Show All Documents</option>
-                                            <?php
-                                            $sqlt = "Select * from m_typeofdoc;";
-                                            $resultt = $conn->query($sqlt);
-                                            if ($resultt->num_rows > 0) {
-                                                while ($rowt = $resultt->fetch_assoc()) {
-                                                    echo "<option value='" . $rowt['type'] . "'>" . $rowt['type'] . "</option>";
+                                            <select class="form-control form-control" id="filepurposefilter" onchange="myFunction();">
+                                                <option value="all">Show All Documents</option>
+                                                <?php
+                                                $sqlt = "Select * from m_typeofdoc;";
+                                                $resultt = $conn->query($sqlt);
+                                                if ($resultt->num_rows > 0) {
+                                                    while ($rowt = $resultt->fetch_assoc()) {
+                                                        echo "<option value='" . $rowt['type'] . "'>" . $rowt['type'] . "</option>";
+                                                    }
                                                 }
-                                            }
-                                            ?>
-                                        </select>
-                                    </div>
+                                                ?>
+                                            </select>
+                                        </div>
                                     </a>
                                 </div>
                             </div>
@@ -172,31 +172,35 @@
 
                                             while ($row = $result->fetch_assoc()) {
 
-                                                $sql3 = "SELECT offices.office, campuses.campus from offices inner join campuses on offices.campus=campuses.id where offices.id = ".$row['origin'];
+                                                $sql3 = "SELECT offices.office, campuses.campus from offices inner join campuses on offices.campus=campuses.id where offices.id = " . $row['origin'];
                                                 $result3 = $conn->query($sql3);
-                                                if($result3->num_rows>0){
+                                                if ($result3->num_rows > 0) {
                                                     $row3 = $result3->fetch_assoc();
-                                                    $origin = $row3['office']. "(".$row3['campus'].")";
+                                                    $origin = $row3['office'] . "(" . $row3['campus'] . ")";
                                                 }
 
                                                 $time = strtotime($row['datetime']);
                                                 $datetime = date("d-M-Y h:i A", $time);
 
-                                                if($row['downloads'] > 0){
+                                                if ($row['downloads'] > 0) {
                                                     $status = "Downloaded";
-                                                }else{
-                                                    $status = "Pending";
+                                                    $cancel = "-";
+                                                } else {
+                                                    $status = "Pending"; 
+                                                    $cancel = "<button type='button' onclick='getRowID(" . $rowi . ")' rel='tooltip' class='btn btn-danger btn-sm btn-round btn-icon' data-toggle='modal' title='Delete' data-target='#deleteModal' data-dismiss='modal'>
+                                                    <i class='now-ui-icons ui-1_simple-remove'></i>
+                                                    </button>";
                                                 }
 
-                                                $filename = "<a href='../" . $row['file_path'] . "' rel='tooltip'  title='Click to Download' onclick = updateDownloads('".$row['id']."'); download>".$row['file_name']."</a>";
+                                                $filename = "<a href='../" . $row['file_path'] . "' rel='tooltip'  title='Click to Download' onclick = updateDownloads('" . $row['id'] . "'); download>" . $row['file_name'] . "</a>";
 
-                                                    echo "<tr class='trcontent'>
+                                                echo "<tr class='trcontent'>
                                                   <td>
                                                     " . $row['id'] . "
                                                   </td>
                                                   <td>
                                                     " . $filename . " &nbsp;
-                                                    <a tabindex='0' role='button' data-toggle='popover' data-trigger='focus' title='Description' data-content='".$row['file_desc']."'>
+                                                    <a tabindex='0' role='button' data-toggle='popover' data-trigger='focus' title='Description' data-content='" . $row['file_desc'] . "'>
                                                     <i class='now-ui-icons travel_info' rel='tooltip'  title='Click for Description'></i>
                                                     </a>
                                                   </td>
@@ -209,11 +213,11 @@
                                                   <td>
                                                     " . $datetime . "
                                                   </td>
-                                                  <td>
-                                                    CAncel
+                                                  <td class='td-actions text-right'>
+                                                    ".$cancel."
                                                   </td>
                                                 </tr>";
-                            
+
                                                 $rowi++;
                                             }
                                         } else {
@@ -313,6 +317,42 @@
     <script src="../assets/js/now-ui-kit.js?v=1.2.0" type="text/javascript"></script>
 
 </body>
+
+<div id="deleteModal" class="modal fade modal-mini modal-danger" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header justify-content-center">
+                <div class="modal-profile">
+                    <i class="now-ui-icons users_circle-08"></i>
+                </div>
+            </div>
+            <div class="modal-body">
+                <form method="post" action="delete.php">
+                    <div class="form-group row">
+                        <div class="col-sm-12 text-center">Delete?<h4 id="docname"></h4>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-sm-12">
+                            <input type="password" class="form-control" id="inputPassword" placeholder="Verify Password" name="password">
+                        </div>
+                        <div class="col-sm-12">
+                            <input type="hidden" class="form-control" id="idno" name="idno">
+                        </div>
+                        <div class="col-sm-12">
+                            <input type="hidden" class="form-control" id="archived_idno" name="" value="archived_idno">
+                        </div>
+                    </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-link btn-neutral">Proceed</button>
+                <button type="button" class="btn btn-link btn-neutral" data-dismiss="modal">Close</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
 <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" id="sendRequestModal" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog modal-lg">
@@ -455,11 +495,9 @@ if (isset($_GET['error']) && $_GET['error'] == 4) {
 </script>
 
 <script>
-
-$('.popover-dismiss').popover({
-  trigger: 'focus'
-})
-
+    $('.popover-dismiss').popover({
+        trigger: 'focus'
+    })
 </script>
 
 <script>
@@ -552,25 +590,25 @@ $('.popover-dismiss').popover({
 </script>
 
 <script>
-function updateDownloads(myObj){
-    var obj, dbParam, xmlhttp;
-      obj = {
-        "fid": myObj
-      };
-      dbParam = JSON.stringify(obj);
-      //alert(dbParam);
-      xmlhttp = new XMLHttpRequest();
-      xmlhttp.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-          //myObj = JSON.parse(this.responseText);
-          //console.log(myObj);
-          //console.log(txt);
-        }
-      };
-     xmlhttp.open("POST", "../updatedownloads.php", true);
-     xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-     xmlhttp.send("x=" + dbParam);
-}
+    function updateDownloads(myObj) {
+        var obj, dbParam, xmlhttp;
+        obj = {
+            "fid": myObj
+        };
+        dbParam = JSON.stringify(obj);
+        //alert(dbParam);
+        xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                //myObj = JSON.parse(this.responseText);
+                //console.log(myObj);
+                //console.log(txt);
+            }
+        };
+        xmlhttp.open("POST", "../updatedownloads.php", true);
+        xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xmlhttp.send("x=" + dbParam);
+    }
 </script>
 
 <!-- <script>
@@ -607,5 +645,14 @@ function updateDownloads(myObj){
 
     };
 </script>
-
-</html> 
+<script>
+    function getRowID(r) {
+        var id = document.getElementById("myTable").rows[r].cells.item(0).innerHTML;
+        var aid = document.getElementById("myTable").rows[r].cells.item(8).innerHTML;
+        var doc = document.getElementById("myTable").rows[r].cells.item(9).innerHTML;
+        document.getElementById("docname").innerHTML = doc;
+        $("#idno").val(id);
+        $("#archived_idno").val(aid);
+    }
+</script>
+</html>

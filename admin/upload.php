@@ -100,7 +100,7 @@ if($_POST['Submit'])
                         echo "Sorry, there was an error uploading your file.";
                     }
             }
-        $sqll = "Insert into logs values(null, '".$_SESSION['name']." uploaded ".$newbasename_filename_name."',CAST('$datenow' as datetime), '".$_SESSION['id']."', 'UPLOAD');";
+        $sqll = "Insert into logs values(null, '".$_SESSION['name']." uploaded ".$newbasename_filename_name."',CAST('$datenow' as datetime), ".$_SESSION['id'].", 'UPLOAD','$newid');";
         if ($conn->query($sqll) === TRUE) {}else{echo "Error: " . $sqll . "<br>" . $conn->error;}
     }
 }
