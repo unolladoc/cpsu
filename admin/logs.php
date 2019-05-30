@@ -50,6 +50,7 @@
                             $sqld = "SELECT * FROM files WHERE downloads < 1 AND finout = 1;";
                             $resultd = $conn->query($sqld);
                             $n=0;
+                            $noticount = "";
                             if ($resultd->num_rows > 0) {
                                 while ($rowd = $resultd->fetch_assoc()) {
                                     $n++;
