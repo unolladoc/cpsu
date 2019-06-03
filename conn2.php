@@ -11,7 +11,7 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 date_default_timezone_set('Asia/Manila');
 $datenow = date('Y-m-d H:i:s');
 //echo $now;
-
+$email = "no-reply@cpsu.cf";
 
 // Check connection
 if ($conn->connect_error) {

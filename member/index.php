@@ -52,7 +52,9 @@
                             $noticount = "";
                             if ($resultd->num_rows > 0) {
                                 while ($rowd = $resultd->fetch_assoc()) {
-                                    $n++;
+                                    if(in_array(0,json_decode($rowd['destination'])) || in_array($_SESSION['campusid'],json_decode($rowd['destination'])) || in_array($_SESSION['officeid'],json_decode($rowd['destination']))){
+                                        $n++;
+                                    }
                                 }
                                 if($n==0){
                                     $noticount = "";

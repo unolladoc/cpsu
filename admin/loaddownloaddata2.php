@@ -15,7 +15,7 @@ if ($result->num_rows > 0) {
     $file_name = $row['file_name'];
 }
 
-$stmt2 = $conn->prepare("SELECT * FROM logs WHERE description LIKE '%DOWNLOADED%' AND description LIKE '%$file_name%' ORDER BY time DESC;");
+$stmt2 = $conn->prepare("SELECT id,description,time FROM logs WHERE description LIKE '%DOWNLOADED%' AND description LIKE '%$file_name%' ORDER BY time DESC;");
 $stmt2->execute();
 $stmt2->bind_result($id, $description, $time);
 $tmp = array();

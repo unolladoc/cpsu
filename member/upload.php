@@ -53,19 +53,19 @@ if($_POST['Submit'])
         if (file_exists($target_file_new)) 
             {
                 //echo "Sorry, file already exists.";
-                header("location: index.php?error=2");
+                header("location: request.php?error=2");
                 $uploadOk = 0;
             }
         else if ($_FILES["filename"]["size"] > 25000000)
             {
                 //echo "Sorry, your file is too large.";
-                header("location: index.php?error=3");
+                header("location: request.php?error=3");
                 $uploadOk = 0;
             }
         else if($imageFileType != "doc" && $imageFileType != "docx" && $imageFileType != "pdf" && $imageFileType != "jpg" && $imageFileType != "jpeg") 
             {
                 //echo "Sorry, only doc, docx, pdf";
-                header("location: index.php?error=4");
+                header("location: request.php?error=4");
                 $uploadOk = 0;
             }
         

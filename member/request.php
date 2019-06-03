@@ -52,7 +52,9 @@
                             $noticount = "";
                             if ($resultd->num_rows > 0) {
                                 while ($rowd = $resultd->fetch_assoc()) {
-                                    $n++;
+                                    if (in_array(0, json_decode($rowd['destination'])) || in_array($_SESSION['campusid'], json_decode($rowd['destination'])) || in_array($_SESSION['officeid'], json_decode($rowd['destination']))) {
+                                        $n++;
+                                    }
                                 }
                                 if ($n == 0) {
                                     $noticount = "";
@@ -232,7 +234,11 @@
                                                   <td class='td-actions text-right'>
                                                     " . $cancel . "
                                                   </td>
-                                                </tr>";
+                                                  <td style='display:none;'>
+                                                  " . $row['file_name'] . "
+                                                  </td>
+                                                </tr>
+                                               ";
 
                                                 $rowi++;
                                             }
@@ -502,6 +508,18 @@ if (isset($_GET['error']) && $_GET['error'] == 4) {
 
           </script> ";
 }
+if (isset($_GET['success']) && $_GET['success'] == 2) {
+    echo "<script>
+            $.notify({
+            
+            title: '<strong>Request Canceled</strong>',
+            message: 'File Request to Administrator Canceled' 
+            },{
+            
+            type: 'warning'
+            });
+          </script> ";
+}
 ?>
 
 <script>
@@ -664,11 +682,11 @@ if (isset($_GET['error']) && $_GET['error'] == 4) {
 <script>
     function getRowID(r) {
         var id = document.getElementById("myTable").rows[r].cells.item(0).innerHTML;
-        var aid = document.getElementById("myTable").rows[r].cells.item(8).innerHTML;
-        var doc = document.getElementById("myTable").rows[r].cells.item(9).innerHTML;
+        //var aid = document.getElementById("myTable").rows[r].cells.item(8).innerHTML;
+        var doc = document.getElementById("myTable").rows[r].cells.item(6).innerHTML;
         document.getElementById("docname").innerHTML = doc;
         $("#idno").val(id);
-        $("#archived_idno").val(aid);
+        //$("#archived_idno").val(aid);
     }
 </script>
 

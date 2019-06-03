@@ -78,6 +78,7 @@ function fileUpdload()
 
                 $sql = "INSERT INTO files values('$newid','$target_path_new','$newbasename_filename_name','$filedescription','$fileextension','$filepurpose','$filerevision',$fileuploader,'$fileorigin','$filedestination',0,CAST('$datenow' as datetime),0,0,'');";
 
+                $mailnotif = "";
                 if ($tomail != 0) {
                     $sqlm = "SELECT username, office, campus from user where office IN (" . $tomail . ") OR campus IN (" . $tomail . ") AND type != 0;";
                     $resultm = $conn->query($sqlm);
@@ -85,20 +86,23 @@ function fileUpdload()
                         while ($rowm = $resultm->fetch_assoc()) {
                             $to = $rowm['username'];
                             $subject = $filepurpose;
-                            $txt = $filedescription;
-                            $headers = "From: no-reply@cpsu.cf";
-                            mail($to, $subject, $txt, $headers);
+                            $txt = "New File Uploaded: ". $newbasename_filename_name ."<br><br>Description: ". $filedescription ."<br><br>To download please LOGIN at cpsu.cf";
+                            $headers = "From: " . $email . "\r\n";
+                            $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+                            //mail($to, $subject, $txt, $headers);
                             // echo $to . "<br><br>" .
                             // $subject . "<br><br>" .
                             // $txt . "<br><br>" .
                             // $headers . "<br><br>" 
                             // ;
-                            // $retval = mail($to,$subject,$txt,$headers);     
-                            //         if( $retval == true ) {
-                            //             echo 'Sucess';
-                            //         }else {
-                            //             echo 'Error';
-                            //         }
+                            $retval = mail($to,$subject,$txt,$headers);     
+                                    if( $retval == true ) {
+                                        //echo 'Sucess';
+                                        $mailnotif = "&mail=1";
+                                    }else {
+                                        //echo 'Error';
+                                        $mailnotif = "&mail=0";
+                                    }
                         }
                     }
                 } else {
@@ -108,16 +112,25 @@ function fileUpdload()
                         while ($rowm = $resultm->fetch_assoc()) {
                             $to = $rowm['username'];
                             $subject = $filepurpose;
-                            $txt = $filedescription;
-                            $headers = "From: no-reply@cpsu.cf";
-                            mail($to, $subject, $txt, $headers);
+                            $txt = "New File Uploaded: ". $newbasename_filename_name ."<br><br>Description: ". $filedescription ."<br><br>To download please LOGIN at cpsu.cf";
+                            $headers = "From: " . $email . " \r\n";
+                            $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+                            //($to, $subject, $txt, $headers);
+                            $retval = mail($to,$subject,$txt,$headers);     
+                                    if( $retval == true ) {
+                                        //echo 'Sucess';
+                                        $mailnotif = "&mail=1";
+                                    }else {
+                                        //echo 'Error';
+                                        $mailnotif = "&mail=0";
+                                    }
                         }
                     }
                 }
                 if ($conn->query($sql) === TRUE) {
                     //copy($filepath, $destinationpath);
                     //echo "New record created successfully";
-                    header("location: index.php?success=1&mail=1");
+                    header("location: index.php?success=1" . $mailnotif);
                 } else {
                     echo "Error: " . $sql . "<br>" . $conn->error;
                     //header("location: home.php?error=1");
