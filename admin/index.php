@@ -11,7 +11,6 @@
         session_destroy();
         header('Location: ../index.php?error');
     }
-
     ?>
 
     <meta charset="utf-8" />
@@ -160,19 +159,19 @@
                     <li class="active">
                         <a href="#">
                             <i class="now-ui-icons files_single-copy-04"></i>
-                            <?php 
-                            $sqld = "SELECT * FROM files WHERE downloads < 1 AND finout = 1;";
+                            <?php
+                            $sqld = "SELECT * FROM files WHERE NOT EXISTS (Select * FROM logs WHERE logs.file_id = files.id AND logs.author = " . $_SESSION['id'] . ") AND archive = 0;";
                             $resultd = $conn->query($sqld);
-                            $n=0;
+                            $n = 0;
                             $noticount = "";
                             if ($resultd->num_rows > 0) {
                                 while ($rowd = $resultd->fetch_assoc()) {
                                     $n++;
                                 }
-                                if($n==0){
+                                if ($n == 0) {
                                     $noticount = "";
-                                }else{
-                                    $noticount = "<strong>(".$n.")</strong>";
+                                } else {
+                                    $noticount = "<strong>(" . $n . ")</strong>";
                                 }
                             }
                             ?>
@@ -338,48 +337,48 @@
                                                 $dest = json_decode($row['destination']);
                                                 $destination = "";
                                                 $destvalue = "";
-                                                foreach($dest as $value){
+                                                foreach ($dest as $value) {
                                                     $destvalue .= $value;
-                                                    if (next($dest )) {
+                                                    if (next($dest)) {
                                                         $destvalue .= ", ";
                                                     }
                                                     $sql1 = "SELECT campus FROM campuses where id = $value";
                                                     $result1 = $conn->query($sql1);
-                                                    if($result1->num_rows>0){
+                                                    if ($result1->num_rows > 0) {
                                                         $row1 = $result1->fetch_assoc();
-                                                        $destination .= "(".$row1['campus'].")";
+                                                        $destination .= "(" . $row1['campus'] . ")";
                                                     }
                                                     $sql2 = "SELECT offices.office, campuses.campus from offices inner join campuses on offices.campus=campuses.id where offices.id = $value";
                                                     $result2 = $conn->query($sql2);
-                                                    if($result2->num_rows>0){
+                                                    if ($result2->num_rows > 0) {
                                                         $row2 = $result2->fetch_assoc();
-                                                        $destination .= "(".$row2['office']. "(".$row2['campus']."))";
+                                                        $destination .= "(" . $row2['office'] . "(" . $row2['campus'] . "))";
                                                     }
                                                 }
-                                                if($destination == ""){
+                                                if ($destination == "") {
                                                     $destination = "All Campus";
                                                     $destvalue = "all";
                                                 }
 
-                                                $sql3 = "SELECT offices.office, campuses.campus from offices inner join campuses on offices.campus=campuses.id where offices.id = ".$row['origin'];
+                                                $sql3 = "SELECT offices.office, campuses.campus from offices inner join campuses on offices.campus=campuses.id where offices.id = " . $row['origin'];
                                                 $result3 = $conn->query($sql3);
-                                                if($result3->num_rows>0){
+                                                if ($result3->num_rows > 0) {
                                                     $row3 = $result3->fetch_assoc();
-                                                    $origin = $row3['office']. "(".$row3['campus'].")";
+                                                    $origin = $row3['office'] . "(" . $row3['campus'] . ")";
                                                 }
 
-                                                $sql4 = "SELECT name from user where id = ".$row['uploader'];
+                                                $sql4 = "SELECT name from user where id = " . $row['uploader'];
                                                 $result4 = $conn->query($sql4);
-                                                if($result4->num_rows>0){
+                                                if ($result4->num_rows > 0) {
                                                     $row4 = $result4->fetch_assoc();
                                                     $uploader = $row4['name'];
                                                 }
 
                                                 $filename = "<a href='../" . $row['file_path'] . "' rel='tooltip'  title='Click to Download' onclick = updateDownloads('" . $row['id'] . "'); download>" . $row['file_name'] . "</a>";
-                                                
-                                                if($row['finout']==0){
+
+                                                if ($row['finout'] == 0) {
                                                     $inout = "Outgoing";
-                                                }elseif($row['finout']==1){
+                                                } elseif ($row['finout'] == 1) {
                                                     $inout = "Incoming";
                                                 }
 
@@ -394,7 +393,7 @@
                                             " . $filename . "
                                           </td>
                                           <td>
-                                            " . $inout ." ". $row['file_purpose'] . "
+                                            " . $inout . " " . $row['file_purpose'] . "
                                           </td>
                                           <td>
                                             " . $origin . "
@@ -745,8 +744,8 @@
                                         }
                                     });
                                 </script>
-                                
-                                 <!--<div class="col-md-3">
+
+                                <!--<div class="col-md-3">
                                  <button type="button" name="alert tags" onclick="test()">
                                 </div>
                                 <div class="col-md-5 pull-right">
@@ -1089,6 +1088,17 @@ if (isset($_GET['error']) && $_GET['error'] == 5) {
 
 <script>
     function updateDownloads(myObj) {
+
+        var table = document.getElementById("myTable");
+        for (var i = 1; i < table.rows.length; i++) {
+            var id = document.getElementById("myTable").rows[i].cells.item(0).innerHTML;
+            var newid = id.replace(/\s/g, "");
+            if (newid == myObj) {
+                //alert(i);
+                table.rows[i].style.backgroundColor = "";
+            }
+        }
+
         var obj, dbParam, xmlhttp;
         obj = {
             "fid": myObj
@@ -1106,7 +1116,6 @@ if (isset($_GET['error']) && $_GET['error'] == 5) {
         xmlhttp.open("POST", "../updatedownloads.php", true);
         xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         xmlhttp.send("x=" + dbParam);
-
     }
 </script>
 
@@ -1211,7 +1220,7 @@ if (isset($_GET['error']) && $_GET['error'] == 5) {
             $("#fileDest").attr('required', '');
         } else {
             text.style.display = "none";
-            $("#fileDest").removeAttr('required'); 
+            $("#fileDest").removeAttr('required');
         }
     }
 </script>
@@ -1243,11 +1252,43 @@ if (isset($_GET['error']) && $_GET['error'] == 5) {
     });
 </script> -->
 
+<!-- <script>
+    function test() {
+        var items = $(".fileDest").tagsinput('items');
+        $("#fileDestHid").val(items);
+    }
+</script> -->
+
 <script>
-function test(){
-    var items = $(".fileDest").tagsinput('items');
-    $("#fileDestHid").val(items);
-}
+    function notify(idx) {
+        var table = document.getElementById("myTable");
+
+        for (var i = 1; i < table.rows.length; i++) {
+            var id = document.getElementById("myTable").rows[i].cells.item(0).innerHTML;
+            var newid = id.replace(/\s/g, "");
+            if (newid == idx) {
+                //alert(i);
+                table.rows[i].style.backgroundColor = "lightgreen";
+            }
+        }
+    }
 </script>
+
+<?php
+$sqld = "SELECT * FROM files WHERE NOT EXISTS (Select * FROM logs WHERE logs.file_id = files.id AND logs.author = " . $_SESSION['id'] . ") AND archive = 0;";
+$resultd = $conn->query($sqld);
+$n = 0;
+if ($resultd->num_rows > 0) {
+    while ($rowd = $resultd->fetch_assoc()) {
+        echo "<script> notify('" . $rowd['id'] . "'); </script>";
+        $n++;
+    }
+    if ($n == 0) {
+        $noticount = "";
+    } else {
+        $noticount = "<strong>(" . $n . ")</strong>";
+    }
+}
+?>
 
 </html>

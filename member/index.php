@@ -46,9 +46,10 @@
                         <a href="#">
                         <i class="now-ui-icons files_single-copy-04"></i>
                             <?php 
-                            $sqld = "SELECT * FROM files inner join logs on files.id = logs.file_id where logs.action = 'DOWNLOAD' AND logs.author != ".$_SESSION['id'].";";
+                            $sqld = "SELECT * FROM files WHERE NOT EXISTS (Select * FROM logs WHERE logs.file_id = files.id AND logs.author = ".$_SESSION['id'].") AND finout = 0 AND archive = 0;";
                             $resultd = $conn->query($sqld);
                             $n=0;
+                            $noticount = "";
                             if ($resultd->num_rows > 0) {
                                 while ($rowd = $resultd->fetch_assoc()) {
                                     $n++;
@@ -206,7 +207,7 @@
 
                                                 $filename = "<a href='../" . $row['file_path'] . "' rel='tooltip'  title='Click to Download' onclick = updateDownloads('".$row['id']."'); download>".$row['file_name']."</a>";
 
-                                                if(in_array(0,json_decode($row['destination']))){
+                                                if(in_array(0,json_decode($row['destination'])) || in_array($_SESSION['campusid'],json_decode($row['destination'])) || in_array($_SESSION['officeid'],json_decode($row['destination']))){
                                                     echo "<tr class='trcontent'>
                                                   <td>
                                                     " . $row['id'] . "
@@ -231,33 +232,7 @@
                                                   </td>
                                                 </tr>";
                                                 }
-                                                if(in_array($_SESSION['campusid'],json_decode($row['destination'])) || in_array($_SESSION['officeid'],json_decode($row['destination']))){
-                                                    echo "<tr class='trcontent'>
-                                                  <td>
-                                                    " . $row['id'] . "
-                                                  </td>
-                                                  <td>
-                                                    " . $filename . " &nbsp;
-                                                    <a tabindex='0' role='button' data-toggle='popover' data-trigger='focus' title='Description' data-content='".$row['file_desc']."'>
-                                                    <i class='now-ui-icons travel_info' rel='tooltip'  title='Click for Description'></i>
-                                                    </a>
-                                                  </td>
-                                                  <td>
-                                                    " . $row['file_purpose'] . "
-                                                  </td>
-                                                  <td>
-                                                    " . $row['origin'] . "
-                                                  </td>
-                                                  <td>
-                                                    " . $row['uploader'] . "
-                                                  </td>
-                                                  <td>
-                                                    " . $datetime . "
-                                                  </td>
-                                                </tr>";
-                                                }
                                                   
-                                                
                                                 $rowi++;
                                             }
                                         } else {
@@ -585,5 +560,38 @@ function updateDownloads(myObj){
 
     };
 </script>
+
+<script>
+    function notify(idx) {
+        var table = document.getElementById("myTable");
+
+        for (var i = 1; i < table.rows.length; i++) {
+            var id = document.getElementById("myTable").rows[i].cells.item(0).innerHTML;
+            var newid = id.replace(/\s/g, "");
+            if (newid == idx) {
+                //alert(i);
+                table.rows[i].style.backgroundColor = "lightgreen";
+            }
+        }
+    }
+</script>
+
+<?php
+$sqld = "SELECT * FROM files WHERE NOT EXISTS (Select * FROM logs WHERE logs.file_id = files.id AND logs.author = ".$_SESSION['id'].") AND finout = 0 AND archive = 0;";
+$resultd = $conn->query($sqld);
+$n = 0;
+if ($resultd->num_rows > 0) {
+    while ($rowd = $resultd->fetch_assoc()) {
+        echo "<script> notify('" . $rowd['id'] . "'); </script>";
+        $n++;
+    }
+    if ($n == 0) {
+        $noticount = "";
+    } else {
+        $noticount = "<strong>(" . $n . ")</strong>";
+    }
+}
+?>
+
 
 </html> 

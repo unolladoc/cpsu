@@ -45,20 +45,20 @@
                 <ul class="nav">
                     <li>
                         <a href="index.php">
-                        <i class="now-ui-icons files_single-copy-04"></i>
-                            <?php 
-                            $sqld = "SELECT * FROM files WHERE downloads < 1 AND finout = 1;";
+                            <i class="now-ui-icons files_single-copy-04"></i>
+                            <?php
+                            $sqld = "SELECT * FROM files WHERE NOT EXISTS (Select * FROM logs WHERE logs.file_id = files.id AND logs.author = " . $_SESSION['id'] . ") AND archive = 0;";
                             $resultd = $conn->query($sqld);
-                            $n=0;
+                            $n = 0;
                             $noticount = "";
                             if ($resultd->num_rows > 0) {
                                 while ($rowd = $resultd->fetch_assoc()) {
                                     $n++;
                                 }
-                                if($n==0){
+                                if ($n == 0) {
                                     $noticount = "";
-                                }else{
-                                    $noticount = "<strong>(".$n.")</strong>";
+                                } else {
+                                    $noticount = "<strong>(" . $n . ")</strong>";
                                 }
                             }
                             ?>
@@ -182,7 +182,7 @@
                                             while ($row = $result->fetch_assoc()) {
 
                                                 $time = strtotime($row['time']);
-                                                $datetime = date("d-M-Y H:i:s", $time);    
+                                                $datetime = date("d-M-Y H:i:s", $time);
 
                                                 echo "<tr>
                                           <td>
