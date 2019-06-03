@@ -498,7 +498,7 @@
     <script src="../assets/js/bloodhound.min.js"></script>
     <script src="../assets/js/typeahead.bundle.min.js"></script>
     <script src="../assets/js/app.js"></script>
-    <script src="../assets/js/app_bs3.js"></script>
+    <!-- <script src="../assets/js/app_bs3.js"></script> -->
     <!--  Google Maps Plugin    
   <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE"></script>
   -->
@@ -825,6 +825,18 @@ if (isset($_GET['success']) && $_GET['success'] == 1) {
             
             title: '<strong>Success</strong>',
             message: 'File Uploaded Successfully' 
+            },{
+            
+            type: 'success'
+            });
+          </script> ";
+}
+if (isset($_GET['mail']) && $_GET['mail'] == 1) {
+    echo "<script>
+            $.notify({
+            
+            title: '<strong>Notifications Sent</strong>',
+            message: 'Email Notifications Sent Successfully' 
             },{
             
             type: 'success'
