@@ -55,7 +55,7 @@
                         <a href="../">
                         <i class="now-ui-icons files_single-copy-04"></i>
                             <?php 
-                            $sqld = "SELECT * FROM files WHERE downloads < 1 AND finout = 1;";
+                            $sqld = "SELECT * FROM files WHERE NOT EXISTS (Select * FROM logs WHERE logs.file_id = files.id AND logs.author = ".$_SESSION['id'].") AND archive = 0;";
                             $resultd = $conn->query($sqld);
                             $n=0;
                             $noticount = "";
