@@ -29,9 +29,11 @@ if($_POST['Submit'])
         $fileorigin = $_SESSION['officeid'];
 
         if($_POST['upfiledestval'] !=0 ){
-            $customcampus = explode(",",$_POST['upfiledestval']); 
+            $customcampus = explode(",",$_POST['upfiledestval']);
+            $tomail = $_POST['upfiledestval']; 
         }else{
             $customcampus = explode(",","0");
+            $tomail = 0;
         }
         $filedestination = json_encode($customcampus);
 
@@ -85,12 +87,63 @@ if($_POST['Submit'])
 
                         $sql = "INSERT INTO files values('$newid','$target_path_new','$newbasename_filename_name','$filedescription','$fileextension','$filepurpose','$filerevision',$fileuploader,'$fileorigin','$filedestination',0,CAST('$datenow' as datetime),0,0,'$fileid');" ;
 
+
+                        $mailnotif = "";
+                        if ($tomail != 0) {
+                            $sqlm = "SELECT username, office, campus from user where office IN (" . $tomail . ") OR campus IN (" . $tomail . ") AND type != 0;";
+                            $resultm = $conn->query($sqlm);
+                            if ($resultm->num_rows > 0) {
+                                while ($rowm = $resultm->fetch_assoc()) {
+                                    $to = $rowm['username'];
+                                    $subject = "UPDATED ".$filepurpose;
+                                    $txt = "File ".$oldname." was Updated to: ". $newbasename_filename_name ."<br><br>Description: ". $filedescription ."<br><br>To download please LOGIN at cpsu.cf";
+                                    $headers = "From: " . $email . "\r\n";
+                                    $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+                                    //mail($to, $subject, $txt, $headers);
+                                    // echo $to . "<br><br>" .
+                                    // $subject . "<br><br>" .
+                                    // $txt . "<br><br>" .
+                                    // $headers . "<br><br>" 
+                                    // ;
+                                    $retval = mail($to,$subject,$txt,$headers);     
+                                            if( $retval == true ) {
+                                                //echo 'Sucess';
+                                                $mailnotif = "&mail=1";
+                                            }else {
+                                                //echo 'Error';
+                                                $mailnotif = "&mail=0";
+                                            }
+                                }
+                            }
+                        } else {
+                            $sqlm = "SELECT username, office, campus from user where type != 0;";
+                            $resultm = $conn->query($sqlm);
+                            if ($resultm->num_rows > 0) {
+                                while ($rowm = $resultm->fetch_assoc()) {
+                                    $to = $rowm['username'];
+                                    $subject = "UPDATED ".$filepurpose;
+                                    $txt = "File ".$oldname." was Updated to: ". $newbasename_filename_name ."<br><br>Description: ". $filedescription ."<br><br>To download please LOGIN at cpsu.cf";
+                                    $headers = "From: " . $email . " \r\n";
+                                    $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+                                    //($to, $subject, $txt, $headers);
+                                    $retval = mail($to,$subject,$txt,$headers);     
+                                            if( $retval == true ) {
+                                                //echo 'Sucess';
+                                                $mailnotif = "&mail=1";
+                                            }else {
+                                                //echo 'Error';
+                                                $mailnotif = "&mail=0";
+                                            }
+                                }
+                            }
+                        }
+
                         if ($conn->query($sql) === TRUE) {
                             //copy($filepath, $destinationpath);
                             //echo "New record created successfully";
                             $sql2 = "UPDATE files SET archive = '1' WHERE id='$fileid'";
                             if ($conn->query($sql2) === TRUE) {
-                                header("location: index.php?success=10");
+                                header("location: index.php?success=10".$mailnotif);
                             }else {
                                 echo "Error: " . $sql2 . "<br>" . $conn->error;
                             }
