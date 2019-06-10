@@ -396,14 +396,17 @@
   jQuery(document).ready(function($) {
     $("#campuses").change(function() {
       var cid = $("#campuses").val();
-      $('#offices').empty();
       $.ajax({
         url: "loaddata2.php",
         type: "POST",
         data: "campus=" + cid,
+        beforeSend: function() {
+          $('#offices').append('<option value="">Loading...</option>')
+        },
         success: function(response) {
+          $('#offices').empty();
           $('#offices').append('<option value="">Select...</option>')
-          console.log(response);
+          //console.log(response);
           //$('#offices').append('<option value=' + myObj[x].id + '>' + myObj[x].office + '</option>');
           $.each(response, function(i, value) {
             $('<option></option>', {
