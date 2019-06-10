@@ -85,7 +85,7 @@ function fileUpdload()
                     if ($resultm->num_rows > 0) {
                         while ($rowm = $resultm->fetch_assoc()) {
                             $to = $rowm['username'];
-                            $subject = $filepurpose;
+                            $subject = "NEW ".$filepurpose;
                             $txt = "New File Uploaded: ". $newbasename_filename_name ."<br><br>Description: ". $filedescription ."<br><br>To download please LOGIN at cpsu.cf";
                             $headers = "From: " . $email . "\r\n";
                             $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
@@ -111,7 +111,7 @@ function fileUpdload()
                     if ($resultm->num_rows > 0) {
                         while ($rowm = $resultm->fetch_assoc()) {
                             $to = $rowm['username'];
-                            $subject = $filepurpose;
+                            $subject = "NEW ".$filepurpose;
                             $txt = "New File Uploaded: ". $newbasename_filename_name ."<br><br>Description: ". $filedescription ."<br><br>To download please LOGIN at cpsu.cf";
                             $headers = "From: " . $email . " \r\n";
                             $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
