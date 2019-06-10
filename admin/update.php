@@ -13,11 +13,14 @@ if (file_exists("../files/")) {
 
 function fileUpdload(){
 
-if($_POST['Submit'])
-    {
+// if($_POST['Submit'])
+//     {
         //$filename = $_POST['filename'];
         //$filepath = realpath($_POST['filename']);
         include('../conn.php');
+
+        $id = mt_rand();
+        $newid = sprintf("CPSU%X",$id);
 
         $oldname = $_POST['oldfilename'];
         $fileid = $_POST['upidno'];
@@ -55,19 +58,22 @@ if($_POST['Submit'])
         if (file_exists($target_file_new)) 
             {
                 //echo "Sorry, file already exists.";
-                header("location: index.php?error=2");
+                echo "index.php?error=2";
+                // header("location: index.php?error=2");
                 $uploadOk = 0;
             }
         else if ($_FILES["upfilename"]["size"] > 25000000)
             {
                 //echo "Sorry, your file is too large.";
-                header("location: index.php?error=3");
+                echo "index.php?error=3";
+                // header("location: index.php?error=3");
                 $uploadOk = 0;
             }
         else if($imageFileType != "doc" && $imageFileType != "docx" && $imageFileType != "pdf" && $imageFileType != "jpg" && $imageFileType != "jpeg"  && $imageFileType != "rar" && $imageFileType != "zip") 
             {
                 //echo "Sorry, only doc, docx, pdf";
-                header("location: index.php?error=4");
+                echo "index.php?error=4";
+                // header("location: index.php?error=4");
                 $uploadOk = 0;
             }
         
@@ -81,9 +87,6 @@ if($_POST['Submit'])
                         if ($conn->connect_error) {
                             die("Connection failed: " . $conn->connect_error);
                         }
-
-                        $id = mt_rand();
-                        $newid = sprintf("CPSU%X",$id);
 
                         $sql = "INSERT INTO files values('$newid','$target_path_new','$newbasename_filename_name','$filedescription','$fileextension','$filepurpose','$filerevision',$fileuploader,'$fileorigin','$filedestination',0,CAST('$datenow' as datetime),0,0,'$fileid');" ;
 
@@ -143,12 +146,15 @@ if($_POST['Submit'])
                             //echo "New record created successfully";
                             $sql2 = "UPDATE files SET archive = '1' WHERE id='$fileid'";
                             if ($conn->query($sql2) === TRUE) {
-                                header("location: index.php?success=10".$mailnotif);
+                                echo "index.php?success=10".$mailnotif;
+                                //header("location: index.php?success=10".$mailnotif);
                             }else {
-                                echo "Error: " . $sql2 . "<br>" . $conn->error;
+                                echo "index.php?archive=error";
+                                //echo "Error: " . $sql2 . "<br>" . $conn->error;
                             }
                         } else {
-                            echo "Error: " . $sql . "<br>" . $conn->error;
+                            echo 'index.php?update=ok&sql=error';
+                            //echo "Error: " . $sql . "<br>" . $conn->error;
                             //header("location: admin/index.php?error=1");
                         }
                         //echo "The file ". basename( $_FILES["filename"]["name"]). " has been uploaded.<br>";
@@ -157,13 +163,17 @@ if($_POST['Submit'])
                 } 
                 else 
                     {
-                        echo "Sorry, there was an error uploading your file.";
+                        echo 'index.php?error=0';
+                        //echo "Sorry, there was an error uploading your file.";
                     }
             }
         $sqll = "Insert into logs values(null, '".$_SESSION['name']." UPDATED ".
         $oldname ." to ".$newbasename_filename_name."',CAST('$datenow' as datetime), ".$_SESSION['id'].", 'UPDATE FILE','$fileid');";
-        if ($conn->query($sqll) === TRUE) {}else{echo "Error: " . $sqll . "<br>" . $conn->error;}
-    }
+        if ($conn->query($sqll) === TRUE) {}else{
+            echo 'index.php?logerror';
+            // echo "Error: " . $sqll . "<br>" . $conn->error;
+        }
+    //}
 }
 
 $conn->close();

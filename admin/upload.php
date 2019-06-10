@@ -14,10 +14,13 @@ if (file_exists("../files/")) {
 function fileUpdload()
 {
 
-    if ($_POST['Submit']) {
+//    if ($_POST['Submit']) {
         //$filename = $_POST['filename'];
         //$filepath = realpath($_POST['filename']);
         include('../conn.php');
+
+        $id = mt_rand();
+        $newid = sprintf("CPSU%X", $id);
 
         $fileextension = $_POST['fileextension'];
         $filepurpose = $_POST['filepurpose'];
@@ -52,15 +55,18 @@ function fileUpdload()
 
         if (file_exists($target_file_new)) {
             //echo "Sorry, file already exists.";
-            header("location: index.php?error=2");
+            echo "index.php?error=2";
+            //header("location: index.php?error=2");
             $uploadOk = 0;
         } else if ($_FILES["filename"]["size"] > 25000000) {
             //echo "Sorry, your file is too large.";
-            header("location: index.php?error=3");
+            echo "index.php?error=3";
+            //header("location: index.php?error=3");
             $uploadOk = 0;
         } else if ($imageFileType != "doc" && $imageFileType != "docx" && $imageFileType != "pdf" && $imageFileType != "jpg" && $imageFileType != "jpeg" && $imageFileType != "rar" && $imageFileType != "zip") {
             //echo "Sorry, only doc, docx, pdf";
-            header("location: index.php?error=4");
+            echo "index.php?error=4";
+            //header("location: index.php?error=4");
             $uploadOk = 0;
         }
 
@@ -72,9 +78,6 @@ function fileUpdload()
                 if ($conn->connect_error) {
                     die("Connection failed: " . $conn->connect_error);
                 }
-
-                $id = mt_rand();
-                $newid = sprintf("CPSU%X", $id);
 
                 $sql = "INSERT INTO files values('$newid','$target_path_new','$newbasename_filename_name','$filedescription','$fileextension','$filepurpose','$filerevision',$fileuploader,'$fileorigin','$filedestination',0,CAST('$datenow' as datetime),0,0,'');";
 
@@ -130,23 +133,28 @@ function fileUpdload()
                 if ($conn->query($sql) === TRUE) {
                     //copy($filepath, $destinationpath);
                     //echo "New record created successfully";
-                    header("location: index.php?success=1" . $mailnotif);
+                    //header("location: index.php?success=1" . $mailnotif);
+                    echo 'index.php?success=1'.$mailnotif;
+                    //echo '<script>window.location.href="index.php?success=1'.$mailnotif.'";</script>';
                 } else {
-                    echo "Error: " . $sql . "<br>" . $conn->error;
+                    echo 'index.php?upload=ok&sql=error';
+                    //echo "Error: " . $sql . "<br>" . $conn->error;
                     //header("location: home.php?error=1");
                 }
                 //echo "The file ". basename( $_FILES["filename"]["name"]). " has been uploaded.<br>";
                 //echo $sql;
 
             } else {
-                echo "Sorry, there was an error uploading your file.";
+                echo 'index.php?error=0';
+                //echo "Sorry, there was an error uploading your file.";
             }
         }
         $sqll = "Insert into logs values(null, '" . $_SESSION['name'] . " uploaded " . $newbasename_filename_name . "',CAST('$datenow' as datetime), " . $_SESSION['id'] . ", 'UPLOAD','$newid');";
         if ($conn->query($sqll) === TRUE) { } else {
-            echo "Error: " . $sqll . "<br>" . $conn->error;
+            //echo "Error: " . $sqll . "<br>" . $conn->error;
+            echo 'index.php?logerror';
         }
-    }
+//    }
 }
 
 $conn->close();

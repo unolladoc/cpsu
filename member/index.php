@@ -275,6 +275,7 @@
     </div>
     <!--   Core JS Files   -->
     <script src="../assets/js/core/jquery.min.js"></script>
+    <script src="../assets/js/jquery.form.js"></script>
     <script src="../assets/js/core/popper.min.js"></script>
     <script src="../assets/js/core/bootstrap.min.js"></script>
     <script src="../assets/js/core/bootstrap-notify.js"></script>
@@ -595,5 +596,36 @@ if ($resultd->num_rows > 0) {
 }
 ?>
 
+<script>
+    $(document).ready(function() {
+        $('#addFileForm').submit(function(event) {
+            if ($('#filename').val) {
+                event.preventDefault();
+                $('#status').text("Uploading...");
+                $('#addFileForm').ajaxSubmit({
+                    beforeSubmit: function() {
+                        $('.progress-bar').width('0%');
+                    },
+                    uploadProgress: function(event, position, total, percentageComplete) {
+                        $('#status').text(percentageComplete + '%');
+                        $('.progress-bar').animate({
+                            width: percentageComplete + '%'
+                        }, {
+                            duration: 1000
+                        });
+                    },
+                    success: function(data) {
+                        //console.log(xhr.getAllResponseHeaders());
+                        //console.log(xhr.getResponseHeader("location"));
+                        $('#status').text("Uploaded!");
+                        //console.log(data);
+                        window.location = data;
+                    }
+                });
+            }
+            return false;
+        });
+    });
+</script>
 
 </html> 

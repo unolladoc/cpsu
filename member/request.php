@@ -520,6 +520,22 @@ if (isset($_GET['success']) && $_GET['success'] == 2) {
             });
           </script> ";
 }
+if (isset($_GET['error']) && $_GET['error'] == 0) {
+
+    echo "<script>
+            $.notify({
+            
+            title: '<strong>Upload Error</strong>',
+            message: 'There was a problem uploading your file. Please contact the administrator/creator' 
+            },{
+            
+            type: 'danger',
+            allow_dismiss: false
+
+            });
+
+          </script> ";
+}
 ?>
 
 <script>

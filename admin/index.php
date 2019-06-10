@@ -487,6 +487,7 @@
     </div>
     <!--   Core JS Files   -->
     <script src="../assets/js/core/jquery.min.js"></script>
+    <script src="../assets/js/jquery.form.js"></script>
     <script src="../assets/js/core/popper.min.js"></script>
     <script src="../assets/js/core/bootstrap.min.js"></script>
     <script src="../assets/js/core/bootstrap-notify.js"></script>
@@ -570,6 +571,14 @@
                         <input type="hidden" id="oldfilename" name="oldfilename">
                         <label id="upfiledest"></label><br>
                         <label id="upfilerevisionlbl"></label>
+                    </div>
+                    <div class="progress-container progress-primary" id="progressBar">
+                        <span class="progress-badge" id="uploading"></span>
+                        <div class="progress">
+                            <div class="progress-bar" id="progress" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                                <span class="progress-value" id="ustatus"></span>
+                            </div>
+                        </div>
                     </div>
                     <!--<button class="btn btn-primary btn-round">Browse File</button>--><br>
                     <label for="exampleFormControlSelect1">File Name</label>
@@ -685,7 +694,6 @@
 <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" id="addFileModal" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog modal-lg">
         <form method="post" enctype="multipart/form-data" action="upload.php" id="addFileForm" name="">
-            <input type="hidden" value="addFileForm" name="<?php echo ini_get("session.upload_progress.name"); ?>">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">Add File</h5>
@@ -697,7 +705,7 @@
                     <div class="progress-container progress-primary" id="progressBar">
                         <span class="progress-badge" id="uploading"></span>
                         <div class="progress">
-                            <div class="progress-bar" id="progress" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100">
+                            <div class="progress-bar" id="progress" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
                                 <span class="progress-value" id="status"></span>
                             </div>
                         </div>
@@ -803,7 +811,7 @@
                     </div>
                     <div class="col-md-12">
                         <div class="modal-footer">
-                            <input type="Submit" class="btn btn-primary" name="Submit" value="Submit" onclick="">
+                            <input type="Submit" id="uploadSubmit" class="btn btn-primary" name="Submit" value="Submit" onclick="">
                         </div>
                     </div>
                 </div>
@@ -905,7 +913,7 @@ if (isset($_GET['error']) && $_GET['error'] == 4) {
             $.notify({
             
             title: 'File Not Supported',
-            message: '<strong>Upload JPEG, JPG, DOC, DOCX, PDF Only</strong>' 
+            message: '<strong>Upload JPEG, JPG, DOC, DOCX, PDF, RAR, ZIP Only</strong>' 
             },{
             
             type: 'danger',
@@ -922,6 +930,22 @@ if (isset($_GET['error']) && $_GET['error'] == 5) {
             
             title: 'Unable to Verify',
             message: '<strong>File Not Deleted</strong>' 
+            },{
+            
+            type: 'danger',
+            allow_dismiss: false
+
+            });
+
+          </script> ";
+}
+if (isset($_GET['error']) && $_GET['error'] == 0) {
+
+    echo "<script>
+            $.notify({
+            
+            title: '<strong>Upload Error</strong>',
+            message: 'There was a problem uploading your file. Please contact the administrator/creator' 
             },{
             
             type: 'danger',
@@ -1307,5 +1331,69 @@ if ($resultd->num_rows > 0) {
     }
 }
 ?>
+
+<script>
+    $(document).ready(function() {
+        $('#addFileForm').submit(function(event) {
+            if ($('#filename').val) {
+                event.preventDefault();
+                $('#status').text("Uploading...");
+                $('#addFileForm').ajaxSubmit({
+                    beforeSubmit: function() {
+                        $('.progress-bar').width('0%');
+                    },
+                    uploadProgress: function(event, position, total, percentageComplete) {
+                        $('#status').text(percentageComplete + '%');
+                        $('.progress-bar').animate({
+                            width: percentageComplete + '%'
+                        }, {
+                            duration: 1000
+                        });
+                    },
+                    success: function(data) {
+                        //console.log(xhr.getAllResponseHeaders());
+                        //console.log(xhr.getResponseHeader("location"));
+                        $('#status').text("Uploaded!");
+                        //console.log(data);
+                        window.location = data;
+                    }
+                });
+            }
+            return false;
+        });
+    });
+</script>
+
+<script>
+    $(document).ready(function() {
+        $('#updateFileForm').submit(function(event) {
+            if ($('#uplfilename').val) {
+                event.preventDefault();
+                $('#ustatus').text("Uploading...");
+                $('#updateFileForm').ajaxSubmit({
+                    beforeSubmit: function() {
+                        $('.progress-bar').width('0%');
+                    },
+                    uploadProgress: function(event, position, total, percentageComplete) {
+                        $('#ustatus').text(percentageComplete + '%');
+                        $('.progress-bar').animate({
+                            width: percentageComplete + '%'
+                        }, {
+                            duration: 1000
+                        });
+                    },
+                    success: function(data) {
+                        //console.log(xhr.getAllResponseHeaders());
+                        //console.log(xhr.getResponseHeader("location"));
+                        $('#ustatus').text("Uploaded!");
+                        //console.log(data);
+                        window.location = data;
+                    }
+                });
+            }
+            return false;
+        });
+    });
+</script>
 
 </html>
