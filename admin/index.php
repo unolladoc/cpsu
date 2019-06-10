@@ -574,7 +574,7 @@
                     <!--<button class="btn btn-primary btn-round">Browse File</button>--><br>
                     <label for="exampleFormControlSelect1">File Name</label>
                     <div class="input-group">
-                        <input class="form-control" type="file" name="upfilename" id="upfilename" onchange="" required>
+                        <input class="form-control" type="file" name="upfilename" id="uplfilename" onchange="" required>
                     </div>
                     <div class="form-group">
                         <label for="exampleFormControlTextarea1">File Description</label>
@@ -1055,7 +1055,7 @@ if (isset($_GET['error']) && $_GET['error'] == 5) {
         var fid = document.getElementById("myTable").rows[r].cells.item(0).innerHTML;
         var fname = document.getElementById("myTable").rows[r].cells.item(9).innerHTML;
         var fpor = document.getElementById("myTable").rows[r].cells.item(14).innerHTML;
-        var fxtn = document.getElementById("myTable").rows[r].cells.item(6).innerHTML;
+        //var fxtn = document.getElementById("myTable").rows[r].cells.item(6).innerHTML;
         var frev = document.getElementById("myTable").rows[r].cells.item(7).innerHTML;
         var fdesc = document.getElementById("myTable").rows[r].cells.item(10).innerHTML;
         var fdest = document.getElementById("myTable").rows[r].cells.item(11).innerHTML;
@@ -1074,7 +1074,8 @@ if (isset($_GET['error']) && $_GET['error'] == 5) {
         $('#upfiledest').text("File Destination: " + fdest);
         $('#upfilerevisionlbl').text("Revision: " + frev.replace(/\s/g, ""));
         $('#upfilerevision').val(parseInt(frev.replace(/\s/g, "")) + 1);
-        $('#upfileextension').val(fxtn.replace(/\s/g, ""));
+        //$('#upfileextension').val("");
+        //$('#upfileextension').val(fxtn.replace(/\s/g, ""));
         $('#upfilepurpose').val(fpor.replace(/\s/g, ""));
         $("#upidno").val(fid.replace(/\s/g, ""));
         $("#upfiledesc").val(fdesc.trim());
@@ -1084,7 +1085,6 @@ if (isset($_GET['error']) && $_GET['error'] == 5) {
 
 <script>
     document.getElementById('filename').onchange = function() {
-
         //var last = this.value.lastIndexOf(".");
         //var filepath = this.value;
         var fileextension = this.value.slice(this.value.lastIndexOf(".") + 1).toUpperCase();
@@ -1094,7 +1094,12 @@ if (isset($_GET['error']) && $_GET['error'] == 5) {
         document.getElementById("filerevision").value = "1";
         //document.getElementById("filerevision").disabled = true;
         //document.getElementById("fileextension").disabled = true;
-
+    };
+</script>
+<script>
+    document.getElementById('uplfilename').onchange = function() {
+        var fileextension = this.value.slice(this.value.lastIndexOf(".") + 1).toUpperCase();
+        document.getElementById("upfileextension").value = fileextension;
     };
 </script>
 
