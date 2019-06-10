@@ -58,7 +58,7 @@ function fileUpdload()
             //echo "Sorry, your file is too large.";
             header("location: index.php?error=3");
             $uploadOk = 0;
-        } else if ($imageFileType != "doc" && $imageFileType != "docx" && $imageFileType != "pdf" && $imageFileType != "jpg" && $imageFileType != "jpeg") {
+        } else if ($imageFileType != "doc" && $imageFileType != "docx" && $imageFileType != "pdf" && $imageFileType != "jpg" && $imageFileType != "jpeg" && $imageFileType != "rar" && $imageFileType != "zip") {
             //echo "Sorry, only doc, docx, pdf";
             header("location: index.php?error=4");
             $uploadOk = 0;
