@@ -47,7 +47,7 @@
                         <a href="index.php">
                             <i class="now-ui-icons files_single-copy-04"></i>
                             <?php
-                            $sqld = "SELECT * FROM files WHERE NOT EXISTS (Select * FROM logs WHERE logs.file_id = files.id AND logs.author = " . $_SESSION['id'] . ") AND archive = 0;";
+                            $sqld = "SELECT * FROM files WHERE NOT EXISTS (Select * FROM logs WHERE logs.file_id = files.id AND logs.author = " . $_SESSION['id'] . ")AND finout = 1 AND archive = 0 AND uploader !=  " . $_SESSION['id'] . ";";
                             $resultd = $conn->query($sqld);
                             $n = 0;
                             $noticount = "";
