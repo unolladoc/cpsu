@@ -280,6 +280,7 @@
     </div>
     <!--   Core JS Files   -->
     <script src="../assets/js/core/jquery.min.js"></script>
+    <script src="../assets/js/jquery.form.js"></script>
     <script src="../assets/js/core/popper.min.js"></script>
     <script src="../assets/js/core/bootstrap.min.js"></script>
     <script src="../assets/js/core/bootstrap-notify.js"></script>
@@ -498,7 +499,7 @@ if (isset($_GET['error']) && $_GET['error'] == 4) {
             $.notify({
             
             title: 'File Not Supported',
-            message: '<strong>Upload JPEG, JPG, DOC, DOCX, PDF Only</strong>' 
+            message: '<strong>Upload JPEG, JPG, DOC, DOCX, PDF, RAR, ZIP Only</strong>' 
             },{
             
             type: 'danger',
@@ -704,6 +705,38 @@ if (isset($_GET['error']) && $_GET['error'] == 0) {
         $("#idno").val(id);
         //$("#archived_idno").val(aid);
     }
+</script>
+
+<script>
+    $(document).ready(function() {
+        $('#addFileForm').submit(function(event) {
+            if ($('#filename').val) {
+                event.preventDefault();
+                $('#status').text("Uploading...");
+                $('#addFileForm').ajaxSubmit({
+                    beforeSubmit: function() {
+                        $('.progress-bar').width('0%');
+                    },
+                    uploadProgress: function(event, position, total, percentageComplete) {
+                        $('#status').text('Uploading ('+ percentageComplete + '%)...');
+                        $('.progress-bar').animate({
+                            width: percentageComplete + '%'
+                        }, {
+                            duration: 1000
+                        });
+                    },
+                    success: function(data) {
+                        //console.log(xhr.getAllResponseHeaders());
+                        //console.log(xhr.getResponseHeader("location"));
+                        $('#status').text("Uploaded!");
+                        //console.log(data);
+                        window.location = data;
+                    }
+                });
+            }
+            return false;
+        });
+    });
 </script>
 
 </html>

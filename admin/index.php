@@ -1343,7 +1343,7 @@ if ($resultd->num_rows > 0) {
                         $('.progress-bar').width('0%');
                     },
                     uploadProgress: function(event, position, total, percentageComplete) {
-                        $('#status').text(percentageComplete + '%');
+                        $('#status').text('Uploading ('+ percentageComplete + '%)...');
                         $('.progress-bar').animate({
                             width: percentageComplete + '%'
                         }, {
@@ -1375,7 +1375,7 @@ if ($resultd->num_rows > 0) {
                         $('.progress-bar').width('0%');
                     },
                     uploadProgress: function(event, position, total, percentageComplete) {
-                        $('#ustatus').text(percentageComplete + '%');
+                        $('#ustatus').text('Uploading ('+ percentageComplete + '%)...');
                         $('.progress-bar').animate({
                             width: percentageComplete + '%'
                         }, {
