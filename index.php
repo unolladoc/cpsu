@@ -306,6 +306,7 @@
           <div class="form-group">
             <label for="">Office</label>
             <select class="form-control form-control" name="office" id="offices" required>
+              <option value=''>Please Select Campus...</option>
             </select>
           </div>
           <div class="form-group">
@@ -401,6 +402,7 @@
         type: "POST",
         data: "campus=" + cid,
         beforeSend: function() {
+          $('#offices').empty();
           $('#offices').append('<option value="">Loading...</option>')
         },
         success: function(response) {
