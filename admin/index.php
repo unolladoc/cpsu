@@ -711,6 +711,12 @@
                         </div>
                     </div>
                     <!--<button class="btn btn-primary btn-round">Browse File</button>--><br>
+                    <label for="exampleFormControlSelect1">Control No</label>
+                    <div class="input-group">
+                        <div class="col-md-4">
+                            <input class="form-control" type="text" name="controlnumber" id="controlnumber" required>
+                        </div>
+                    </div>
                     <label for="exampleFormControlSelect1">File Name</label>
                     <div class="input-group">
                         <input class="form-control" type="file" name="filename" id="filename" onchange="" required>
@@ -1343,7 +1349,7 @@ if ($resultd->num_rows > 0) {
                         $('.progress-bar').width('0%');
                     },
                     uploadProgress: function(event, position, total, percentageComplete) {
-                        $('#status').text('Uploading ('+ percentageComplete + '%)...');
+                        $('#status').text('Uploading (' + percentageComplete + '%)...');
                         $('.progress-bar').animate({
                             width: percentageComplete + '%'
                         }, {
@@ -1375,7 +1381,7 @@ if ($resultd->num_rows > 0) {
                         $('.progress-bar').width('0%');
                     },
                     uploadProgress: function(event, position, total, percentageComplete) {
-                        $('#ustatus').text('Uploading ('+ percentageComplete + '%)...');
+                        $('#ustatus').text('Uploading (' + percentageComplete + '%)...');
                         $('.progress-bar').animate({
                             width: percentageComplete + '%'
                         }, {
