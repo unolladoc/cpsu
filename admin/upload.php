@@ -19,8 +19,8 @@ function fileUpdload()
         //$filepath = realpath($_POST['filename']);
         include('../conn.php');
 
-        $id = mt_rand();
-        $newid = sprintf("CPSU%X", $id);
+        // $id = mt_rand();
+        // $newid = sprintf("CPSU%X", $id);
 
         $fileextension = $_POST['fileextension'];
         $filepurpose = $_POST['filepurpose'];
@@ -28,6 +28,7 @@ function fileUpdload()
         $filedescription = $_POST['filedesc'];
         $fileuploader = $_SESSION['id'];
         $fileorigin = $_SESSION['officeid'];
+        $newid = $_POST['controlnumber'];
 
         if (isset($_POST['allcampus'])) {
             $customcampus = explode(",", "0");
@@ -36,6 +37,7 @@ function fileUpdload()
             $customcampus = explode(",", $_POST['customcampus']);
             $tomail = $_POST['customcampus'];
         }
+
         $filedestination = json_encode($customcampus);
 
         //$filedestination = "";

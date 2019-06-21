@@ -184,7 +184,7 @@
                             <p>Archive</p>
                         </a>
                     </li>
-                    <li><a href="https://docs.google.com/document/?usp=docs_alc&authuser=0" target="_blank">
+                    <li><a href="https://docs.google.com/document/d/18eO2R4hblMhazMgkIquMcJWPfnz6GVJ1/edit" target="_blank">
                             <i class="now-ui-icons education_paper"></i>
                             <p>Create NEW (Google Doc)</p>
                         </a>
@@ -711,11 +711,16 @@
                         </div>
                     </div>
                     <!--<button class="btn btn-primary btn-round">Browse File</button>--><br>
-                    <label for="exampleFormControlSelect1">Control No</label>
+                    <label for="exampleFormControlSelect1">Control No.</label>
                     <div class="input-group">
                         <div class="col-md-4">
-                            <input class="form-control" type="text" name="controlnumber" id="controlnumber" required>
+                            <?php
+                            $id = mt_rand();
+                            $newid = sprintf("CPSU%X", $id);
+                            echo '<input style="font-weight: bold;" class="form-control" type="text" name="controlnumber" id="controlnumber" value="'.$newid.'" required>';
+                            ?>   
                         </div>
+                        <div class="col-md-8 pull-right"><span style="color:#095006; font-size: 12px;"><i class="now-ui-icons travel_info"></i>NOTE: Add your Document Control Code on the "Control No.", IF NO Control Code available, Please copy the Control No. to the "Control Code" on the footer of the document before uploading.</span></div>
                     </div>
                     <label for="exampleFormControlSelect1">File Name</label>
                     <div class="input-group">
