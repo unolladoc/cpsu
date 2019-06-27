@@ -6,7 +6,7 @@ $obj = $_POST["campus"];
 $output = array();
 
 $conn = new mysqli($servername, $username, $password, $dbname);
-$stmt = $conn->prepare("SELECT id, office from offices where campus = ?");
+$stmt = $conn->prepare("SELECT id, office from offices where campus = ? order by office asc");
 $stmt->bind_param("s", $obj);
 $stmt->execute();
 $stmt->bind_result($id, $office);
