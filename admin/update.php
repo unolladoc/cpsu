@@ -19,8 +19,8 @@ function fileUpdload(){
         //$filepath = realpath($_POST['filename']);
         include('../conn.php');
 
-        $id = mt_rand();
-        $newid = sprintf("CPSU%X",$id);
+        // $id = mt_rand();
+        // $newid = sprintf("CPSU%X",$id);
 
         $oldname = $_POST['oldfilename'];
         $fileid = $_POST['upidno'];
@@ -30,6 +30,7 @@ function fileUpdload(){
         $filedescription = $_POST['upfiledesc'];
         $fileuploader = $_SESSION['id'];
         $fileorigin = $_SESSION['officeid'];
+        $newid = $_POST['upcontrolnumber'];
 
         if($_POST['upfiledestval'] !=0 ){
             $customcampus = explode(",",$_POST['upfiledestval']);

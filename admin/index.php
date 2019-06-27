@@ -581,6 +581,17 @@
                         </div>
                     </div>
                     <!--<button class="btn btn-primary btn-round">Browse File</button>--><br>
+                    <label for="exampleFormControlSelect1">Updated Control No.</label>
+                    <div class="input-group">
+                        <div class="col-md-4">
+                            <?php
+                            $uid = mt_rand();
+                            $newuid = sprintf("CPSU%X", $uid);
+                            echo '<input style="font-weight: bold;" class="form-control" type="text" name="upcontrolnumber" id="upcontrolnumber" value="'.$newuid.'" required>';
+                            ?>   
+                        </div>
+                        <div class="col-md-8 pull-right"><span style="color:#095006; font-size: 12px;"><i class="now-ui-icons travel_info"></i>NOTE: Add your Document Control Code on the "Control No.", IF NO Control Code available, Please copy the Control No. to the "Control Code" on the footer of the document before uploading.</span></div>
+                    </div>
                     <label for="exampleFormControlSelect1">File Name</label>
                     <div class="input-group">
                         <input class="form-control" type="file" name="upfilename" id="uplfilename" onchange="" required>
