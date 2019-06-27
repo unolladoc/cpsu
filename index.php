@@ -304,7 +304,7 @@
             </select>
           </div>
           <div class="form-group">
-            <label for="">Office</label>
+            <label for="">Office<span id="loading_office"></span></label>
             <select class="form-control form-control" name="office" id="offices" required>
               <option value=''>Please Select Campus...</option>
             </select>
@@ -404,10 +404,12 @@
         beforeSend: function() {
           $('#offices').empty();
           $('#offices').append('<option value="">Loading...</option>')
+          $('#loading_office').append('<i class="now-ui-icons loader_refresh spin"></i>');
         },
         success: function(response) {
           $('#offices').empty();
-          $('#offices').append('<option value="">Select...</option>')
+          $('#offices').append('<option value="">Select...</option>');
+          $('#loading_office').empty();
           //console.log(response);
           //$('#offices').append('<option value=' + myObj[x].id + '>' + myObj[x].office + '</option>');
           $.each(response, function(i, value) {
