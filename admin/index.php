@@ -770,6 +770,7 @@
                                         typeaheadjs: {
                                             name: 'cities',
                                             displayKey: 'text',
+                                            limit: 8,
                                             source: val.ttAdapter()
                                         }
                                     });
