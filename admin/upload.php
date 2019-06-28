@@ -30,13 +30,32 @@ function fileUpdload()
         $fileorigin = $_SESSION['officeid'];
         $newid = $_POST['controlnumber'];
 
+        $dean = "1011,1012,1013,1014,1015,1016,1017,1018,1019";
+        $campusdirectors = "2000,3000,4000,5000,6000,7000,8000,9000,10000";
+
         if (isset($_POST['allcampus'])) {
             $customcampus = explode(",", "0");
             $tomail = 0;
         } else {
-            $customcampus = explode(",", $_POST['customcampus']);
-            $tomail = $_POST['customcampus'];
-        }
+            $tmpcustomcampus = $_POST['customcampus'];
+            if (isset($_POST['alldean'])) {
+                if($tmpcustomcampus != ""){
+                    $tmpcustomcampus .= "," . $dean;  
+                }else{
+                    $tmpcustomcampus .= $dean;  
+                }
+            }
+            if (isset($_POST['allcampusdirector'])) {
+                if($tmpcustomcampus != ""){
+                    $tmpcustomcampus .= "," . $campusdirectors;  
+                }else{
+                    $tmpcustomcampus .= $campusdirectors;  
+                } 
+            }
+
+            $customcampus = explode(",", $tmpcustomcampus);
+            $tomail = $tmpcustomcampus;
+        } 
 
         $filedestination = json_encode($customcampus);
 
@@ -143,8 +162,9 @@ function fileUpdload()
                     //echo "Error: " . $sql . "<br>" . $conn->error;
                     //header("location: home.php?error=1");
                 }
-                //echo "The file ". basename( $_FILES["filename"]["name"]). " has been uploaded.<br>";
+                echo "The file ". basename( $_FILES["filename"]["name"]). " has been uploaded.<br>";
                 //echo $sql;
+                //echo $tomail;
 
             } else {
                 echo 'index.php?error=0';
