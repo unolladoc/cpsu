@@ -279,6 +279,12 @@
                                         </select>
                                     </div>
                                     <div class="col-md-3 pull-left">
+                                        <select class="form-control form-control" id="unreadfilter" onchange="myFunction();">
+                                            <option value="all">Show All Read/Unread</option>
+                                            <option value="unread">Unread Documents</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3 pull-left">
                                         <select class="form-control form-control" id="inoutfilter" onchange="myFunction();">
                                             <option value="all">Incoming & Outgoing</option>
                                             <option value="1">Incoming Documents</option>
@@ -381,7 +387,6 @@
                                                 } elseif ($row['finout'] == 1) {
                                                     $inout = "Incoming";
                                                 }
-
                                                 $time = strtotime($row['datetime']);
                                                 $datetime = date("d-M-Y h:i A", $time);
 
@@ -431,6 +436,7 @@
                                           <td style='display:none;'>
                                           " . $row['file_purpose'] . "
                                           </td>
+                                          <td style='display:none;' id='download_status" . $rowi . "'></td>
 
                                           <td class='td-actions text-right'>
                                            		<button type='button' onclick='getRowForDetails(" . $rowi . ")' rel='tooltip' class='btn btn-success btn-sm btn-round btn-icon' title='Details' data-toggle='modal' data-target='#fileDetailsModal' data-dismiss='modal' >
@@ -587,8 +593,8 @@
                             <?php
                             $uid = mt_rand();
                             $newuid = sprintf("CPSU%X", $uid);
-                            echo '<input style="font-weight: bold;" class="form-control" type="text" name="upcontrolnumber" id="upcontrolnumber" value="'.$newuid.'" required>';
-                            ?>   
+                            echo '<input style="font-weight: bold;" class="form-control" type="text" name="upcontrolnumber" id="upcontrolnumber" value="' . $newuid . '" required>';
+                            ?>
                         </div>
                         <div class="col-md-8 pull-right"><span style="color:#095006; font-size: 12px;"><i class="now-ui-icons travel_info"></i>NOTE: Add your Document Control Code on the "Control No.", IF NO Control Code available, Please copy the Control No. to the "Control Code" on the footer of the document before uploading.</span></div>
                     </div>
@@ -704,7 +710,7 @@
 
 <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" id="addFileModal" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog modal-lg">
-        <form method="post" enctype="multipart/form-data" action="upload.php" id="addFileForm" name="">
+        <form method="post" enctype="multipart/form-data" action="upload.php" id="addFileForm" name>
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">Add File</h5>
@@ -728,8 +734,8 @@
                             <?php
                             $id = mt_rand();
                             $newid = sprintf("CPSU%X", $id);
-                            echo '<input style="font-weight: bold;" class="form-control" type="text" name="controlnumber" id="controlnumber" value="'.$newid.'" required>';
-                            ?>   
+                            echo '<input style="font-weight: bold;" class="form-control" type="text" name="controlnumber" id="controlnumber" value="' . $newid . '" required>';
+                            ?>
                         </div>
                         <div class="col-md-8 pull-right"><span style="color:#095006; font-size: 12px;"><i class="now-ui-icons travel_info"></i>NOTE: Add your Document Control Code on the "Control No.", IF NO Control Code available, Please copy the Control No. to the "Control Code" on the footer of the document before uploading.</span></div>
                     </div>
@@ -749,9 +755,25 @@
                                 <span class="form-check-sign"></span>
                             </label>
                             <div class="col-md-12 form-group" id="customFileDestination" style="display:none; padding:10px;">
-                                <div class="bs-example">
-                                    <input type="text" id="fileDest" class="fileDest" name="customcampus" style="display:none;" placeholder="Type Campus/Office">
-                                    <input type="hidden" id="fileDestHid" name="">
+                                <div>
+                                    <div class="form-check form-check-inline">
+                                        <label class="form-check-label">
+                                            <input class="form-check-input" type="checkbox" name="alldean" id="alldeanCheckbox" value="1" onclick="unrequirefiledest()" unchecked> All Dean
+                                            <span class="form-check-sign"></span>
+                                        </label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <label class="form-check-label">
+                                            <input class="form-check-input" type="checkbox" name="allcampusdirector" id="allcampusdirectorCheckbox" value="1" onclick="unrequirefiledest()" unchecked> All Campus Director
+                                            <span class="form-check-sign"></span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div style="padding-top:10px">
+                                    <div class="form-group" id="custominput">
+                                        <input type="text" id="fileDest" class="fileDest" name="customcampus" style="display:none;" placeholder="Type Campus/Office">
+                                        <input type="hidden" id="fileDestHid" name="">
+                                    </div>
                                 </div>
                                 <script>
                                     var val = new Bloodhound({
@@ -984,7 +1006,7 @@ if (isset($_GET['error']) && $_GET['error'] == 0) {
 <script>
     function myFunction() {
         // Declare variables 
-        var input, filter, input2, filter2, input3, filter3, table, tr, td, i, txtValue;
+        var input, filter, input2, filter2, input3, filter3, input4, filter4, table, tr, td, i, txtValue;
         input = document.getElementById("myInput");
         filter = input.value.toUpperCase();
         table = document.getElementById("myTable");
@@ -1004,12 +1026,19 @@ if (isset($_GET['error']) && $_GET['error'] == 0) {
             filter3 = "";
         }
 
+        input4 = document.getElementById("unreadfilter");
+        if (input4.value.toUpperCase() != "ALL") {
+            filter4 = input4.value.toUpperCase();
+        } else {
+            filter4 = "";
+        }
+
         // Loop through all table rows, and hide those who don't match the search query
         for (i = 0; i < tr.length; i++) {
             td = tr[i].getElementsByTagName("td");
             if (td.length > 0) {
                 //txtValue = td.textContent || td.innerText;
-                if ((td[0].innerHTML.toUpperCase().indexOf(filter) > -1 || td[1].innerHTML.toUpperCase().indexOf(filter) > -1) && (td[2].innerHTML.toUpperCase().indexOf(filter2) > -1 && td[13].innerHTML.toUpperCase().indexOf(filter3) > -1)) {
+                if ((td[0].innerHTML.toUpperCase().indexOf(filter) > -1 || td[1].innerHTML.toUpperCase().indexOf(filter) > -1) && (td[2].innerHTML.toUpperCase().indexOf(filter2) > -1 && td[13].innerHTML.toUpperCase().indexOf(filter3) > -1 && td[15].innerHTML.toUpperCase().indexOf(filter4) > -1)) {
                     tr[i].style.display = "";
                 } else {
                     tr[i].style.display = "none";
@@ -1160,6 +1189,7 @@ if (isset($_GET['error']) && $_GET['error'] == 0) {
             if (newid == myObj) {
                 //alert(i);
                 table.rows[i].style.backgroundColor = "";
+                $('#download_status' + i).html('read');
             }
         }
 
@@ -1289,6 +1319,19 @@ if (isset($_GET['error']) && $_GET['error'] == 0) {
     }
 </script>
 
+<script>
+    function unrequirefiledest() {
+        var checkBox1 = document.getElementById("allcampusdirectorCheckbox");
+        var checkBox2 = document.getElementById("alldeanCheckbox");
+        var text = document.getElementById("customFileDestination");
+        if (checkBox1.checked == true || checkBox2.checked == true) {
+            $("#fileDest").removeAttr('required');
+        } else {
+            $("#fileDest").attr('required', '');
+        }
+    }
+</script>
+
 <!-- <script>
     jQuery(document).ready(function($) {
         $("#campuses").change(function() {
@@ -1333,6 +1376,9 @@ if (isset($_GET['error']) && $_GET['error'] == 0) {
             if (newid == idx) {
                 //alert(i);
                 table.rows[i].style.backgroundColor = "lightgreen";
+                $('#download_status' + i).html('unread');
+            } else {
+                $('#download_status' + i).html('read');
             }
         }
     }
