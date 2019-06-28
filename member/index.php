@@ -3,7 +3,7 @@
 
 <head>
 
-    <?php 
+    <?php
     include('../conn.php');
     include('../session.php');
 
@@ -44,22 +44,22 @@
                 <ul class="nav">
                     <li class="active">
                         <a href="#">
-                        <i class="now-ui-icons files_single-copy-04"></i>
-                            <?php 
-                            $sqld = "SELECT * FROM files WHERE NOT EXISTS (Select * FROM logs WHERE logs.file_id = files.id AND logs.author = ".$_SESSION['id'].") AND finout = 0 AND archive = 0;";
+                            <i class="now-ui-icons files_single-copy-04"></i>
+                            <?php
+                            $sqld = "SELECT * FROM files WHERE NOT EXISTS (Select * FROM logs WHERE logs.file_id = files.id AND logs.author = " . $_SESSION['id'] . ") AND finout = 0 AND archive = 0;";
                             $resultd = $conn->query($sqld);
-                            $n=0;
+                            $n = 0;
                             $noticount = "";
                             if ($resultd->num_rows > 0) {
                                 while ($rowd = $resultd->fetch_assoc()) {
-                                    if(in_array(0,json_decode($rowd['destination'])) || in_array($_SESSION['campusid'],json_decode($rowd['destination'])) || in_array($_SESSION['officeid'],json_decode($rowd['destination']))){
+                                    if (in_array(0, json_decode($rowd['destination'])) || in_array($_SESSION['campusid'], json_decode($rowd['destination'])) || in_array($_SESSION['officeid'], json_decode($rowd['destination']))) {
                                         $n++;
                                     }
                                 }
-                                if($n==0){
+                                if ($n == 0) {
                                     $noticount = "";
-                                }else{
-                                    $noticount = "<strong>(".$n.")</strong>";
+                                } else {
+                                    $noticount = "<strong>(" . $n . ")</strong>";
                                 }
                             }
                             ?>
@@ -136,18 +136,24 @@
                                             <h4 class="card-title"> Request List</h4>
                                             <!--<i class="now-ui-icons arrows-1_minimal-down"></i>-->
                                         </div>
-                                        <div class="col-md-3">
-                                        <select class="form-control form-control" id="filepurposefilter" onchange="myFunction();">
-                                            <option value="all">Show All Documents</option>
-                                            <?php
-                                            $sqlt = "Select * from m_typeofdoc;";
-                                            $resultt = $conn->query($sqlt);
-                                            if ($resultt->num_rows > 0) {
-                                                while ($rowt = $resultt->fetch_assoc()) {
-                                                    echo "<option value='" . $rowt['type'] . "'>" . $rowt['type'] . "</option>";
+                                        <div class="col-md-3 pull-left">
+                                            <select class="form-control form-control" id="filepurposefilter" onchange="myFunction();">
+                                                <option value="all">Show All Documents</option>
+                                                <?php
+                                                $sqlt = "Select * from m_typeofdoc;";
+                                                $resultt = $conn->query($sqlt);
+                                                if ($resultt->num_rows > 0) {
+                                                    while ($rowt = $resultt->fetch_assoc()) {
+                                                        echo "<option value='" . $rowt['type'] . "'>" . $rowt['type'] . "</option>";
+                                                    }
                                                 }
-                                            }
-                                            ?>
+                                                ?>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-3 pull-left">
+                                        <select class="form-control form-control" id="unreadfilter" onchange="myFunction();">
+                                            <option value="all">Show All Read/Unread</option>
+                                            <option value="unread">Unread Documents</option>
                                         </select>
                                     </div>
                                     </a>
@@ -190,16 +196,16 @@
 
                                             while ($row = $result->fetch_assoc()) {
 
-                                                $sql3 = "SELECT offices.office, campuses.campus from offices inner join campuses on offices.campus=campuses.id where offices.id = ".$row['origin'];
+                                                $sql3 = "SELECT offices.office, campuses.campus from offices inner join campuses on offices.campus=campuses.id where offices.id = " . $row['origin'];
                                                 $result3 = $conn->query($sql3);
-                                                if($result3->num_rows>0){
+                                                if ($result3->num_rows > 0) {
                                                     $row3 = $result3->fetch_assoc();
-                                                    $origin = $row3['office']. "(".$row3['campus'].")";
+                                                    $origin = $row3['office'] . "(" . $row3['campus'] . ")";
                                                 }
 
-                                                $sql4 = "SELECT name from user where id = ".$row['uploader'];
+                                                $sql4 = "SELECT name from user where id = " . $row['uploader'];
                                                 $result4 = $conn->query($sql4);
-                                                if($result4->num_rows>0){
+                                                if ($result4->num_rows > 0) {
                                                     $row4 = $result4->fetch_assoc();
                                                     $uploader = $row4['name'];
                                                 }
@@ -207,16 +213,16 @@
                                                 $time = strtotime($row['datetime']);
                                                 $datetime = date("d-M-Y h:i A", $time);
 
-                                                $filename = "<a href='../" . $row['file_path'] . "' rel='tooltip'  title='Click to Download' onclick = updateDownloads('".$row['id']."'); download>".$row['file_name']."</a>";
+                                                $filename = "<a href='../" . $row['file_path'] . "' rel='tooltip'  title='Click to Download' onclick = updateDownloads('" . $row['id'] . "'); download>" . $row['file_name'] . "</a>";
 
-                                                if(in_array(0,json_decode($row['destination'])) || in_array($_SESSION['campusid'],json_decode($row['destination'])) || in_array($_SESSION['officeid'],json_decode($row['destination']))){
+                                                if (in_array(0, json_decode($row['destination'])) || in_array($_SESSION['campusid'], json_decode($row['destination'])) || in_array($_SESSION['officeid'], json_decode($row['destination']))) {
                                                     echo "<tr class='trcontent'>
                                                   <td>
                                                     " . $row['id'] . "
                                                   </td>
                                                   <td>
                                                     " . $filename . " &nbsp;
-                                                    <a tabindex='0' role='button' data-toggle='popover' data-trigger='focus' title='Description' data-content='".$row['file_desc']."'>
+                                                    <a tabindex='0' role='button' data-toggle='popover' data-trigger='focus' title='Description' data-content='" . $row['file_desc'] . "'>
                                                     <i class='now-ui-icons travel_info' rel='tooltip'  title='Click for Description'></i>
                                                     </a>
                                                   </td>
@@ -232,9 +238,10 @@
                                                   <td>
                                                     " . $datetime . "
                                                   </td>
+                                                  <td style='display:none;' id='download_status".$rowi."'></td>
                                                 </tr>";
                                                 }
-                                                  
+
                                                 $rowi++;
                                             }
                                         } else {
@@ -411,17 +418,15 @@
 </script>
 
 <script>
-
-$('.popover-dismiss').popover({
-  trigger: 'focus'
-})
-
+    $('.popover-dismiss').popover({
+        trigger: 'focus'
+    })
 </script>
 
 <script>
     function myFunction() {
         // Declare variables 
-        var input, filter, input2, filter2, table, tr, td, i, txtValue;
+        var input, filter, input2, filter2, input4, filter4, table, tr, td, i, txtValue;
         input = document.getElementById("myInput");
         filter = input.value.toUpperCase();
         table = document.getElementById("myTable");
@@ -434,12 +439,19 @@ $('.popover-dismiss').popover({
             filter2 = "";
         }
 
+        input4 = document.getElementById("unreadfilter");
+        if (input4.value.toUpperCase() != "ALL") {
+            filter4 = input4.value.toUpperCase();
+        } else {
+            filter4 = "";
+        }
+
         // Loop through all table rows, and hide those who don't match the search query
         for (i = 0; i < tr.length; i++) {
             td = tr[i].getElementsByTagName("td");
             if (td.length > 0) {
                 //txtValue = td.textContent || td.innerText;
-                if ((td[0].innerHTML.toUpperCase().indexOf(filter) > -1 || td[1].innerHTML.toUpperCase().indexOf(filter) > -1) && (td[2].innerHTML.toUpperCase().indexOf(filter2) > -1)) {
+                if ((td[0].innerHTML.toUpperCase().indexOf(filter) > -1 || td[1].innerHTML.toUpperCase().indexOf(filter) > -1) && (td[2].innerHTML.toUpperCase().indexOf(filter2) > -1 && td[6].innerHTML.toUpperCase().indexOf(filter4) > -1)) {
                     tr[i].style.display = "";
                 } else {
                     tr[i].style.display = "none";
@@ -508,25 +520,37 @@ $('.popover-dismiss').popover({
 </script>
 
 <script>
-function updateDownloads(myObj){
-    var obj, dbParam, xmlhttp;
-      obj = {
-        "fid": myObj
-      };
-      dbParam = JSON.stringify(obj);
-      //alert(dbParam);
-      xmlhttp = new XMLHttpRequest();
-      xmlhttp.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-          //myObj = JSON.parse(this.responseText);
-          //console.log(myObj);
-          //console.log(txt);
+    function updateDownloads(myObj) {
+
+        var table = document.getElementById("myTable");
+        for (var i = 1; i < table.rows.length; i++) {
+            var id = document.getElementById("myTable").rows[i].cells.item(0).innerHTML;
+            var newid = id.replace(/\s/g, "");
+            if (newid == myObj) {
+                //alert(i);
+                table.rows[i].style.backgroundColor = "";
+                $('#download_status'+i).html('read');
+            }
         }
-      };
-     xmlhttp.open("POST", "../updatedownloads.php", true);
-     xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-     xmlhttp.send("x=" + dbParam);
-}
+
+        var obj, dbParam, xmlhttp;
+        obj = {
+            "fid": myObj
+        };
+        dbParam = JSON.stringify(obj);
+        //alert(dbParam);
+        xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                //myObj = JSON.parse(this.responseText);
+                //console.log(myObj);
+                //console.log(txt);
+            }
+        };
+        xmlhttp.open("POST", "../updatedownloads.php", true);
+        xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xmlhttp.send("x=" + dbParam);
+    }
 </script>
 
 <!-- <script>
@@ -574,13 +598,16 @@ function updateDownloads(myObj){
             if (newid == idx) {
                 //alert(i);
                 table.rows[i].style.backgroundColor = "lightgreen";
+                $('#download_status'+i).html('unread');
+            }else{
+                $('#download_status'+i).html('read');
             }
         }
     }
 </script>
 
 <?php
-$sqld = "SELECT * FROM files WHERE NOT EXISTS (Select * FROM logs WHERE logs.file_id = files.id AND logs.author = ".$_SESSION['id'].") AND finout = 0 AND archive = 0;";
+$sqld = "SELECT * FROM files WHERE NOT EXISTS (Select * FROM logs WHERE logs.file_id = files.id AND logs.author = " . $_SESSION['id'] . ") AND finout = 0 AND archive = 0;";
 $resultd = $conn->query($sqld);
 $n = 0;
 if ($resultd->num_rows > 0) {
@@ -607,7 +634,7 @@ if ($resultd->num_rows > 0) {
                         $('.progress-bar').width('0%');
                     },
                     uploadProgress: function(event, position, total, percentageComplete) {
-                        $('#status').text('Uploading ('+ percentageComplete + '%)...');
+                        $('#status').text('Uploading (' + percentageComplete + '%)...');
                         $('.progress-bar').animate({
                             width: percentageComplete + '%'
                         }, {
@@ -628,4 +655,4 @@ if ($resultd->num_rows > 0) {
     });
 </script>
 
-</html> 
+</html>
