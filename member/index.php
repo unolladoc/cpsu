@@ -28,6 +28,7 @@
     <link href="../assets/css/bootstrap.min.css" rel="stylesheet" />
     <link href="../assets/css/now-ui-dashboard.css?v=1.2.0" rel="stylesheet" />
     <link href="../assets/css/now-ui-kit.css?v=1.2.0" rel="stylesheet" />
+    <link href="../assets/css/jquery.floatingscroll.css" rel="stylesheet" />
     <!-- CSS Just for demo purpose, don't include it in your project -->
     <link href="../assets/demo/demo.css" rel="stylesheet" />
 </head>
@@ -289,6 +290,7 @@
     <script src="../assets/js/core/bootstrap-notify.min.js"></script>
     <script src="../assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>
     <script src="../assets/js/angular.min.js"></script>
+    <script src="../assets/js/jquery.floatingscroll.min.js"></script>
     <!--  Google Maps Plugin    
   <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE"></script>
   -->
@@ -410,6 +412,12 @@
         </form>
     </div>
 </div>
+
+<script>
+$(document).ready(function () {
+    $(".table-responsive").floatingScroll();
+});
+</script>
 
 <script>
     $('.modal').on('hidden.bs.modal', function() {

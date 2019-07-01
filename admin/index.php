@@ -30,6 +30,7 @@
     <link href="../assets/css/app.css" />
     <link href="../assets/css/now-ui-dashboard.css?v=1.2.0" rel="stylesheet" />
     <link href="../assets/css/now-ui-kit.css?v=1.2.0" rel="stylesheet" />
+    <link href="../assets/css/jquery.floatingscroll.css" rel="stylesheet" />
     <!-- CSS Just for demo purpose, don't include it in your project -->
     <link href="../assets/demo/demo.css" rel="stylesheet" />
 
@@ -585,6 +586,7 @@
     <script src="../assets/js/bloodhound.min.js"></script>
     <script src="../assets/js/typeahead.bundle.min.js"></script>
     <script src="../assets/js/app.js"></script>
+    <script src="../assets/js/jquery.floatingscroll.min.js"></script>
     <!-- <script src="../assets/js/app_bs3.js"></script> -->
     <!--  Google Maps Plugin    
   <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE"></script>
@@ -978,6 +980,12 @@
         </form>
     </div>
 </div>
+
+<script>
+$(document).ready(function () {
+    $(".table-responsive").floatingScroll();
+});
+</script>
 
 <script>
     $('.modal').on('hidden.bs.modal', function() {
