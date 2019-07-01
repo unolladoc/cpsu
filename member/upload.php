@@ -35,7 +35,7 @@ function fileUpdload(){
         //     $customcampus = explode(",",$_POST['customcampus']);
         // }
         
-        $customcampus = explode(",","1000,1100");
+        $customcampus = explode(",","1100");
         $filedestination = json_encode($customcampus);
 
         //$filedestination = "";

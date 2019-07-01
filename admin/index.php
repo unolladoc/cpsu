@@ -446,6 +446,17 @@
                                                 $time = strtotime($row['datetime']);
                                                 $datetime = date("d-M-Y h:i A", $time);
 
+                                                if ($row['finout'] == 0) {
+                                                    $up_ar_btn = "<button type='button' onclick='getRowForUptade(" . $rowi . ")' rel='tooltip' class='btn btn-info btn-sm btn-round btn-icon' data-toggle='modal' title='Update' data-target='#updateModal' data-dismiss='modal'>
+                                                                        <i class='now-ui-icons arrows-1_cloud-upload-94'></i>
+                                                                    </button>
+                                                                    <button type='button' onclick='getRowForArchive(" . $rowi . ")' rel='tooltip' class='btn btn-warning btn-sm btn-round btn-icon' data-toggle='modal' title='Archive' data-target='#archiveModal' data-dismiss='modal'>
+                                                                        <i class='now-ui-icons files_box'></i>
+                                                                    </button>";
+                                                }else{
+                                                    $up_ar_btn = "";
+                                                }
+
                                                 echo "<tr class='trcontent'>
                                           <td>
                                             " . $row['id'] . "
@@ -500,14 +511,9 @@
                                           " . $month . "
                                           </td>
                                           <td class='td-actions text-right'>
-                                          <button type='button' onclick='getRowForDetails(" . $rowi . ")' rel='tooltip' class='btn btn-success btn-sm btn-round btn-icon' title='Details' data-toggle='modal' data-target='#fileDetailsModal' data-dismiss='modal' >
+                                                ". $up_ar_btn ."
+                                                <button type='button' onclick='getRowForDetails(" . $rowi . ")' rel='tooltip' class='btn btn-success btn-sm btn-round btn-icon' title='Details' data-toggle='modal' data-target='#fileDetailsModal' data-dismiss='modal' >
                                            			<i class='now-ui-icons design_bullet-list-67'></i>
-                                                </button>
-                                                <button type='button' onclick='getRowForUptade(" . $rowi . ")' rel='tooltip' class='btn btn-info btn-sm btn-round btn-icon' data-toggle='modal' title='Update' data-target='#updateModal' data-dismiss='modal'>
-                                                  <i class='now-ui-icons arrows-1_cloud-upload-94'></i>
-                                                </button>
-                                                <button type='button' onclick='getRowForArchive(" . $rowi . ")' rel='tooltip' class='btn btn-warning btn-sm btn-round btn-icon' data-toggle='modal' title='Archive' data-target='#archiveModal' data-dismiss='modal'>
-                                                    <i class='now-ui-icons files_box'></i>
                                                 </button>
                                                 <button type='button' onclick='getRowID(" . $rowi . ")' rel='tooltip' class='btn btn-danger btn-sm btn-round btn-icon' data-toggle='modal' title='Delete' data-target='#deleteModal' data-dismiss='modal'>
                                                     <i class='now-ui-icons ui-1_simple-remove'></i>

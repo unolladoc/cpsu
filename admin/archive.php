@@ -53,8 +53,8 @@
                 <ul class="nav">
                     <li>
                         <a href="../">
-                        <i class="now-ui-icons files_single-copy-04"></i>
-                        <?php
+                            <i class="now-ui-icons files_single-copy-04"></i>
+                            <?php
                             $sqld = "SELECT * FROM files WHERE NOT EXISTS (Select * FROM logs WHERE logs.file_id = files.id AND logs.author = " . $_SESSION['id'] . ")AND finout = 1 AND archive = 0 AND uploader !=  " . $_SESSION['id'] . ";";
                             $resultd = $conn->query($sqld);
                             $n = 0;
@@ -111,7 +111,7 @@
                                 <span class="navbar-toggler-bar bar3"></span>
                             </button>
                         </div>
-
+                        <button class="btn btn-info btn-round btn-lg" data-toggle="modal" data-target="#archiveModal" data-dismiss="modal" onclick="">Archive File</button>
                     </div>
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-bar navbar-kebab"></span>
@@ -158,50 +158,50 @@
                                         <h4 class="card-title"> Archive List</h4>
                                         <!--<i class="now-ui-icons arrows-1_minimal-down"></i>-->
                                     </div>
-                                        <div class="col-md-4 pull-left">
-                                            <select class="form-control form-control" id="filepurposefilter" onchange="myFunction();">
-                                                <option value="all">Show All Documents</option>
-                                                <?php
-                                                $sqlt = "Select * from m_typeofdoc;";
-                                                $resultt = $conn->query($sqlt);
-                                                if ($resultt->num_rows > 0) {
-                                                    while ($rowt = $resultt->fetch_assoc()) {
-                                                        echo "<option value='" . $rowt['type'] . "'>" . $rowt['type'] . "</option>";
-                                                    }
+                                    <div class="col-md-4 pull-left">
+                                        <select class="form-control form-control" id="filepurposefilter" onchange="myFunction();">
+                                            <option value="all">Show All Documents</option>
+                                            <?php
+                                            $sqlt = "Select * from m_typeofdoc;";
+                                            $resultt = $conn->query($sqlt);
+                                            if ($resultt->num_rows > 0) {
+                                                while ($rowt = $resultt->fetch_assoc()) {
+                                                    echo "<option value='" . $rowt['type'] . "'>" . $rowt['type'] . "</option>";
                                                 }
-                                                ?>
-                                            </select>
-                                        </div>
-                                        <div class="col-md-4 pull-left">
-                                            <select class="form-control form-control" id="yearfilter" onchange="myFunction();">
-                                                <option value="all">Show All Year</option>
-                                                <?php
-                                                $sqlt = "SELECT DISTINCT YEAR(datetime) AS year from files ORDER BY year ASC;";
-                                                $resultt = $conn->query($sqlt);
-                                                if ($resultt->num_rows > 0) {
-                                                    while ($rowt = $resultt->fetch_assoc()) {
-                                                        echo "<option value='" . $rowt['year'] . "'>" . $rowt['year'] . "</option>";
-                                                    }
+                                            }
+                                            ?>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4 pull-left">
+                                        <select class="form-control form-control" id="yearfilter" onchange="myFunction();">
+                                            <option value="all">Show All Year</option>
+                                            <?php
+                                            $sqlt = "SELECT DISTINCT YEAR(datetime) AS year from files where archive != 0 ORDER BY year ASC;";
+                                            $resultt = $conn->query($sqlt);
+                                            if ($resultt->num_rows > 0) {
+                                                while ($rowt = $resultt->fetch_assoc()) {
+                                                    echo "<option value='" . $rowt['year'] . "'>" . $rowt['year'] . "</option>";
                                                 }
-                                                ?>
-                                            </select>
-                                        </div>
-                                        <div class="col-md-4 pull-left">
-                                            <select class="form-control form-control" id="monthfilter" onchange="myFunction();">
-                                                <option value="all">Show All Month</option>
-                                                <?php
-                                                $sqlt = "SELECT DISTINCT Month(datetime) AS mon from files ORDER BY mon ASC;";
-                                                $resultt = $conn->query($sqlt);
-                                                if ($resultt->num_rows > 0) {
-                                                    while ($rowt = $resultt->fetch_assoc()) {
-                                                        $dateObj   = DateTime::createFromFormat('!m', $rowt['mon']);
-                                                        $monthName = $dateObj->format('F');
-                                                        echo "<option value='" . $monthName . "'>" . $monthName . "</option>";
-                                                    }
+                                            }
+                                            ?>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4 pull-left">
+                                        <select class="form-control form-control" id="monthfilter" onchange="myFunction();">
+                                            <option value="all">Show All Month</option>
+                                            <?php
+                                            $sqlt = "SELECT DISTINCT Month(datetime) AS mon from files  where archive != 0 ORDER BY mon ASC;";
+                                            $resultt = $conn->query($sqlt);
+                                            if ($resultt->num_rows > 0) {
+                                                while ($rowt = $resultt->fetch_assoc()) {
+                                                    $dateObj   = DateTime::createFromFormat('!m', $rowt['mon']);
+                                                    $monthName = $dateObj->format('F');
+                                                    echo "<option value='" . $monthName . "'>" . $monthName . "</option>";
                                                 }
-                                                ?>
-                                            </select>
-                                        </div>
+                                            }
+                                            ?>
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
 
@@ -209,7 +209,7 @@
                                 <div class="table-responsive">
                                     <table class="table" id="myTable">
                                         <?php
-                                        $sql = "SELECT * FROM files where archive = 1 ORDER BY datetime DESC";
+                                        $sql = "SELECT * FROM files where archive != 0 ORDER BY datetime DESC";
                                         $result = $conn->query($sql);
                                         $rowi = 1;
 
@@ -253,39 +253,39 @@
                                                 $dest = json_decode($row['destination']);
                                                 $destination = "";
                                                 $destvalue = "";
-                                                foreach($dest as $value){
+                                                foreach ($dest as $value) {
                                                     $destvalue .= $value;
-                                                    if (next($dest )) {
+                                                    if (next($dest)) {
                                                         $destvalue .= ", ";
                                                     }
                                                     $sql1 = "SELECT campus FROM campuses where id = $value";
                                                     $result1 = $conn->query($sql1);
-                                                    if($result1->num_rows>0){
+                                                    if ($result1->num_rows > 0) {
                                                         $row1 = $result1->fetch_assoc();
-                                                        $destination .= "(".$row1['campus'].")";
+                                                        $destination .= "(" . $row1['campus'] . ")";
                                                     }
                                                     $sql2 = "SELECT offices.office, campuses.campus from offices inner join campuses on offices.campus=campuses.id where offices.id = $value";
                                                     $result2 = $conn->query($sql2);
-                                                    if($result2->num_rows>0){
+                                                    if ($result2->num_rows > 0) {
                                                         $row2 = $result2->fetch_assoc();
-                                                        $destination .= "(".$row2['office']. "(".$row2['campus']."))";
+                                                        $destination .= "(" . $row2['office'] . "(" . $row2['campus'] . "))";
                                                     }
                                                 }
-                                                if($destination == ""){
+                                                if ($destination == "") {
                                                     $destination = "All Campus";
                                                     $destvalue = "all";
                                                 }
 
-                                                $sql3 = "SELECT offices.office, campuses.campus from offices inner join campuses on offices.campus=campuses.id where offices.id = ".$row['origin'];
+                                                $sql3 = "SELECT offices.office, campuses.campus from offices inner join campuses on offices.campus=campuses.id where offices.id = " . $row['origin'];
                                                 $result3 = $conn->query($sql3);
-                                                if($result3->num_rows>0){
+                                                if ($result3->num_rows > 0) {
                                                     $row3 = $result3->fetch_assoc();
-                                                    $origin = $row3['office']. "(".$row3['campus'].")";
+                                                    $origin = $row3['office'] . "(" . $row3['campus'] . ")";
                                                 }
 
-                                                $sql4 = "SELECT name from user where id = ".$row['uploader'];
+                                                $sql4 = "SELECT name from user where id = " . $row['uploader'];
                                                 $result4 = $conn->query($sql4);
-                                                if($result4->num_rows>0){
+                                                if ($result4->num_rows > 0) {
                                                     $row4 = $result4->fetch_assoc();
                                                     $uploader = $row4['name'];
                                                 }
@@ -297,6 +297,14 @@
 
                                                 $time = strtotime($row['datetime']);
                                                 $datetime = date("d-M-Y h:i A", $time);
+
+                                                if ($row['archive'] == 2) {
+                                                    $del_btn = "<button type='button' onclick='getRowForDelete(" . $rowi . ")' rel='tooltip' class='btn btn-danger btn-sm btn-round btn-icon' data-toggle='modal' title='Delete' data-target='#deleteModal' data-dismiss='modal'>
+                                                    <i class='now-ui-icons ui-1_simple-remove'></i>
+                                                </button>";
+                                                } else {
+                                                    $del_btn = "";
+                                                }
 
                                                 echo "<tr class='trcontent'>
                                           <td>
@@ -346,6 +354,7 @@
                                            		<button type='button' onclick='getRowForDetails(" . $rowi . ")' rel='tooltip' class='btn btn-success btn-sm btn-round btn-icon' title='Details' data-toggle='modal' data-target='#fileDetailsModal' data-dismiss='modal' >
                                            			<i class='now-ui-icons design_bullet-list-67'></i>
                                                 </button>
+                                                " . $del_btn . "
                                         </td>
                                         <!--removed update and delete button-->
                                         </tr>";
@@ -389,6 +398,7 @@
     </div>
     <!--   Core JS Files   -->
     <script src="../assets/js/core/jquery.min.js"></script>
+    <script src="../assets/js/jquery.form.js"></script>
     <script src="../assets/js/core/popper.min.js"></script>
     <script src="../assets/js/core/bootstrap.min.js"></script>
     <script src="../assets/js/core/bootstrap-notify.js"></script>
@@ -450,7 +460,6 @@
 
 </body>
 
-
 <div class="modal fade bd-example-modal-lg" id="fileDetailsModal" tabindex="-1" role="dialog" aria-labelledby="fileDetailsModal" aria-hidden="f">
     <div class="modal-dialog modal-lg" role="document">
         <form></form>
@@ -474,15 +483,48 @@
     </div>
 </div>
 
-<!-- deletemodal removed -->
+<div id="deleteModal" class="modal fade modal-mini modal-danger" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header justify-content-center">
+                <div class="modal-profile">
+                    <i class="now-ui-icons users_circle-08"></i>
+                </div>
+            </div>
+            <div class="modal-body">
+                <form method="post" action="deletefromarchive.php">
+                    <div class="form-group row">
+                        <div class="col-sm-12 text-center">Delete?<h4 id="docname"></h4>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-sm-12">
+                            <input type="password" class="form-control" id="inputPassword" placeholder="Verify Password" name="password">
+                        </div>
+                        <div class="col-sm-12">
+                            <input type="hidden" class="form-control" id="idno" name="idno">
+                        </div>
+                        <div class="col-sm-12">
+                            <input type="hidden" class="form-control" id="archived_idno" name="" value="archived_idno">
+                        </div>
+                    </div>
 
-<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" id="addFileModal" data-backdrop="static" data-keyboard="false">
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-link btn-neutral">Proceed</button>
+                <button type="button" class="btn btn-link btn-neutral" data-dismiss="modal">Close</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" id="archiveModal" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog modal-lg">
-        <form method="post" enctype="multipart/form-data" action="upload.php" id="addFileForm" name="">
-            <input type="hidden" value="addFileForm" name="<?php echo ini_get("session.upload_progress.name"); ?>">
+        <form method="post" enctype="multipart/form-data" action="uploadtoarchive.php" id="addFileForm" name="">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Add File</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Archive a File</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -491,17 +533,31 @@
                     <div class="progress-container progress-primary" id="progressBar">
                         <span class="progress-badge" id="uploading"></span>
                         <div class="progress">
-                            <div class="progress-bar" id="progress" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100">
+                            <div class="progress-bar" id="progress" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
                                 <span class="progress-value" id="status"></span>
                             </div>
                         </div>
+                    </div>
+                    <label for="exampleFormControlSelect1">Control No.</label>
+                    <div class="input-group">
+                        <div class="col-md-4">
+                            <?php
+                            $id = mt_rand();
+                            $newid = sprintf("CPSU%X", $id);
+                            echo '<input style="font-weight: bold;" class="form-control" type="text" name="controlnumber" id="controlnumber" value="' . $newid . '" required>';
+                            ?>
+                        </div>
+                        <div class="col-md-8 pull-right"><span style="color:#095006; font-size: 12px;"><i class="now-ui-icons travel_info"></i>NOTE: Add your Document Control Code on the "Control No.", IF NO Control Code available, Please copy the Control No. to the "Control Code" on the footer of the document before uploading.</span></div>
                     </div>
                     <!--<button class="btn btn-primary btn-round">Browse File</button>--><br>
                     <label for="exampleFormControlSelect1">File Name</label>
                     <div class="input-group">
                         <input class="form-control" type="file" name="filename" id="filename" onchange="" required>
                     </div>
-
+                    <div class="form-group">
+                        <label for="exampleFormControlTextarea1">File Description</label>
+                        <textarea class="form-control" id="filedesc" name="filedesc" rows="2" required></textarea>
+                    </div>
                     <div class="col-md-4 pull-right">
                         <label for="exampleFormControlSelect1">File Extension</label>
                         <div class="input-group">
@@ -519,9 +575,15 @@
                         <div class="input-group">
                             <select class="form-control form-control" name="filepurpose" required>
                                 <option value="">Select...</option>
-                                <option value="Letter">Letter</option>
-                                <option value="Form">Form</option>
-                                <option value="Memo">Memo</option>
+                                <?php
+                                $sqlt = "Select * from m_typeofdoc;";
+                                $resultt = $conn->query($sqlt);
+                                if ($resultt->num_rows > 0) {
+                                    while ($rowt = $resultt->fetch_assoc()) {
+                                        echo "<option value='" . $rowt['type'] . "'>" . $rowt['type'] . "</option>";
+                                    }
+                                }
+                                ?>
                             </select>
                             <!--<input type="text" class="form-control form-control-lg" id="" name="filepurpose" value="Accreditation" required>-->
                         </div>
@@ -535,6 +597,126 @@
         </form>
     </div>
 </div>
+
+<?php 
+if (isset($_GET['success']) && $_GET['success'] == 1) {
+    echo "<script>
+            $.notify({
+            
+            title: '<strong>Success</strong>',
+            message: 'File Uploaded Successfully' 
+            },{
+            
+            type: 'success'
+            });
+          </script> ";
+}
+if (isset($_GET['success']) && $_GET['success'] == 2) {
+    echo "<script>
+            $.notify({
+            
+            title: '<strong>File Deletion</strong>',
+            message: 'File Successfully Deleted' 
+            },{
+            
+            type: 'warning'
+            });
+          </script> ";
+}
+if (isset($_GET['error']) && $_GET['error'] == 2) {
+
+    echo "<script>
+            $.notify({
+            
+            title: 'ERROR',
+            message: '<strong>File Already Exist</strong>' 
+            },{
+            
+            type: 'danger',
+            allow_dismiss: false
+
+            });
+
+          </script> ";
+}
+if (isset($_GET['error']) && $_GET['error'] == 3) {
+
+    echo "<script>
+            $.notify({
+            
+            title: 'File Too Large',
+            message: '<strong>25MB Maximum Size</strong>' 
+            },{
+            
+            type: 'danger',
+            allow_dismiss: false
+
+            });
+
+          </script> ";
+}
+if (isset($_GET['error']) && $_GET['error'] == 4) {
+
+    echo "<script>
+            $.notify({
+            
+            title: 'File Not Supported',
+            message: '<strong>Upload JPEG, JPG, DOC, DOCX, PDF, RAR, ZIP Only</strong>' 
+            },{
+            
+            type: 'danger',
+            allow_dismiss: false
+
+            });
+
+          </script> ";
+}
+if (isset($_GET['error']) && $_GET['error'] == 5) {
+
+    echo "<script>
+            $.notify({
+            
+            title: 'Unable to Verify',
+            message: '<strong>File Not Deleted</strong>' 
+            },{
+            
+            type: 'danger',
+            allow_dismiss: false
+
+            });
+
+          </script> ";
+}
+if (isset($_GET['error']) && $_GET['error'] == 0) {
+
+    echo "<script>
+            $.notify({
+            
+            title: '<strong>Upload Error</strong>',
+            message: 'There was a problem uploading your file. Please contact the administrator/creator' 
+            },{
+            
+            type: 'danger',
+            allow_dismiss: false
+
+            });
+
+          </script> ";
+}
+
+?>
+
+
+<script>
+    function getRowForDelete(r) {
+        var id = document.getElementById("myTable").rows[r].cells.item(0).innerHTML;
+        var aid = document.getElementById("myTable").rows[r].cells.item(8).innerHTML;
+        var doc = document.getElementById("myTable").rows[r].cells.item(9).innerHTML;
+        document.getElementById("docname").innerHTML = doc;
+        $("#idno").val(id);
+        $("#archived_idno").val(aid);
+    }
+</script>
 
 <script>
     $('.modal').on('hidden.bs.modal', function() {
@@ -743,27 +925,44 @@
     }
 </script>
 
-<!-- <script>
-    function filterText() {
-        document.getElementById('myInput').value = '';
-        var rex = new RegExp($('#filepurposefilter').val());
-        var rex = new RegExp($('#yearfilter').val());
-        if (rex == "/all/") {
-            clearFilter();
-        } else {
-            $('.trcontent').hide();
-            $('.trcontent').filter(function() {
-                return rex.test($(this).text());
-            }).show();
-            $('.trcontent').filter(function() {
-                return rex2.test($(this).text());
-            }).show();
-        }
-    }
+<script>
+    $(document).ready(function() {
+        $('#addFileForm').submit(function(event) {
+            if ($('#filename').val) {
+                event.preventDefault();
+                $('#status').text("Uploading...");
+                $('#addFileForm').ajaxSubmit({
+                    beforeSubmit: function() {
+                        $('.progress-bar').width('0%');
+                    },
+                    uploadProgress: function(event, position, total, percentageComplete) {
+                        $('#status').text('Uploading (' + percentageComplete + '%)...');
+                        $('.progress-bar').animate({
+                            width: percentageComplete + '%'
+                        }, {
+                            duration: 1000
+                        });
+                    },
+                    success: function(data) {
+                        //console.log(xhr.getAllResponseHeaders());
+                        //console.log(xhr.getResponseHeader("location"));
+                        $('#status').text("Uploaded!");
+                        //console.log(data);
+                        window.location = data;
+                    }
+                });
+            }
+            return false;
+        });
+    });
+</script>
 
-    function clearFilter() {
-        $('.trcontent').show();
-    }
-</script> -->
+<script>
+    document.getElementById('filename').onchange = function() {
+        var fileextension = this.value.slice(this.value.lastIndexOf(".") + 1).toUpperCase();
+        document.getElementById("fileextension").value = fileextension;
+        document.getElementById("filerevision").value = "1";
+    };
+</script>
 
 </html>
