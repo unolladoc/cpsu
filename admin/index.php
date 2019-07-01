@@ -257,39 +257,91 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="card">
-                            <div class="card card-plain">
+                            <div class="card card-plain" style="margin-bottom:0px;">
                                 <div class="card-header" role="tab" id="headingTwo">
 
                                     <div class="card-header">
                                         <h4 class="card-title"> Document List</h4>
                                         <!--<i class="now-ui-icons arrows-1_minimal-down"></i>-->
                                     </div>
-                                    <div class="col-md-3 pull-left">
-                                        <select class="form-control form-control" id="filepurposefilter" onchange="myFunction();">
-                                            <option value="all">Show All Documents</option>
-                                            <?php
-                                            $sqlt = "Select * from m_typeofdoc;";
-                                            $resultt = $conn->query($sqlt);
-                                            if ($resultt->num_rows > 0) {
-                                                while ($rowt = $resultt->fetch_assoc()) {
-                                                    echo "<option value='" . $rowt['type'] . "'>" . $rowt['type'] . "</option>";
-                                                }
-                                            }
-                                            ?>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-3 pull-left">
-                                        <select class="form-control form-control" id="unreadfilter" onchange="myFunction();">
-                                            <option value="all">Show All Read/Unread</option>
-                                            <option value="unread">Unread Documents</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-3 pull-left">
-                                        <select class="form-control form-control" id="inoutfilter" onchange="myFunction();">
-                                            <option value="all">Incoming & Outgoing</option>
-                                            <option value="1">Incoming Documents</option>
-                                            <option value="0">Outgoing Documents</option>
-                                        </select>
+                                    <div id="accordion" role="tablist" aria-multiselectable="true" class="card-collapse">
+                                        <div class="card card-plain">
+                                            <div class="card-header" role="tab" id="headingOne">
+                                                <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                                                    Filter
+
+                                                    <i class="now-ui-icons arrows-1_minimal-down"></i>
+                                                </a>
+                                            </div>
+
+                                            <div id="collapseOne" class="collapse" role="tabpanel" aria-labelledby="headingOne">
+                                                <div class="card-body">
+                                                    <div class="col-md-3 pull-left">
+                                                        <select class="form-control form-control" id="filepurposefilter" onchange="myFunction();">
+                                                            <option value="all">All Documents</option>
+                                                            <?php
+                                                            $sqlt = "Select * from m_typeofdoc;";
+                                                            $resultt = $conn->query($sqlt);
+                                                            if ($resultt->num_rows > 0) {
+                                                                while ($rowt = $resultt->fetch_assoc()) {
+                                                                    echo "<option value='" . $rowt['type'] . "'>" . $rowt['type'] . "</option>";
+                                                                }
+                                                            }
+                                                            ?>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-3 pull-left">
+                                                        <select class="form-control form-control" id="unreadfilter" onchange="myFunction();">
+                                                            <option value="all">All Read/Unread</option>
+                                                            <option value="unread">Unread Documents</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-3 pull-left">
+                                                        <select class="form-control form-control" id="inoutfilter" onchange="myFunction();">
+                                                            <option value="all">Incoming & Outgoing</option>
+                                                            <option value="1">Incoming Documents</option>
+                                                            <option value="0">Outgoing Documents</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="card-body" style="margin-top:30px;">
+                                                    <div class="col-md-2 pull-left">
+                                                        <select class="form-control form-control" id="yearfilter" onchange="myFunction();">
+                                                            <option value="all">All Year</option>
+                                                            <?php
+                                                            $sqlt = "SELECT DISTINCT YEAR(datetime) AS year from files where archive = 0 ORDER BY year ASC;";
+                                                            $resultt = $conn->query($sqlt);
+                                                            if ($resultt->num_rows > 0) {
+                                                                while ($rowt = $resultt->fetch_assoc()) {
+                                                                    echo "<option value='" . $rowt['year'] . "'>" . $rowt['year'] . "</option>";
+                                                                }
+                                                            }
+                                                            ?>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-2 pull-left">
+                                                        <select class="form-control form-control" id="monthfilter" onchange="myFunction();">
+                                                            <option value="all">All Month</option>
+                                                            <?php
+                                                            $sqlt = "SELECT DISTINCT Month(datetime) AS mon from files where archive = 0 ORDER BY mon ASC;";
+                                                            $resultt = $conn->query($sqlt);
+                                                            if ($resultt->num_rows > 0) {
+                                                                while ($rowt = $resultt->fetch_assoc()) {
+                                                                    $dateObj   = DateTime::createFromFormat('!m', $rowt['mon']);
+                                                                    $monthName = $dateObj->format('F');
+                                                                    echo "<option value='" . $monthName . "'>" . $monthName . "</option>";
+                                                                }
+                                                            }
+                                                            ?>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="card-body" style="margin-top:30px;">
+                                                    <button class="btn btn-info btn-round btn-sm" onclick="resetFilter();">Reset Filter</button>
+                                                </div>
+                                            </div>
+                                        </div>
+
                                     </div>
                                 </div>
                             </div>
@@ -324,8 +376,7 @@
                                         <th onclick="sortTable(5)">
                                           Uploaded
                                         </th>
-                                        <th></th>
-                                        <th>
+                                        <th class="text-right">
                                           Action
                                         </th>
                                       </thead>
@@ -387,6 +438,11 @@
                                                 } elseif ($row['finout'] == 1) {
                                                     $inout = "Incoming";
                                                 }
+
+                                                $convertdatetime = new DateTime($row['datetime']);
+                                                $year = $convertdatetime->format('Y');
+                                                $month = $convertdatetime->format('F');
+
                                                 $time = strtotime($row['datetime']);
                                                 $datetime = date("d-M-Y h:i A", $time);
 
@@ -437,20 +493,25 @@
                                           " . $row['file_purpose'] . "
                                           </td>
                                           <td style='display:none;' id='download_status" . $rowi . "'></td>
-
+                                          <td style='display:none;'>
+                                          " . $year . "
+                                          </td>
+                                          <td style='display:none;'>
+                                          " . $month . "
+                                          </td>
                                           <td class='td-actions text-right'>
-                                           		<button type='button' onclick='getRowForDetails(" . $rowi . ")' rel='tooltip' class='btn btn-success btn-sm btn-round btn-icon' title='Details' data-toggle='modal' data-target='#fileDetailsModal' data-dismiss='modal' >
+                                          <button type='button' onclick='getRowForDetails(" . $rowi . ")' rel='tooltip' class='btn btn-success btn-sm btn-round btn-icon' title='Details' data-toggle='modal' data-target='#fileDetailsModal' data-dismiss='modal' >
                                            			<i class='now-ui-icons design_bullet-list-67'></i>
                                                 </button>
- 
-                                          </td>
-                                                <td class='td-actions text-right'>
-                                           		 <button type='button' onclick='getRowForUptade(" . $rowi . ")' rel='tooltip' class='btn btn-info btn-sm btn-round btn-icon' data-toggle='modal' title='Update' data-target='#updateModal' data-dismiss='modal'>
+                                                <button type='button' onclick='getRowForUptade(" . $rowi . ")' rel='tooltip' class='btn btn-info btn-sm btn-round btn-icon' data-toggle='modal' title='Update' data-target='#updateModal' data-dismiss='modal'>
                                                   <i class='now-ui-icons arrows-1_cloud-upload-94'></i>
-                                                  </button>
-                                                  <button type='button' onclick='getRowID(" . $rowi . ")' rel='tooltip' class='btn btn-danger btn-sm btn-round btn-icon' data-toggle='modal' title='Delete' data-target='#deleteModal' data-dismiss='modal'>
-                                                      <i class='now-ui-icons ui-1_simple-remove'></i>
-                                                  </button>
+                                                </button>
+                                                <button type='button' onclick='getRowForArchive(" . $rowi . ")' rel='tooltip' class='btn btn-warning btn-sm btn-round btn-icon' data-toggle='modal' title='Archive' data-target='#archiveModal' data-dismiss='modal'>
+                                                    <i class='now-ui-icons files_box'></i>
+                                                </button>
+                                                <button type='button' onclick='getRowID(" . $rowi . ")' rel='tooltip' class='btn btn-danger btn-sm btn-round btn-icon' data-toggle='modal' title='Delete' data-target='#deleteModal' data-dismiss='modal'>
+                                                    <i class='now-ui-icons ui-1_simple-remove'></i>
+                                                </button>
                                           </td>
                                         </tr>";
                                                 $rowi++;
@@ -560,6 +621,41 @@
 
 </body>
 
+<div id="archiveModal" class="modal fade modal-mini modal-warning" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header justify-content-center">
+                <div class="modal-profile">
+                    <i class="now-ui-icons users_circle-08"></i>
+                </div>
+            </div>
+            <div class="modal-body">
+                <form method="post" action="toarchive.php">
+                    <div class="form-group row">
+                        <div class="col-sm-12 text-center">Archive?<h4 id="adocname"></h4>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-sm-12">
+                            <input type="password" class="form-control" id="inputPassword" placeholder="Verify Password" name="password">
+                        </div>
+                        <div class="col-sm-12">
+                            <input type="hidden" class="form-control" id="aidno" name="aidno">
+                        </div>
+                        <div class="col-sm-12">
+                            <input type="hidden" class="form-control" id="archived_idno" name="" value="archived_idno">
+                        </div>
+                    </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-link btn-neutral">Proceed</button>
+                <button type="button" class="btn btn-link btn-neutral" data-dismiss="modal">Close</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
 <div class="modal fade bd-example-modal-lg" id="updateModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
@@ -920,6 +1016,18 @@ if (isset($_GET['success']) && $_GET['success'] == 2) {
             });
           </script> ";
 }
+if (isset($_GET['success']) && $_GET['success'] == 3) {
+    echo "<script>
+            $.notify({
+            
+            title: '<strong>File Archived</strong>',
+            message: 'File Transferred to Archive' 
+            },{
+            
+            type: 'warning'
+            });
+          </script> ";
+}
 if (isset($_GET['error']) && $_GET['error'] == 2) {
 
     echo "<script>
@@ -1033,12 +1141,26 @@ if (isset($_GET['error']) && $_GET['error'] == 0) {
             filter4 = "";
         }
 
+        input5 = document.getElementById("yearfilter");
+        if (input5.value.toUpperCase() != "ALL") {
+            filter5 = input5.value.toUpperCase();
+        } else {
+            filter5 = "";
+        }
+
+        input6 = document.getElementById("monthfilter");
+        if (input6.value.toUpperCase() != "ALL") {
+            filter6 = input6.value.toUpperCase();
+        } else {
+            filter6 = "";
+        }
+
         // Loop through all table rows, and hide those who don't match the search query
         for (i = 0; i < tr.length; i++) {
             td = tr[i].getElementsByTagName("td");
             if (td.length > 0) {
                 //txtValue = td.textContent || td.innerText;
-                if ((td[0].innerHTML.toUpperCase().indexOf(filter) > -1 || td[1].innerHTML.toUpperCase().indexOf(filter) > -1) && (td[2].innerHTML.toUpperCase().indexOf(filter2) > -1 && td[13].innerHTML.toUpperCase().indexOf(filter3) > -1 && td[15].innerHTML.toUpperCase().indexOf(filter4) > -1)) {
+                if ((td[0].innerHTML.toUpperCase().indexOf(filter) > -1 || td[1].innerHTML.toUpperCase().indexOf(filter) > -1) && (td[2].innerHTML.toUpperCase().indexOf(filter2) > -1 && td[13].innerHTML.toUpperCase().indexOf(filter3) > -1 && td[15].innerHTML.toUpperCase().indexOf(filter4) > -1 && td[16].innerHTML.toUpperCase().indexOf(filter5) > -1 && td[17].innerHTML.toUpperCase().indexOf(filter6) > -1)) {
                     tr[i].style.display = "";
                 } else {
                     tr[i].style.display = "none";
@@ -1123,6 +1245,15 @@ if (isset($_GET['error']) && $_GET['error'] == 0) {
         $("#idno").val(id);
         $("#archived_idno").val(aid);
 
+    }
+</script>
+
+<script>
+    function getRowForArchive(r) {
+        var id = document.getElementById("myTable").rows[r].cells.item(0).innerHTML;
+        var doc = document.getElementById("myTable").rows[r].cells.item(9).innerHTML;
+        document.getElementById("adocname").innerHTML = doc;
+        $("#aidno").val(id);
     }
 </script>
 
@@ -1463,6 +1594,15 @@ if ($resultd->num_rows > 0) {
             return false;
         });
     });
+</script>
+
+<script>
+    function resetFilter() {
+        $("select").each(function() {
+            this.selectedIndex = 0;
+            myFunction();
+        });
+    }
 </script>
 
 </html>
