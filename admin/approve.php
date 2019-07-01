@@ -31,5 +31,4 @@ if ($resultu->num_rows > 0) {
 	if ($conn->query($sqll) === TRUE) {}else{echo "Error: " . $sqll . "<br>" . $conn->error;}
 }
 
-
 ?>
