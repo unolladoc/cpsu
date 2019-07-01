@@ -79,7 +79,20 @@
                     <li>
                         <a href="members.php">
                             <i class="now-ui-icons users_single-02"></i>
-                            <p>Members</p>
+                            <?php
+                            $sqld = "SELECT COUNT(type) as total_unuser from user where type = 0;";
+                            $resultd = $conn->query($sqld);
+                            $total_unuser = "";
+                            if ($resultd->num_rows > 0) {
+                                $rowd = $resultd->fetch_assoc();
+                                if ($rowd['total_unuser'] == 0) {
+                                    $total_unuser = "";
+                                } else {
+                                    $total_unuser = "<strong>(" . $rowd['total_unuser'] . ")</strong>";
+                                }
+                            }
+                            ?>
+                            <p>Members <?php echo $total_unuser ?></p>
                         </a>
                     </li>
                     <li class="active">

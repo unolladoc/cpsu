@@ -79,7 +79,20 @@
                     <li class="active">
                         <a href="#">
                             <i class="now-ui-icons users_single-02"></i>
-                            <p>Members</p>
+                            <?php
+                            $sqld = "SELECT COUNT(type) as total_unuser from user where type = 0;";
+                            $resultd = $conn->query($sqld);
+                            $total_unuser = "";
+                            if ($resultd->num_rows > 0) {
+                                $rowd = $resultd->fetch_assoc();
+                                if ($rowd['total_unuser'] == 0) {
+                                    $total_unuser = "";
+                                } else {
+                                    $total_unuser = "<strong>(" . $rowd['total_unuser'] . ")</strong>";
+                                }
+                            }
+                            ?>
+                            <p>Members <?php echo $total_unuser ?></p>
                         </a>
                     </li>
                     <li>
@@ -158,7 +171,7 @@
                                 <div class="table-responsive">
                                     <table class="table" id="myTable">
                                         <?php
-                                        $sql = "SELECT * FROM user;";
+                                        $sql = "SELECT * FROM user ORDER BY type ASC;";
                                         $result = $conn->query($sql);
                                         $rowi = 1;
 
@@ -189,7 +202,7 @@
 
 
                                             while ($row = $result->fetch_assoc()) {
-
+                                                $style_bg = "";
                                                 if ($row['type'] == 0) {
                                                     $access = "UNVERIFIED";
                                                     $actionbuttons = '
@@ -199,6 +212,7 @@
                                                   <button type="button" onclick="getRowID(' . $rowi . ')" rel="tooltip" class="btn btn-danger btn-sm btn-round btn-icon" data-toggle="modal" title="Remove User" data-target="#deleteModal" data-dismiss="modal">
                                                       <i class="now-ui-icons ui-1_simple-remove"></i>
                                                   </button>';
+                                                    $style_bg = "style=background-color:lightgreen;";
                                                 } else if ($row['type'] == 1) {
                                                     $access = "Admin";
                                                     if ($_SESSION['id'] == $row['id']) {
@@ -218,6 +232,16 @@
                                                 </button>
                                                     ';
                                                 }
+                                                if ($row['type'] == 9) {
+                                                    $access = "UNVERIFIED";
+                                                    $actionbuttons = '
+                                                  <button type="button" onclick="getRowID(' . $rowi . ')" rel="tooltip" class="btn btn-success btn-sm btn-round btn-icon" data-toggle="modal" title="Approve" data-target="#approveModal" data-dismiss="modal">
+                                                      <i class="now-ui-icons ui-1_check"></i>
+                                                  </button>
+                                                  <button type="button" onclick="getRowID(' . $rowi . ')" rel="tooltip" class="btn btn-danger btn-sm btn-round btn-icon" data-toggle="modal" title="Remove User" data-target="#deleteModal" data-dismiss="modal">
+                                                      <i class="now-ui-icons ui-1_simple-remove"></i>
+                                                  </button>';
+                                                }
 
                                                 $sql2 = "SELECT campus FROM campuses where id = " . $row['campus'];
                                                 $result2 = $conn->query($sql2);
@@ -234,7 +258,7 @@
                                                     $roffice = $row3['office'];
                                                 }
 
-                                                echo "<tr>
+                                                echo "<tr ".$style_bg.">
                                           <td>
                                             " . $row['id'] . "
                                           </td>

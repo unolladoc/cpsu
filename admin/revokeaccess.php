@@ -12,7 +12,7 @@ $sql = "SELECT * FROM user WHERE username = '$username' and password = md5('$pas
 $result = mysqli_query($conn, $sql);
 
 if ($result->num_rows > 0) {
-	$sql2 = "UPDATE user set type = 0 where id ='$id';";
+	$sql2 = "UPDATE user set type = 9 where id ='$id';";
 	//echo $sql2;
 	$result2 = mysqli_query($conn,$sql2);
 	header("location: members.php?success=3");

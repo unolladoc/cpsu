@@ -192,7 +192,20 @@
                     <li>
                         <a href="members.php">
                             <i class="now-ui-icons users_single-02"></i>
-                            <p>Members</p>
+                            <?php
+                            $sqld = "SELECT COUNT(type) as total_unuser from user where type = 0;";
+                            $resultd = $conn->query($sqld);
+                            $total_unuser = "";
+                            if ($resultd->num_rows > 0) {
+                                $rowd = $resultd->fetch_assoc();
+                                if ($rowd['total_unuser'] == 0) {
+                                    $total_unuser = "";
+                                } else {
+                                    $total_unuser = "<strong>(" . $rowd['total_unuser'] . ")</strong>";
+                                }
+                            }
+                            ?>
+                            <p>Members <?php echo $total_unuser ?></p>
                         </a>
                     </li>
                     <li>
@@ -453,7 +466,7 @@
                                                                     <button type='button' onclick='getRowForArchive(" . $rowi . ")' rel='tooltip' class='btn btn-warning btn-sm btn-round btn-icon' data-toggle='modal' title='Archive' data-target='#archiveModal' data-dismiss='modal'>
                                                                         <i class='now-ui-icons files_box'></i>
                                                                     </button>";
-                                                }else{
+                                                } else {
                                                     $up_ar_btn = "";
                                                 }
 
@@ -511,7 +524,7 @@
                                           " . $month . "
                                           </td>
                                           <td class='td-actions text-right'>
-                                                ". $up_ar_btn ."
+                                                " . $up_ar_btn . "
                                                 <button type='button' onclick='getRowForDetails(" . $rowi . ")' rel='tooltip' class='btn btn-success btn-sm btn-round btn-icon' title='Details' data-toggle='modal' data-target='#fileDetailsModal' data-dismiss='modal' >
                                            			<i class='now-ui-icons design_bullet-list-67'></i>
                                                 </button>
