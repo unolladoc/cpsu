@@ -537,7 +537,8 @@ $(document).ready(function () {
             if (newid == myObj) {
                 //alert(i);
                 table.rows[i].style.backgroundColor = "";
-                $('#download_status'+i).html('read');
+                table.rows[i].cells[6].innerHTML = '';
+                //$('#download_status'+i).html('read');
             }
         }
 
@@ -606,9 +607,10 @@ $(document).ready(function () {
             if (newid == idx) {
                 //alert(i);
                 table.rows[i].style.backgroundColor = "lightgreen";
-                $('#download_status'+i).html('unread');
+                table.rows[i].cells[6].innerHTML = 'unread';
+                //$('#download_status'+i).html('unread');
             }else{
-                $('#download_status'+i).html('read');
+                //$('#download_status'+i).html('read');
             }
         }
     }

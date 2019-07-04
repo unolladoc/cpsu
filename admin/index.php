@@ -517,7 +517,7 @@
                                           <td style='display:none;'>
                                           " . $row['file_purpose'] . "
                                           </td>
-                                          <td style='display:none;' id='download_status" . $rowi . "'></td>
+                                          <td style='display:none;'></td>
                                           <td style='display:none;'>
                                           " . $year . "
                                           </td>
@@ -1347,7 +1347,7 @@ if (isset($_GET['error']) && $_GET['error'] == 0) {
             if (newid == myObj) {
                 //alert(i);
                 table.rows[i].style.backgroundColor = "";
-                $('#download_status' + i).html('read');
+                table.rows[i].cells[15].innerHTML = '';
             }
         }
 
@@ -1534,9 +1534,12 @@ if (isset($_GET['error']) && $_GET['error'] == 0) {
             if (newid == idx) {
                 //alert(i);
                 table.rows[i].style.backgroundColor = "lightgreen";
-                $('#download_status' + i).html('unread');
+                table.rows[i].cells[15].innerHTML = 'unread';
+                //document.getElementById('download_status'+i).innerHTML = "unread";
+                //$('#download_status').html('unread');
             } else {
-                $('#download_status' + i).html('read');
+                //$('#download_status').html('read');
+                //table.rows[i].cells[15].innerHTML = 'read';
             }
         }
     }
