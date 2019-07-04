@@ -72,7 +72,7 @@
                             <p>Archive</p>
                         </a>
                     </li>
-                    <li><a href="https://docs.google.com/document/d/18eO2R4hblMhazMgkIquMcJWPfnz6GVJ1/edit" target="_blank">
+                    <li><a href="https://drive.google.com/drive/folders/1VInlcieE8Tkzwfabrrna8_8yhRbdaG55?usp=sharing" target="_blank">
                             <i class="now-ui-icons education_paper"></i>
                             <p>Create NEW (Google Doc)</p>
                         </a>

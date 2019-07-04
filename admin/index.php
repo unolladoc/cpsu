@@ -185,7 +185,7 @@
                             <p>Archive</p>
                         </a>
                     </li>
-                    <li><a href="https://docs.google.com/document/d/18eO2R4hblMhazMgkIquMcJWPfnz6GVJ1/edit" target="_blank">
+                    <li><a href="https://drive.google.com/drive/folders/1VInlcieE8Tkzwfabrrna8_8yhRbdaG55?usp=sharing" target="_blank">
                             <i class="now-ui-icons education_paper"></i>
                             <p>Create NEW (Google Doc)</p>
                         </a>
@@ -250,7 +250,7 @@
                         </form>
                         <ul class="navbar-nav">
                             <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="http://example.com" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <i class="now-ui-icons location_world"></i>
                                     <p>
                                         <span class="d-lg-none d-md-block">Some Actions</span>
