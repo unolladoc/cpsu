@@ -384,7 +384,8 @@
 
 <div id="sentDocumentsModal" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="false">
     <div class="modal-dialog modal-lg">
-        <div class="modal-content" style="padding:20px;">
+        <form></form>
+        <div class="modal-content"  style="padding:20px;">
             <h5 class="modal-title" id="exampleModalLabel">Sent Documents</h5>
             <div id="name"></div>
             <div id="office"></div>
@@ -834,12 +835,12 @@ if (isset($_GET['error']) && $_GET['error'] == 5) {
         var newname = name.replace(/\s/g, "");
         var newid = id.replace(/\s/g, "");
         var txt = "";
-        var $tr = "";
+        var tr = "";
         $('#name').text("Name: " + name);
         $('#office').text("Office: " + office + " (" + campus + ")");
         $('#sdTableBody').empty();
         $.ajax({
-            url: "loaddownloaddata4.php",
+            url: "loaddownloaddata3.php",
             type: "POST",
             data: "uid=" + newid,
             success: function(response) {
@@ -850,12 +851,12 @@ if (isset($_GET['error']) && $_GET['error'] == 5) {
                     // $('<option></option>', {
                     //   html: value.office
                     // }).attr('value', value.id).appendTo('#offices');
-                    $tr = $('<tr id="sdtr">').append(
+                    tr = $('<tr id="sdtr">').append(
                         $('<td>').text(item.id),
                         $('<td>').text(item.filename),
                         $('<td>').text(item.status)
                     );
-                    $('#sdTable').append($tr);
+                    $('#sdTable').append(tr);
                 });  
                 //document.getElementById("download_log").innerHTML = txt;
             },
