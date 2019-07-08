@@ -126,6 +126,8 @@
                             </button>
                         </div>
                         <button class="btn btn-info btn-round btn-lg" data-toggle="modal" data-target="#archiveModal" data-dismiss="modal" onclick="">Archive File</button>
+                        <span style="margin: 20px;"></span>
+                        <strong><a class="navbar-brand" href="#" id="no_of_docs"></a></strong>
                     </div>
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-bar navbar-kebab"></span>
@@ -313,9 +315,13 @@
                                                 $datetime = date("d-M-Y h:i A", $time);
 
                                                 if ($row['archive'] == 2) {
-                                                    $del_btn = "<button type='button' onclick='getRowForDelete(" . $rowi . ")' rel='tooltip' class='btn btn-danger btn-sm btn-round btn-icon' data-toggle='modal' title='Delete' data-target='#deleteModal' data-dismiss='modal'>
+                                                    $del_btn = "<button type='button' onclick='getRowForUnarchive(" . $rowi . ")' rel='tooltip' class='btn btn-warning btn-sm btn-round btn-icon' data-toggle='modal' title='Unarchive' data-target='#unarchiveModal' data-dismiss='modal'>
+                                                    <i class='now-ui-icons ui-1_simple-delete'></i>
+                                                </button>
+                                                    <button type='button' onclick='getRowForDelete(" . $rowi . ")' rel='tooltip' class='btn btn-danger btn-sm btn-round btn-icon' data-toggle='modal' title='Delete' data-target='#deleteModal' data-dismiss='modal'>
                                                     <i class='now-ui-icons ui-1_simple-remove'></i>
-                                                </button>";
+                                                </button>
+                                                ";
                                                 } else {
                                                     $del_btn = "";
                                                 }
@@ -498,6 +504,42 @@
     </div>
 </div>
 
+<div id="unarchiveModal" class="modal fade modal-mini modal-warning" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header justify-content-center">
+                <div class="modal-profile">
+                    <i class="now-ui-icons users_circle-08"></i>
+                </div>
+            </div>
+            <div class="modal-body">
+                <form method="post" action="unarchive.php">
+                    <div class="form-group row">
+                        <div class="col-sm-12 text-center">Unarchive?<h4 id="una_docname"></h4>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-sm-12">
+                            <input type="password" class="form-control" id="inputPassword" placeholder="Verify Password" name="password">
+                        </div>
+                        <div class="col-sm-12">
+                            <input type="hidden" class="form-control" id="una_idno" name="una_idno">
+                        </div>
+                        <div class="col-sm-12">
+                            <input type="hidden" class="form-control" id="una_archived_idno" name="" value="archived_idno">
+                        </div>
+                    </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-link btn-neutral">Proceed</button>
+                <button type="button" class="btn btn-link btn-neutral" data-dismiss="modal">Close</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div id="deleteModal" class="modal fade modal-mini modal-danger" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -638,6 +680,18 @@ if (isset($_GET['success']) && $_GET['success'] == 2) {
             });
           </script> ";
 }
+if (isset($_GET['success']) && $_GET['success'] == 3) {
+    echo "<script>
+            $.notify({
+            
+            title: '<strong>File Unarchive</strong>',
+            message: 'File Successfully Restord to Document List' 
+            },{
+            
+            type: 'warning'
+            });
+          </script> ";
+}
 if (isset($_GET['error']) && $_GET['error'] == 2) {
 
     echo "<script>
@@ -722,9 +776,9 @@ if (isset($_GET['error']) && $_GET['error'] == 0) {
 ?>
 
 <script>
-$(document).ready(function () {
-    $(".table-responsive").floatingScroll();
-});
+    $(document).ready(function() {
+        $(".table-responsive").floatingScroll();
+    });
 </script>
 
 <script>
@@ -735,6 +789,16 @@ $(document).ready(function () {
         document.getElementById("docname").innerHTML = doc;
         $("#idno").val(id);
         $("#archived_idno").val(aid);
+    }
+</script>
+<script>
+    function getRowForUnarchive(r) {
+        var id = document.getElementById("myTable").rows[r].cells.item(0).innerHTML;
+        var aid = document.getElementById("myTable").rows[r].cells.item(8).innerHTML;
+        var doc = document.getElementById("myTable").rows[r].cells.item(9).innerHTML;
+        document.getElementById("una_docname").innerHTML = doc;
+        $("#una_idno").val(id);
+        $("#una_archived_idno").val(aid);
     }
 </script>
 
@@ -749,11 +813,12 @@ $(document).ready(function () {
 <script>
     function myFunction() {
         // Declare variables 
-        var input, filter, input2, filter2, input3, filter3, input4, filter4, table, tr, td, i, txtValue;
+        var input, filter, input2, filter2, input3, filter3, input4, filter4, table, tr, td, i, txtValue, no_of_docs;
         input = document.getElementById("myInput");
         filter = input.value.toUpperCase();
         table = document.getElementById("myTable");
         tr = table.getElementsByTagName("tr");
+        no_of_docs = 0;
 
         input2 = document.getElementById("filepurposefilter");
         if (input2.value.toUpperCase() != "ALL") {
@@ -784,12 +849,15 @@ $(document).ready(function () {
                 //txtValue = td.textContent || td.innerText;
                 if ((td[0].innerHTML.toUpperCase().indexOf(filter) > -1 || td[1].innerHTML.toUpperCase().indexOf(filter) > -1) && (td[2].innerHTML.toUpperCase().indexOf(filter2) > -1 && td[11].innerHTML.toUpperCase().indexOf(filter3) > -1 && td[12].innerHTML.toUpperCase().indexOf(filter4) > -1)) {
                     tr[i].style.display = "";
+                    no_of_docs++;
                 } else {
                     tr[i].style.display = "none";
                 }
             }
         }
+        $('#no_of_docs').text("Number of Documents: " + no_of_docs);
     }
+    myFunction();
 </script>
 
 <script>

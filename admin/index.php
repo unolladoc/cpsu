@@ -231,6 +231,8 @@
                             </button>
                         </div>
                         <button class="btn btn-info btn-round btn-lg" data-toggle="modal" data-target="#addFileModal" data-dismiss="modal" onclick="">Add File</button>
+                        <span style="margin: 20px;"></span>
+                        <strong><a class="navbar-brand" href="#" id="no_of_docs"></a></strong>
                     </div>
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-bar navbar-kebab"></span>
@@ -1141,11 +1143,12 @@ if (isset($_GET['error']) && $_GET['error'] == 0) {
 <script>
     function myFunction() {
         // Declare variables 
-        var input, filter, input2, filter2, input3, filter3, input4, filter4, table, tr, td, i, txtValue;
+        var input, filter, input2, filter2, input3, filter3, input4, filter4, table, tr, td, i, txtValue, no_of_docs;
         input = document.getElementById("myInput");
         filter = input.value.toUpperCase();
         table = document.getElementById("myTable");
         tr = table.getElementsByTagName("tr");
+        no_of_docs = 0;
 
         input2 = document.getElementById("filepurposefilter");
         if (input2.value.toUpperCase() != "ALL") {
@@ -1189,12 +1192,14 @@ if (isset($_GET['error']) && $_GET['error'] == 0) {
                 //txtValue = td.textContent || td.innerText;
                 if ((td[0].innerHTML.toUpperCase().indexOf(filter) > -1 || td[1].innerHTML.toUpperCase().indexOf(filter) > -1) && (td[2].innerHTML.toUpperCase().indexOf(filter2) > -1 && td[13].innerHTML.toUpperCase().indexOf(filter3) > -1 && td[15].innerHTML.toUpperCase().indexOf(filter4) > -1 && td[16].innerHTML.toUpperCase().indexOf(filter5) > -1 && td[17].innerHTML.toUpperCase().indexOf(filter6) > -1)) {
                     tr[i].style.display = "";
+                    no_of_docs++;
                 } else {
                     tr[i].style.display = "none";
                 }
             }
 
         }
+        $('#no_of_docs').text("Number of Documents: " + no_of_docs);
     }
 </script>
 

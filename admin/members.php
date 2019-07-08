@@ -217,7 +217,7 @@
                                                 } else if ($row['type'] == 1) {
                                                     $access = "Admin";
                                                     if ($_SESSION['id'] == $row['id']) {
-                                                        $actionbuttons = '-';
+                                                        $actionbuttons = '';
                                                     } else {
                                                         $actionbuttons = '<button type="button" onclick="getRowID(' . $rowi . ')" rel="tooltip" class="btn btn-warning btn-sm btn-round btn-icon" data-toggle="modal" title="Remove as Admin" data-target="#revokeadminaccessModal" data-dismiss="modal">
                                                         <i class="now-ui-icons users_single-02"></i>
@@ -232,8 +232,7 @@
                                                     <i class="now-ui-icons ui-1_simple-remove"></i>
                                                 </button>
                                                     ';
-                                                }
-                                                if ($row['type'] == 9) {
+                                                } else if ($row['type'] == 9) {
                                                     $access = "UNVERIFIED";
                                                     $actionbuttons = '
                                                   <button type="button" onclick="getRowID(' . $rowi . ')" rel="tooltip" class="btn btn-success btn-sm btn-round btn-icon" data-toggle="modal" title="Approve" data-target="#approveModal" data-dismiss="modal">
@@ -259,12 +258,12 @@
                                                     $roffice = $row3['office'];
                                                 }
 
-                                                echo "<tr ".$style_bg.">
+                                                echo "<tr " . $style_bg . ">
                                           <td>
                                             " . $row['id'] . "
                                           </td>
                                           <td>
-                                            " . $row['name'] . "
+                                            " . $row['name'] . "    
                                           </td>
                                           <td>
                                             " . $rcampus . "
@@ -276,6 +275,9 @@
                                             " . $access . "
                                           </td>
                                           <td class='td-actions text-right'>
+                                          <button type='button' onclick='getRowForSentDocuments(" . $rowi . ")' rel='tooltip' class='btn btn-default btn-sm btn-round btn-icon' title='View Sent Documents' data-toggle='modal' data-target='#sentDocumentsModal' data-dismiss='modal' >
+                                           			<i class='now-ui-icons files_single-copy-04'></i>
+                                          </button>
                                           " . $actionbuttons . "                                           		
                                           </td>
                                         </tr>";
@@ -379,6 +381,31 @@
     <script src="../assets/js/now-ui-kit.js?v=1.2.0" type="text/javascript"></script>
 
 </body>
+
+<div id="sentDocumentsModal" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="false">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content" style="padding:20px;">
+            <h5 class="modal-title" id="exampleModalLabel">Sent Documents</h5>
+            <div id="name"></div>
+            <div id="office"></div>
+            <table class="table" id="sdTable">
+                <thead class=" text-primary">
+                    <th onclick="sortsdTable(0)">
+                        ID
+                    </th>
+                    <th onclick="sortsdTable(1)">
+                        File Name
+                    </th>
+                    <th onclick="sortsdTable(2)">
+                        Status
+                    </th>
+                </thead>
+                <tbody id="sdTableBody">
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
 
 <div id="deleteModal" class="modal fade modal-mini modal-danger" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
     <div class="modal-dialog">
@@ -546,9 +573,9 @@
 </div>
 
 <script>
-$(document).ready(function () {
-    $(".table-responsive").floatingScroll();
-});
+    $(document).ready(function() {
+        $(".table-responsive").floatingScroll();
+    });
 </script>
 
 <script>
@@ -724,6 +751,63 @@ if (isset($_GET['error']) && $_GET['error'] == 5) {
 </script>
 
 <script>
+    function sortsdTable(n) {
+        var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+        table = document.getElementById("sdTable");
+        switching = true;
+        // Set the sorting direction to ascending:
+        dir = "asc";
+        /* Make a loop that will continue until
+        no switching has been done: */
+        while (switching) {
+            // Start by saying: no switching is done:
+            switching = false;
+            rows = table.rows;
+            /* Loop through all table rows (except the
+            first, which contains table headers): */
+            for (i = 1; i < (rows.length - 1); i++) {
+                // Start by saying there should be no switching:
+                shouldSwitch = false;
+                /* Get the two elements you want to compare,
+                one from current row and one from the next: */
+                x = rows[i].getElementsByTagName("TD")[n];
+                y = rows[i + 1].getElementsByTagName("TD")[n];
+                /* Check if the two rows should switch place,
+                based on the direction, asc or desc: */
+                if (dir == "asc") {
+                    if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                        // If so, mark as a switch and break the loop:
+                        shouldSwitch = true;
+                        break;
+                    }
+                } else if (dir == "desc") {
+                    if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                        // If so, mark as a switch and break the loop:
+                        shouldSwitch = true;
+                        break;
+                    }
+                }
+            }
+            if (shouldSwitch) {
+                /* If a switch has been marked, make the switch
+                and mark that a switch has been done: */
+                rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                switching = true;
+                // Each time a switch is done, increase this count by 1:
+                switchcount++;
+            } else {
+                /* If no switching has been done AND the direction is "asc",
+                set the direction to "desc" and run the while loop again. */
+                if (switchcount == 0 && dir == "asc") {
+                    dir = "desc";
+                    switching = true;
+                }
+            }
+        }
+    }
+</script>
+
+<script>
     function getRowID(r) {
         var id = document.getElementById("myTable").rows[r].cells.item(0).innerHTML;
         var doc = document.getElementById("myTable").rows[r].cells.item(1).innerHTML;
@@ -737,6 +821,49 @@ if (isset($_GET['error']) && $_GET['error'] == 5) {
         $("#idno3").val(id);
         $("#idno4").val(id);
         $("#idno5").val(id);
+    }
+</script>
+
+<script>
+    function getRowForSentDocuments(r) {
+        var id = document.getElementById("myTable").rows[r].cells.item(0).innerHTML;
+        var name = document.getElementById("myTable").rows[r].cells.item(1).innerHTML;
+        var campus = document.getElementById("myTable").rows[r].cells.item(2).innerHTML;
+        var office = document.getElementById("myTable").rows[r].cells.item(3).innerHTML;
+
+        var newname = name.replace(/\s/g, "");
+        var newid = id.replace(/\s/g, "");
+        var txt = "";
+        var $tr = "";
+        $('#name').text("Name: " + name);
+        $('#office').text("Office: " + office + " (" + campus + ")");
+        $('#sdTableBody').empty();
+        $.ajax({
+            url: "loaddownloaddata4.php",
+            type: "POST",
+            data: "uid=" + newid,
+            success: function(response) {
+                console.log(response);
+                // $('#sdtr').remove();
+                $.each(response, function(i, item) {
+                    //txt += value.time + " " + value.description + " " + "<br>";
+                    // $('<option></option>', {
+                    //   html: value.office
+                    // }).attr('value', value.id).appendTo('#offices');
+                    $tr = $('<tr id="sdtr">').append(
+                        $('<td>').text(item.id),
+                        $('<td>').text(item.filename),
+                        $('<td>').text(item.status)
+                    );
+                    $('#sdTable').append($tr);
+                });  
+                //document.getElementById("download_log").innerHTML = txt;
+            },
+            error: function(err) {
+                console.log("Error" + err);
+            }
+        });
+
     }
 </script>
 
