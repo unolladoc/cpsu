@@ -31,6 +31,7 @@
     <link href="../assets/css/now-ui-dashboard.css?v=1.2.0" rel="stylesheet" />
     <link href="../assets/css/now-ui-kit.css?v=1.2.0" rel="stylesheet" />
     <link href="../assets/css/jquery.floatingscroll.css" rel="stylesheet" />
+    <link href="../assets/css/bootstrap-multiselect.css" rel="stylesheet" type="text/css" />
     <!-- CSS Just for demo purpose, don't include it in your project -->
     <link href="../assets/demo/demo.css" rel="stylesheet" />
 
@@ -589,7 +590,7 @@
     <script src="../assets/js/typeahead.bundle.min.js"></script>
     <script src="../assets/js/app.js"></script>
     <script src="../assets/js/jquery.floatingscroll.min.js"></script>
-    <!-- <script src="../assets/js/app_bs3.js"></script> -->
+    <script src="../assets/js/bootstrap-multiselect.js"></script>
     <!--  Google Maps Plugin    
   <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE"></script>
   -->
@@ -641,7 +642,6 @@
     <!-- Now Ui Dashboard DEMO methods, don't include it in your project! -->
     <!-- <script src="../assets/js/demo.js"></script> -->
     <!-- <script src="../assets/js/now-ui-kit.js?v=1.2.0" type="text/javascript"></script> -->
-
 </body>
 
 <div id="archiveModal" class="modal fade modal-mini modal-warning" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
@@ -887,6 +887,19 @@
                                             <span class="form-check-sign"></span>
                                         </label>
                                     </div>
+                                    <div class="form-check form-check-inline">
+                                        <select id="deanselect" name="deans[]" multiple="multiple">
+                                            <?php
+                                            $sqldn = "select * from offices where office like 'Dean%';";
+                                            $resultdn = $conn->query($sqldn);
+                                            if ($resultdn->num_rows > 0) {
+                                                while ($rowdn = $resultdn->fetch_assoc()) {
+                                                    echo "<option value='" . $rowdn['id'] . "'>" . $rowdn['office'] . "</option>";
+                                                }
+                                            }
+                                            ?>
+                                        </select>
+                                    </div>
                                 </div>
                                 <div style="padding-top:10px">
                                     <div class="form-group" id="custominput">
@@ -984,9 +997,9 @@
 </div>
 
 <script>
-$(document).ready(function () {
-    $(".table-responsive").floatingScroll();
-});
+    $(document).ready(function() {
+        $(".table-responsive").floatingScroll();
+    });
 </script>
 
 <script>
@@ -1638,6 +1651,19 @@ if ($resultd->num_rows > 0) {
             myFunction();
         });
     }
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#deanselect').multiselect({
+            includeSelectAllOption: true,
+            buttonClass: 'btn btn-primary multiselect dropdown-toggle',
+            nonSelectedText: 'No Dean Selected',
+            allSelectedText: 'All Dean Selected',
+            selectAllText: 'Select All Dean',
+            buttonWidth: '380px'
+        });
+    });
 </script>
 
 </html>

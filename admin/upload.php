@@ -30,6 +30,8 @@ function fileUpdload()
     $fileorigin = $_SESSION['officeid'];
     $newid = $_POST['controlnumber'];
 
+    $deans = $_POST['deans'];
+
     $dean = "1011,1012,1013,1014,1015,1016,1017,1018,1019";
     $campusdirectors = "2000,3000,4000,5000,6000,7000,8000,9000,10000";
 
