@@ -30,28 +30,26 @@ function fileUpdload()
     $fileorigin = $_SESSION['officeid'];
     $newid = $_POST['controlnumber'];
 
-    $deans = $_POST['deans'];
-
-    $dean = "1011,1012,1013,1014,1015,1016,1017,1018,1019";
-    $campusdirectors = "2000,3000,4000,5000,6000,7000,8000,9000,10000";
+    //$dean = "1011,1012,1013,1014,1015,1016,1017,1018,1019";
+    //$campusdirectors = "2000,3000,4000,5000,6000,7000,8000,9000,10000";
 
     if (isset($_POST['allcampus'])) {
         $customcampus = explode(",", "0");
         $tomail = 0;
     } else {
         $tmpcustomcampus = $_POST['customcampus'];
-        if (isset($_POST['alldean'])) {
+        if (isset($_POST['deans'])) {
             if ($tmpcustomcampus != "") {
-                $tmpcustomcampus .= "," . $dean;
+                $tmpcustomcampus .= "," . implode(",",$_POST['deans']);
             } else {
-                $tmpcustomcampus .= $dean;
+                $tmpcustomcampus .= implode(",",$_POST['deans']);
             }
         }
-        if (isset($_POST['allcampusdirector'])) {
+        if (isset($_POST['campusdirectors'])) {
             if ($tmpcustomcampus != "") {
-                $tmpcustomcampus .= "," . $campusdirectors;
+                $tmpcustomcampus .= "," . implode(",",$_POST['campusdirectors']);
             } else {
-                $tmpcustomcampus .= $campusdirectors;
+                $tmpcustomcampus .= implode(",",$_POST['campusdirectors']);
             }
         }
 

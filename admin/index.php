@@ -876,18 +876,6 @@
                             <div class="col-md-12 form-group" id="customFileDestination" style="display:none; padding:10px;">
                                 <div>
                                     <div class="form-check form-check-inline">
-                                        <label class="form-check-label">
-                                            <input class="form-check-input" type="checkbox" name="alldean" id="alldeanCheckbox" value="1" onclick="unrequirefiledest()" unchecked> All Dean
-                                            <span class="form-check-sign"></span>
-                                        </label>
-                                    </div>
-                                    <div class="form-check form-check-inline">
-                                        <label class="form-check-label">
-                                            <input class="form-check-input" type="checkbox" name="allcampusdirector" id="allcampusdirectorCheckbox" value="1" onclick="unrequirefiledest()" unchecked> All Campus Director
-                                            <span class="form-check-sign"></span>
-                                        </label>
-                                    </div>
-                                    <div class="form-check form-check-inline">
                                         <select id="deanselect" name="deans[]" multiple="multiple">
                                             <?php
                                             $sqldn = "select * from offices where office like 'Dean%';";
@@ -900,6 +888,31 @@
                                             ?>
                                         </select>
                                     </div>
+                                    <div class="form-check form-check-inline">
+                                        <select id="campusdirectorselect" name="campusdirectors[]" multiple="multiple">
+                                            <?php
+                                            $sqldn = 'select offices.id, office, campuses.campus from offices INNER JOIN campuses on offices.campus = campuses.id where office = "Campus Director\'s Office";';
+                                            $resultdn = $conn->query($sqldn);
+                                            if ($resultdn->num_rows > 0) {
+                                                while ($rowdn = $resultdn->fetch_assoc()) {
+                                                    echo "<option value='" . $rowdn['id'] . "'>" . $rowdn['campus'] . "</option>";
+                                                }
+                                            }
+                                            ?>
+                                        </select>
+                                    </div>
+                                    <!-- <div class="form-check form-check-inline">
+                                        <label class="form-check-label">
+                                            <input class="form-check-input" type="checkbox" name="alldean" id="alldeanCheckbox" value="1" onclick="unrequirefiledest()" unchecked> All Dean
+                                            <span class="form-check-sign"></span>
+                                        </label>
+                                    </div> -->
+                                    <!-- <div class="form-check form-check-inline">
+                                        <label class="form-check-label">
+                                            <input class="form-check-input" type="checkbox" name="allcampusdirector" id="allcampusdirectorCheckbox" value="1" onclick="unrequirefiledest()" unchecked> All Campus Director
+                                            <span class="form-check-sign"></span>
+                                        </label>
+                                    </div> -->
                                 </div>
                                 <div style="padding-top:10px">
                                     <div class="form-group" id="custominput">
@@ -1495,7 +1508,7 @@ if (isset($_GET['error']) && $_GET['error'] == 0) {
     }
 </script>
 
-<script>
+<!-- <script>
     function unrequirefiledest() {
         var checkBox1 = document.getElementById("allcampusdirectorCheckbox");
         var checkBox2 = document.getElementById("alldeanCheckbox");
@@ -1506,7 +1519,7 @@ if (isset($_GET['error']) && $_GET['error'] == 0) {
             $("#fileDest").attr('required', '');
         }
     }
-</script>
+</script> -->
 
 <!-- <script>
     jQuery(document).ready(function($) {
@@ -1655,13 +1668,88 @@ if ($resultd->num_rows > 0) {
 
 <script type="text/javascript">
     $(document).ready(function() {
+        var count = 0;
         $('#deanselect').multiselect({
             includeSelectAllOption: true,
             buttonClass: 'btn btn-primary multiselect dropdown-toggle',
             nonSelectedText: 'No Dean Selected',
             allSelectedText: 'All Dean Selected',
-            selectAllText: 'Select All Dean',
-            buttonWidth: '380px'
+            nSelectedText: ' - Deans Selected',
+            selectAllText: 'Select All',
+            buttonWidth: '330px',
+            maxHeight: 200,
+            onSelectAll: function(checked) {
+                count = 9;
+                $("#fileDest").removeAttr('required');
+                //alert('SelectAll triggered!');
+                //alert(" count:"+count);
+            },
+            onDeselectAll: function() {
+                count = 0;
+                $("#fileDest").attr('required', '');
+                //alert('onDeselectAll triggered!');
+                //alert(" count:"+count);
+            },
+            onChange: function(option, checked) {
+                var c = (checked ? 'selected' : 'deselect');
+                if (c == 'selected') {
+                    var value = $(option).val();
+                    count++;
+                } else {
+                    var value = "";
+                    count--;
+                }
+                if (count > 0) {
+                    $("#fileDest").removeAttr('required');
+                } else {
+                    $("#fileDest").attr('required', '');
+                }
+                //alert(c + " " + value +" count:"+count);
+            }
+        });
+    });
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        var count = 0;
+        $('#campusdirectorselect').multiselect({
+            includeSelectAllOption: true,
+            buttonClass: 'btn btn-primary multiselect dropdown-toggle',
+            nonSelectedText: 'No Campus Director Selected',
+            allSelectedText: 'All Campus Director Selected',
+            nSelectedText: ' - Campus Director Selected',
+            selectAllText: 'Select All',
+            buttonWidth: '330px',
+            maxHeight: 200,
+            onSelectAll: function(checked) {
+                count = 9;
+                $("#fileDest").removeAttr('required');
+                //alert('SelectAll triggered!');
+                //alert(" count:"+count);
+            },
+            onDeselectAll: function() {
+                count = 0;
+                $("#fileDest").attr('required', '');
+                //alert('onDeselectAll triggered!');
+                //alert(" count:"+count);
+            },
+            onChange: function(option, checked) {
+                var c = (checked ? 'selected' : 'deselect');
+                if (c == 'selected') {
+                    var value = $(option).val();
+                    count++;
+                } else {
+                    var value = "";
+                    count--;
+                }
+                if (count > 0) {
+                    $("#fileDest").removeAttr('required');
+                } else {
+                    $("#fileDest").attr('required', '');
+                }
+                //alert(c + " " + value +" count:"+count);
+            }
         });
     });
 </script>
