@@ -868,17 +868,43 @@
                     </div>
                     <div class="form-group">
                         <label for="exampleFormControlTextarea1">File Destination</label>
-                        <div class="form-check">
-                            <label class="form-check-label">
+                        <div>
+                            <!-- <label class="form-check-label">
                                 <input class="form-check-input" type="checkbox" name="allcampus" id="fileDestinationCheckbox" value="all" onclick="unhideFileDesination()" checked> All Campuses
                                 <span class="form-check-sign"></span>
-                            </label>
+                            </label> -->
+                            <div class="form-check form-check-inline">
+                                <select id="allcampusselect" name="allcampus[]" multiple="multiple">
+                                    <?php
+                                    $sqldn = "select * from campuses;";
+                                    $resultdn = $conn->query($sqldn);
+                                    if ($resultdn->num_rows > 0) {
+                                        while ($rowdn = $resultdn->fetch_assoc()) {
+                                            echo "<option value='" . $rowdn['id'] . "'>" . $rowdn['campus'] . "</option>";
+                                        }
+                                    }
+                                    ?>
+                                </select>
+                            </div>
                             <div class="col-md-12 form-group" id="customFileDestination" style="display:none; padding:10px;">
                                 <div>
                                     <div class="form-check form-check-inline">
+                                        <select id="vpselect" name="vp[]" multiple="multiple">
+                                            <?php
+                                            $sqldn = "select * from offices where o_group = '02';";
+                                            $resultdn = $conn->query($sqldn);
+                                            if ($resultdn->num_rows > 0) {
+                                                while ($rowdn = $resultdn->fetch_assoc()) {
+                                                    echo "<option value='" . $rowdn['id'] . "'>" . $rowdn['office'] . "</option>";
+                                                }
+                                            }
+                                            ?>
+                                        </select>
+                                    </div>
+                                    <div class="form-check form-check-inline">
                                         <select id="deanselect" name="deans[]" multiple="multiple">
                                             <?php
-                                            $sqldn = "select * from offices where office like 'Dean%';";
+                                            $sqldn = "select * from offices where o_group = '04';";
                                             $resultdn = $conn->query($sqldn);
                                             if ($resultdn->num_rows > 0) {
                                                 while ($rowdn = $resultdn->fetch_assoc()) {
@@ -891,7 +917,72 @@
                                     <div class="form-check form-check-inline">
                                         <select id="campusdirectorselect" name="campusdirectors[]" multiple="multiple">
                                             <?php
-                                            $sqldn = 'select offices.id, office, campuses.campus from offices INNER JOIN campuses on offices.campus = campuses.id where office = "Campus Director\'s Office";';
+                                            $sqldn = 'select offices.id, office, campuses.campus from offices INNER JOIN campuses on offices.campus = campuses.id where o_group = "03";';
+                                            $resultdn = $conn->query($sqldn);
+                                            if ($resultdn->num_rows > 0) {
+                                                while ($rowdn = $resultdn->fetch_assoc()) {
+                                                    echo "<option value='" . $rowdn['id'] . "'>" . $rowdn['campus'] . "</option>";
+                                                }
+                                            }
+                                            ?>
+                                        </select>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <select id="directorselect" name="director[]" multiple="multiple">
+                                            <?php
+                                            $sqldn = "select * from offices where o_group = '05';";
+                                            $resultdn = $conn->query($sqldn);
+                                            if ($resultdn->num_rows > 0) {
+                                                while ($rowdn = $resultdn->fetch_assoc()) {
+                                                    echo "<option value='" . $rowdn['id'] . "'>" . $rowdn['office'] . "</option>";
+                                                }
+                                            }
+                                            ?>
+                                        </select>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <select id="registrarselect" name="registrar[]" multiple="multiple">
+                                            <?php
+                                            $sqldn = 'select offices.id, office, campuses.campus from offices INNER JOIN campuses on offices.campus = campuses.id where o_group = "06";';
+                                            $resultdn = $conn->query($sqldn);
+                                            if ($resultdn->num_rows > 0) {
+                                                while ($rowdn = $resultdn->fetch_assoc()) {
+                                                    echo "<option value='" . $rowdn['id'] . "'>" . $rowdn['campus'] . "</option>";
+                                                }
+                                            }
+                                            ?>
+                                        </select>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <select id="accountingselect" name="accounting[]" multiple="multiple">
+                                            <?php
+                                            $sqldn = 'select offices.id, office, campuses.campus from offices INNER JOIN campuses on offices.campus = campuses.id where o_group = "07";';
+                                            $resultdn = $conn->query($sqldn);
+                                            if ($resultdn->num_rows > 0) {
+                                                while ($rowdn = $resultdn->fetch_assoc()) {
+                                                    echo "<option value='" . $rowdn['id'] . "'>" . $rowdn['campus'] . "</option>";
+                                                }
+                                            }
+                                            ?>
+                                        </select>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <select id="cashierselect" name="cashier[]" multiple="multiple">
+                                            <?php
+                                            $sqldn = 'select offices.id, office, campuses.campus from offices INNER JOIN campuses on offices.campus = campuses.id where o_group = "08";';
+                                            $resultdn = $conn->query($sqldn);
+                                            if ($resultdn->num_rows > 0) {
+                                                while ($rowdn = $resultdn->fetch_assoc()) {
+                                                    echo "<option value='" . $rowdn['id'] . "'>" . $rowdn['campus'] . "</option>";
+                                                }
+                                            }
+                                            ?>
+                                        </select>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <select id="libraryselect" name="library[]" multiple="multiple">
+                                            <?php
+                                            $sqldn = 'select offices.id, office, campuses.campus from offices INNER JOIN campuses on offices.campus = campuses.id where o_group = "09";';
                                             $resultdn = $conn->query($sqldn);
                                             if ($resultdn->num_rows > 0) {
                                                 while ($rowdn = $resultdn->fetch_assoc()) {
@@ -1494,7 +1585,7 @@ if (isset($_GET['error']) && $_GET['error'] == 0) {
     }
 </script> -->
 
-<script>
+<!-- <script>
     function unhideFileDesination() {
         var checkBox = document.getElementById("fileDestinationCheckbox");
         var text = document.getElementById("customFileDestination");
@@ -1506,7 +1597,7 @@ if (isset($_GET['error']) && $_GET['error'] == 0) {
             $("#fileDest").removeAttr('required');
         }
     }
-</script>
+</script> -->
 
 <!-- <script>
     function unrequirefiledest() {
@@ -1668,18 +1759,86 @@ if ($resultd->num_rows > 0) {
 
 <script type="text/javascript">
     $(document).ready(function() {
-        var count = 0;
-        $('#deanselect').multiselect({
+        var count = 10;
+        var text = document.getElementById("customFileDestination");
+        $('#allcampusselect').multiselect({
             includeSelectAllOption: true,
             buttonClass: 'btn btn-primary multiselect dropdown-toggle',
-            nonSelectedText: 'No Dean Selected',
-            allSelectedText: 'All Dean Selected',
-            nSelectedText: ' - Deans Selected',
+            nonSelectedText: 'No Campus Selected',
+            allSelectedText: 'All Campus Selected',
+            nSelectedText: ' - Campus Selected',
             selectAllText: 'Select All',
-            buttonWidth: '330px',
+            numberDisplayed: 9,
+            // buttonWidth: '250px',
             maxHeight: 200,
             onSelectAll: function(checked) {
-                count = 9;
+                count = $('#allcampusselect option').length;
+                text.style.display = "none";
+                $("#fileDest").removeAttr('required');
+                //alert('SelectAll triggered!');
+                //alert(" count:"+count);
+            },
+            onDeselectAll: function() {
+                count = 0;
+                text.style.display = "block";
+                $("#fileDest").attr('required', '');
+                $('#vpselect').multiselect('deselectAll', false);
+                $('#vpselect').multiselect('updateButtonText');
+                $('#campusdirectorselect').multiselect('deselectAll', false);
+                $('#campusdirectorselect').multiselect('updateButtonText');
+                $('#deanselect').multiselect('deselectAll', false);
+                $('#deanselect').multiselect('updateButtonText');
+                $('#directorselect').multiselect('deselectAll', false);
+                $('#directorselect').multiselect('updateButtonText');
+                $('#registrarselect').multiselect('deselectAll', false);
+                $('#registrarselect').multiselect('updateButtonText');
+                $('#accountingselect').multiselect('deselectAll', false);
+                $('#accountingselect').multiselect('updateButtonText');
+                $('#cashierselect').multiselect('deselectAll', false);
+                $('#cashierselect').multiselect('updateButtonText');
+                $('#libraryselect').multiselect('deselectAll', false);
+                $('#libraryselect').multiselect('updateButtonText');
+                //alert('onDeselectAll triggered!');
+                //alert(" count:"+count);
+            },
+            onChange: function(option, checked) {
+                var c = (checked ? 'selected' : 'deselect');
+                if (c == 'selected') {
+                    var value = $(option).val();
+                    count++;
+                } else {
+                    var value = "";
+                    count--;
+                }
+                if (count < 1) {
+                    text.style.display = "block";
+                    $("#fileDest").removeAttr('required');
+                } else {
+                    text.style.display = "none";
+                    $("#fileDest").attr('required', '');
+                }
+                //alert(c + " " + value +" count:"+count);
+            }
+        });
+        $('#allcampusselect').multiselect('selectAll', false);
+        $('#allcampusselect').multiselect('updateButtonText');
+    });
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        var count = 0;
+        $('#vpselect').multiselect({
+            includeSelectAllOption: true,
+            buttonClass: 'btn btn-primary multiselect dropdown-toggle',
+            nonSelectedText: 'No VP Selected',
+            allSelectedText: 'All VP Selected',
+            nSelectedText: ' - VP Selected',
+            selectAllText: 'Select All',
+            buttonWidth: '350px',
+            maxHeight: 200,
+            onSelectAll: function(checked) {
+                count = $('#vpselect option').length;
                 $("#fileDest").removeAttr('required');
                 //alert('SelectAll triggered!');
                 //alert(" count:"+count);
@@ -1720,10 +1879,10 @@ if ($resultd->num_rows > 0) {
             allSelectedText: 'All Campus Director Selected',
             nSelectedText: ' - Campus Director Selected',
             selectAllText: 'Select All',
-            buttonWidth: '330px',
+            buttonWidth: '250px',
             maxHeight: 200,
             onSelectAll: function(checked) {
-                count = 9;
+                count = $('#campusdirectorselect option').length;
                 $("#fileDest").removeAttr('required');
                 //alert('SelectAll triggered!');
                 //alert(" count:"+count);
@@ -1754,4 +1913,273 @@ if ($resultd->num_rows > 0) {
     });
 </script>
 
+<script type="text/javascript">
+    $(document).ready(function() {
+        var count = 0;
+        $('#deanselect').multiselect({
+            includeSelectAllOption: true,
+            buttonClass: 'btn btn-primary multiselect dropdown-toggle',
+            nonSelectedText: 'No Dean Selected',
+            allSelectedText: 'All Dean Selected',
+            nSelectedText: ' - Deans Selected',
+            selectAllText: 'Select All',
+            numberDisplayed: 1,
+            buttonWidth: '330px',
+            maxHeight: 200,
+            onSelectAll: function(checked) {
+                count = $('#deanselect option').length;
+                $("#fileDest").removeAttr('required');
+                //alert('SelectAll triggered!');
+                //alert(" count:"+count);
+            },
+            onDeselectAll: function() {
+                count = 0;
+                $("#fileDest").attr('required', '');
+                //alert('onDeselectAll triggered!');
+                //alert(" count:"+count);
+            },
+            onChange: function(option, checked) {
+                var c = (checked ? 'selected' : 'deselect');
+                if (c == 'selected') {
+                    var value = $(option).val();
+                    count++;
+                } else {
+                    var value = "";
+                    count--;
+                }
+                if (count > 0) {
+                    $("#fileDest").removeAttr('required');
+                } else {
+                    $("#fileDest").attr('required', '');
+                }
+                //alert(c + " " + value +" count:"+count);
+            }
+        });
+    });
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        var count = 0;
+        $('#directorselect').multiselect({
+            includeSelectAllOption: true,
+            buttonClass: 'btn btn-primary multiselect dropdown-toggle',
+            nonSelectedText: 'No Director Selected',
+            allSelectedText: 'All Director Office Selected',
+            nSelectedText: ' - Office Selected',
+            selectAllText: 'Select All',
+            numberDisplayed: 1,
+            buttonWidth: '350px',
+            maxHeight: 200,
+            onSelectAll: function(checked) {
+                count = $('#directorselect option').length;
+                $("#fileDest").removeAttr('required');
+                //alert('SelectAll triggered!');
+                //alert(" count:"+count);
+            },
+            onDeselectAll: function() {
+                count = 0;
+                $("#fileDest").attr('required', '');
+                //alert('onDeselectAll triggered!');
+                //alert(" count:"+count);
+            },
+            onChange: function(option, checked) {
+                var c = (checked ? 'selected' : 'deselect');
+                if (c == 'selected') {
+                    var value = $(option).val();
+                    count++;
+                } else {
+                    var value = "";
+                    count--;
+                }
+                if (count > 0) {
+                    $("#fileDest").removeAttr('required');
+                } else {
+                    $("#fileDest").attr('required', '');
+                }
+                //alert(c + " " + value +" count:"+count);
+            }
+        });
+    });
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        var count = 0;
+        $('#registrarselect').multiselect({
+            includeSelectAllOption: true,
+            buttonClass: 'btn btn-primary multiselect dropdown-toggle',
+            nonSelectedText: 'No Registrar Selected',
+            allSelectedText: 'All Registrar Office Selected',
+            nSelectedText: ' - Registrar Office Selected',
+            selectAllText: 'Select All',
+            numberDisplayed: 2,
+            buttonWidth: '250px',
+            maxHeight: 200,
+            onSelectAll: function(checked) {
+                count = $('#registrarselect option').length;
+                $("#fileDest").removeAttr('required');
+                //alert('SelectAll triggered!');
+                //alert(" count:"+count);
+            },
+            onDeselectAll: function() {
+                count = 0;
+                $("#fileDest").attr('required', '');
+                //alert('onDeselectAll triggered!');
+                //alert(" count:"+count);
+            },
+            onChange: function(option, checked) {
+                var c = (checked ? 'selected' : 'deselect');
+                if (c == 'selected') {
+                    var value = $(option).val();
+                    count++;
+                } else {
+                    var value = "";
+                    count--;
+                }
+                if (count > 0) {
+                    $("#fileDest").removeAttr('required');
+                } else {
+                    $("#fileDest").attr('required', '');
+                }
+                //alert(c + " " + value +" count:"+count);
+            }
+        });
+    });
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        var count = 0;
+        $('#accountingselect').multiselect({
+            includeSelectAllOption: true,
+            buttonClass: 'btn btn-primary multiselect dropdown-toggle',
+            nonSelectedText: 'No Accounting Office Selected',
+            allSelectedText: 'All Accounting Office Selected',
+            nSelectedText: ' - Accounting Office Selected',
+            selectAllText: 'Select All',
+            numberDisplayed: 2,
+            buttonWidth: '250px',
+            maxHeight: 200,
+            onSelectAll: function(checked) {
+                count = $('#accountingselect option').length;
+                $("#fileDest").removeAttr('required');
+                //alert('SelectAll triggered!');
+                //alert(" count:"+count);
+            },
+            onDeselectAll: function() {
+                count = 0;
+                $("#fileDest").attr('required', '');
+                //alert('onDeselectAll triggered!');
+                //alert(" count:"+count);
+            },
+            onChange: function(option, checked) {
+                var c = (checked ? 'selected' : 'deselect');
+                if (c == 'selected') {
+                    var value = $(option).val();
+                    count++;
+                } else {
+                    var value = "";
+                    count--;
+                }
+                if (count > 0) {
+                    $("#fileDest").removeAttr('required');
+                } else {
+                    $("#fileDest").attr('required', '');
+                }
+                //alert(c + " " + value +" count:"+count);
+            }
+        });
+    });
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        var count = 0;
+        $('#cashierselect').multiselect({
+            includeSelectAllOption: true,
+            buttonClass: 'btn btn-primary multiselect dropdown-toggle',
+            nonSelectedText: 'No Cashier Office Selected',
+            allSelectedText: 'All Cashier Office Selected',
+            nSelectedText: ' - Cashier Office Selected',
+            selectAllText: 'Select All',
+            numberDisplayed: 2,
+            buttonWidth: '250px',
+            maxHeight: 200,
+            onSelectAll: function(checked) {
+                count = $('#cashierselect option').length;
+                $("#fileDest").removeAttr('required');
+                //alert('SelectAll triggered!');
+                //alert(" count:"+count);
+            },
+            onDeselectAll: function() {
+                count = 0;
+                $("#fileDest").attr('required', '');
+                //alert('onDeselectAll triggered!');
+                //alert(" count:"+count);
+            },
+            onChange: function(option, checked) {
+                var c = (checked ? 'selected' : 'deselect');
+                if (c == 'selected') {
+                    var value = $(option).val();
+                    count++;
+                } else {
+                    var value = "";
+                    count--;
+                }
+                if (count > 0) {
+                    $("#fileDest").removeAttr('required');
+                } else {
+                    $("#fileDest").attr('required', '');
+                }
+                //alert(c + " " + value +" count:"+count);
+            }
+        });
+    });
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        var count = 0;
+        $('#libraryselect').multiselect({
+            includeSelectAllOption: true,
+            buttonClass: 'btn btn-primary multiselect dropdown-toggle',
+            nonSelectedText: 'No Library Selected',
+            allSelectedText: 'All Library Selected',
+            nSelectedText: ' - Library Selected',
+            selectAllText: 'Select All',
+            numberDisplayed: 2,
+            buttonWidth: '250px',
+            maxHeight: 200,
+            onSelectAll: function(checked) {
+                count = $('#libraryselect option').length;
+                $("#fileDest").removeAttr('required');
+                //alert('SelectAll triggered!');
+                //alert(" count:"+count);
+            },
+            onDeselectAll: function() {
+                count = 0;
+                $("#fileDest").attr('required', '');
+                //alert('onDeselectAll triggered!');
+                //alert(" count:"+count);
+            },
+            onChange: function(option, checked) {
+                var c = (checked ? 'selected' : 'deselect');
+                if (c == 'selected') {
+                    var value = $(option).val();
+                    count++;
+                } else {
+                    var value = "";
+                    count--;
+                }
+                if (count > 0) {
+                    $("#fileDest").removeAttr('required');
+                } else {
+                    $("#fileDest").attr('required', '');
+                }
+                //alert(c + " " + value +" count:"+count);
+            }
+        });
+    });
+</script>
 </html>
