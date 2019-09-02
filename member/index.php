@@ -67,11 +67,11 @@
                             <p>Document List <?php echo $noticount ?></p>
                         </a>
                     </li>
-                    <li><a href="https://drive.google.com/drive/folders/1VInlcieE8Tkzwfabrrna8_8yhRbdaG55?usp=sharing" target="_blank">
+                    <!-- <li><a href="https://drive.google.com/drive/folders/1VInlcieE8Tkzwfabrrna8_8yhRbdaG55?usp=sharing" target="_blank">
                             <i class="now-ui-icons education_paper"></i>
                             <p>Create NEW (Google Doc)</p>
                         </a>
-                    </li>
+                    </li> -->
                     <li>
                         <a href="request.php">
                             <i class="now-ui-icons files_single-copy-04"></i>
