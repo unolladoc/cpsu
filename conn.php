@@ -5,6 +5,7 @@ $username = "root";
 $password = "";
 $dbname = "cpsu";
 
+//newcomp
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
 //date_default_timezone_set('America/Los_Angeles');
