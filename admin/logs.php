@@ -72,6 +72,12 @@
                             <p>Archive</p>
                         </a>
                     </li>
+                    <li>
+                        <a href="templates.php">
+                            <i class="now-ui-icons education_paper"></i>
+                            <p>Templates</p>
+                        </a>
+                    </li>
                     <!-- <li><a href="https://drive.google.com/drive/folders/1VInlcieE8Tkzwfabrrna8_8yhRbdaG55?usp=sharing" target="_blank">
                             <i class="now-ui-icons education_paper"></i>
                             <p>Create NEW (Google Doc)</p>
@@ -172,7 +178,7 @@
 
                             <div class="card-body">
                                 <div class="table-responsive">
-                                <div id="toPrint">
+                                    <div id="toPrint">
                                         <div class="justify-content-center" id="headerforprint" style='display:none;text-align:center;'>
                                             <img src="../assets/img/favicon.png" style="height:35px;">
                                             <div class="t m0 x2 h2 y2 ff1 fs0 fc0 sc0 ls0 ws0">CENTRAL PHILIPPINE<span class="_ _0"></span>S ST<span class="_ _0"></span>A<span class="_ _1"></span>TE UNIVERSIT<span class="_ _0"></span>Y<span class="_ _0"></span> </div>
@@ -181,16 +187,16 @@
                                                 <h3>Logs</h3>
                                             </div>
                                         </div>
-                                    <table class="table" id="myTable">
-                                        <?php
-                                        $sql = "SELECT * FROM logs ORDER BY time DESC;";
-                                        $result = $conn->query($sql);
-                                        $rowi = 1;
+                                        <table class="table" id="myTable">
+                                            <?php
+                                            $sql = "SELECT * FROM logs ORDER BY time DESC;";
+                                            $result = $conn->query($sql);
+                                            $rowi = 1;
 
-                                        if ($result->num_rows > 0) {
-                                            // output data of each row
+                                            if ($result->num_rows > 0) {
+                                                // output data of each row
 
-                                            echo '<thead class=" text-primary">
+                                                echo '<thead class=" text-primary">
                                         <th onclick="sortTable(0)">
                                           Log ID
                                         </th>
@@ -204,12 +210,12 @@
                                       <tbody>';
 
 
-                                            while ($row = $result->fetch_assoc()) {
+                                                while ($row = $result->fetch_assoc()) {
 
-                                                $time = strtotime($row['time']);
-                                                $datetime = date("d-M-Y H:i:s", $time);
+                                                    $time = strtotime($row['time']);
+                                                    $datetime = date("d-M-Y H:i:s", $time);
 
-                                                echo "<tr>
+                                                    echo "<tr>
                                           <td>
                                             " . $row['id'] . "
                                           </td>
@@ -220,16 +226,16 @@
                                             " .  $row['description'] . "
                                           </td>
                                         </tr>";
-                                                $rowi++;
+                                                    $rowi++;
+                                                }
+                                            } else {
+                                                echo "<option>No Results</option>";
                                             }
-                                        } else {
-                                            echo "<option>No Results</option>";
-                                        }
 
-                                        ?>
-                                        </tbody>
-                                    </table>
-                                </div>
+                                            ?>
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                         </div>
