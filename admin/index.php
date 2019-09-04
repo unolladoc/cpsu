@@ -1020,6 +1020,19 @@
                                             ?>
                                         </select>
                                     </div>
+                                    <div class="form-check form-check-inline">
+                                        <select id="officesselect" name="offices[]" multiple="multiple">
+                                            <?php
+                                            $sqldn = 'select offices.id, campuses.campus, offices.office from offices left join campuses on offices.campus = campuses.id order by office asc;';
+                                            $resultdn = $conn->query($sqldn);
+                                            if ($resultdn->num_rows > 0) {
+                                                while ($rowdn = $resultdn->fetch_assoc()) {
+                                                    echo "<option value='" . $rowdn['id'] . "'>" .$rowdn['office']." (". $rowdn['campus'] . ")</option>";
+                                                }
+                                            }
+                                            ?>
+                                        </select>
+                                    </div>
                                     <!-- <div class="form-check form-check-inline">
                                         <label class="form-check-label">
                                             <input class="form-check-input" type="checkbox" name="alldean" id="alldeanCheckbox" value="1" onclick="unrequirefiledest()" unchecked> All Dean
@@ -2181,6 +2194,53 @@ if ($resultd->num_rows > 0) {
             maxHeight: 200,
             onSelectAll: function(checked) {
                 count = $('#libraryselect option').length;
+                $("#fileDest").removeAttr('required');
+                //alert('SelectAll triggered!');
+                //alert(" count:"+count);
+            },
+            onDeselectAll: function() {
+                count = 0;
+                $("#fileDest").attr('required', '');
+                //alert('onDeselectAll triggered!');
+                //alert(" count:"+count);
+            },
+            onChange: function(option, checked) {
+                var c = (checked ? 'selected' : 'deselect');
+                if (c == 'selected') {
+                    var value = $(option).val();
+                    count++;
+                } else {
+                    var value = "";
+                    count--;
+                }
+                if (count > 0) {
+                    $("#fileDest").removeAttr('required');
+                } else {
+                    $("#fileDest").attr('required', '');
+                }
+                //alert(c + " " + value +" count:"+count);
+            }
+        });
+    });
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        var count = 0;
+        $('#officesselect').multiselect({
+            includeSelectAllOption: true,
+            enableFiltering: true,
+            enableCaseInsensitiveFiltering: true,
+            buttonClass: 'btn btn-primary multiselect dropdown-toggle',
+            nonSelectedText: 'No Offices Selected',
+            allSelectedText: 'All Offices Selected',
+            nSelectedText: ' - Office Selected',
+            selectAllText: 'Select All',
+            numberDisplayed: 2,
+            buttonWidth: '500px',
+            maxHeight: 200,
+            onSelectAll: function(checked) {
+                count = $('#officesselect option').length;
                 $("#fileDest").removeAttr('required');
                 //alert('SelectAll triggered!');
                 //alert(" count:"+count);
