@@ -18,7 +18,7 @@
     <link rel="icon" type="../image/png" href="../assets/img/favicon.png">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <title>
-        Member - <?php echo $_SESSION['name']; ?>
+        Templates - <?php echo $_SESSION['name']; ?>
     </title>
     <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />
     <!--     Fonts and icons     -->
@@ -43,8 +43,8 @@
             </div>
             <div class="sidebar-wrapper">
                 <ul class="nav">
-                    <li class="active">
-                        <a href="#">
+                    <li>
+                        <a href="../">
                             <i class="now-ui-icons files_single-copy-04"></i>
                             <?php
                             $sqld = "SELECT * FROM files WHERE NOT EXISTS (Select * FROM logs WHERE logs.file_id = files.id AND logs.author = " . $_SESSION['id'] . ") AND finout = 0 AND archive = 0;";
@@ -78,8 +78,8 @@
                             <p>Requests</p>
                         </a>
                     </li>
-                    <li>
-                        <a href="templates.php">
+                    <li class="active">
+                        <a href="#">
                             <i class="now-ui-icons files_single-copy-04"></i>
                             <p>Templates</p>
                         </a>
@@ -99,7 +99,7 @@
                                 <span class="navbar-toggler-bar bar3"></span>
                             </button>
                         </div>
-                        <button class="btn btn-info btn-round btn-lg" data-toggle="modal" data-target="#sendRequestModal" data-dismiss="modal" onclick="">Send Request</button>
+                        <!-- <button class="btn btn-info btn-round btn-lg" data-toggle="modal" data-target="#sendRequestModal" data-dismiss="modal" onclick="">Send Request</button> -->
                         <!-- &nbsp; Welcome &nbsp; <b> <?php echo $_SESSION['name']; ?></b> -->
                     </div>
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
@@ -145,10 +145,10 @@
                                 <div class="card-header" role="tab" id="headingTwo">
                                     <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo" style="text-decoration: none; color: #000000">
                                         <div class="card-header">
-                                            <h4 class="card-title"> Request List</h4>
+                                            <h4 class="card-title"> Templates List</h4>
                                             <!--<i class="now-ui-icons arrows-1_minimal-down"></i>-->
                                         </div>
-                                        <div class="col-md-3 pull-left">
+                                        <div class="col-md-3">
                                             <select class="form-control form-control" id="filepurposefilter" onchange="myFunction();">
                                                 <option value="all">Show All Documents</option>
                                                 <?php
@@ -162,12 +162,6 @@
                                                 ?>
                                             </select>
                                         </div>
-                                        <div class="col-md-3 pull-left">
-                                        <select class="form-control form-control" id="unreadfilter" onchange="myFunction();">
-                                            <option value="all">Show All Read/Unread</option>
-                                            <option value="unread">Unread Documents</option>
-                                        </select>
-                                    </div>
                                     </a>
                                 </div>
                             </div>
@@ -176,7 +170,8 @@
                                 <div class="table-responsive">
                                     <table class="table" id="myTable">
                                         <?php
-                                        $sql = "SELECT * FROM files where archive = 0 ORDER BY datetime DESC";
+                                        $uploaderid = $_SESSION['id'];
+                                        $sql = "SELECT * FROM files where archive = 3 ORDER BY datetime DESC";
                                         $result = $conn->query($sql);
                                         $rowi = 1;
 
@@ -194,17 +189,10 @@
                                           Purpose
                                         </th>
                                         <th onclick="sortTable(3)">
-                                          Origin
-                                        </th>
-                                        <th onclick="sortTable(4)">
-                                          Uploader
-                                        </th>
-                                        <th onclick="sortTable(5)">
                                           Uploaded
                                         </th>
                                       </thead>
                                       <tbody>';
-
 
                                             while ($row = $result->fetch_assoc()) {
 
@@ -215,20 +203,12 @@
                                                     $origin = $row3['office'] . "(" . $row3['campus'] . ")";
                                                 }
 
-                                                $sql4 = "SELECT name from user where id = " . $row['uploader'];
-                                                $result4 = $conn->query($sql4);
-                                                if ($result4->num_rows > 0) {
-                                                    $row4 = $result4->fetch_assoc();
-                                                    $uploader = $row4['name'];
-                                                }
-
                                                 $time = strtotime($row['datetime']);
                                                 $datetime = date("d-M-Y h:i A", $time);
 
                                                 $filename = "<a href='../" . $row['file_path'] . "' rel='tooltip'  title='Click to Download' onclick = updateDownloads('" . $row['id'] . "'); download>" . $row['file_name'] . "</a>";
 
-                                                if (in_array(0, json_decode($row['destination'])) || in_array($_SESSION['campusid'], json_decode($row['destination'])) || in_array($_SESSION['officeid'], json_decode($row['destination']))) {
-                                                    echo "<tr class='trcontent'>
+                                                echo "<tr class='trcontent'>
                                                   <td>
                                                     " . $row['id'] . "
                                                   </td>
@@ -242,17 +222,13 @@
                                                     " . $row['file_purpose'] . "
                                                   </td>
                                                   <td>
-                                                    " . $origin . "
-                                                  </td>
-                                                  <td>
-                                                    " . $uploader . "
-                                                  </td>
-                                                  <td>
                                                     " . $datetime . "
                                                   </td>
-                                                  <td style='display:none;' id='download_status".$rowi."'></td>
-                                                </tr>";
-                                                }
+                                                  <td style='display:none;'>
+                                                  " . $row['file_name'] . "
+                                                  </td>
+                                                </tr>
+                                               ";
 
                                                 $rowi++;
                                             }
@@ -356,73 +332,99 @@
 
 </body>
 
-<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" id="sendRequestModal" data-backdrop="static" data-keyboard="false">
-    <div class="modal-dialog modal-lg">
-        <form method="post" enctype="multipart/form-data" action="upload.php" id="addFileForm" name="">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Send Request</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="progress-container progress-primary" id="progressBar">
-                        <span class="progress-badge" id="uploading"></span>
-                        <div class="progress">
-                            <div class="progress-bar" id="progress" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
-                                <span class="progress-value" id="status"></span>
-                            </div>
-                        </div>
-                    </div>
-                    <!--<button class="btn btn-primary btn-round">Browse File</button>--><br>
-                    <label for="exampleFormControlSelect1">File Name</label>
-                    <div class="input-group">
-                        <input class="form-control" type="file" name="filename" id="filename" onchange="" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="exampleFormControlTextarea1">File Description</label>
-                        <textarea class="form-control" id="filedesc" name="filedesc" rows="2" required></textarea>
-                    </div>
-                    <div class="col-md-4 pull-right">
-                        <label for="exampleFormControlSelect1">File Extension</label>
-                        <div class="input-group">
-                            <input type="text" class="form-control form-control-lg" id="fileextension" name="fileextension" required>
-                        </div>
-                    </div>
-                    <div class="col-md-4 pull-right">
-                        <label for="exampleFormControlSelect1">File Revision</label>
-                        <div class="input-group">
-                            <input type="text" class="form-control form-control-lg" id="filerevision" name="filerevision" required>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <label for="exampleFormControlSelect1">File Type</label>
-                        <div class="input-group">
-                            <select class="form-control form-control" name="filepurpose" required>
-                                <option value="">Select...</option>
-                                <?php
-                                $sqlt = "Select * from m_typeofdoc;";
-                                $resultt = $conn->query($sqlt);
-                                if ($resultt->num_rows > 0) {
-                                    while ($rowt = $resultt->fetch_assoc()) {
-                                        echo "<option value='" . $rowt['type'] . "'>" . $rowt['type'] . "</option>";
-                                    }
-                                }
-                                ?>
-                            </select>
-                            <!--<input type="text" class="form-control form-control-lg" id="" name="filepurpose" value="Accreditation" required>-->
-                        </div>
-                    </div>
-                    <div class="col-md-12">
-                        <div class="modal-footer">
-                            <input type="Submit" class="btn btn-primary" name="Submit" value="Submit" onclick="">
-                        </div>
-                    </div>
-                </div>
-        </form>
-    </div>
-</div>
+<?php
+
+if (isset($_GET['success']) && $_GET['success'] == 1) {
+    echo "<script>
+            $.notify({
+            
+            title: '<strong>Success</strong>',
+            message: 'Request Successfully Sent' 
+            },{
+            
+            type: 'success'
+            });
+          </script> ";
+}
+
+
+if (isset($_GET['error']) && $_GET['error'] == 2) {
+
+    echo "<script>
+            $.notify({
+            
+            title: 'ERROR',
+            message: '<strong>Request Already Exist</strong>' 
+            },{
+            
+            type: 'danger',
+            allow_dismiss: false
+
+            });
+
+          </script> ";
+}
+if (isset($_GET['error']) && $_GET['error'] == 3) {
+
+    echo "<script>
+            $.notify({
+            
+            title: 'File Too Large',
+            message: '<strong>25MB Maximum Size</strong>' 
+            },{
+            
+            type: 'danger',
+            allow_dismiss: false
+
+            });
+
+          </script> ";
+}
+if (isset($_GET['error']) && $_GET['error'] == 4) {
+
+    echo "<script>
+            $.notify({
+            
+            title: 'File Not Supported',
+            message: '<strong>Upload JPEG, JPG, DOC, DOCX, PDF, RAR, ZIP Only</strong>' 
+            },{
+            
+            type: 'danger',
+            allow_dismiss: false
+
+            });
+
+          </script> ";
+}
+if (isset($_GET['success']) && $_GET['success'] == 2) {
+    echo "<script>
+            $.notify({
+            
+            title: '<strong>Request Canceled</strong>',
+            message: 'File Request to Administrator Canceled' 
+            },{
+            
+            type: 'warning'
+            });
+          </script> ";
+}
+if (isset($_GET['error']) && $_GET['error'] == 0) {
+
+    echo "<script>
+            $.notify({
+            
+            title: '<strong>Upload Error</strong>',
+            message: 'There was a problem uploading your file. Please contact the administrator/creator' 
+            },{
+            
+            type: 'danger',
+            allow_dismiss: false
+
+            });
+
+          </script> ";
+}
+?>
 
 <script>
 $(document).ready(function () {
@@ -445,7 +447,7 @@ $(document).ready(function () {
 <script>
     function myFunction() {
         // Declare variables 
-        var input, filter, input2, filter2, input4, filter4, table, tr, td, i, txtValue;
+        var input, filter, input2, filter2, table, tr, td, i, txtValue;
         input = document.getElementById("myInput");
         filter = input.value.toUpperCase();
         table = document.getElementById("myTable");
@@ -458,19 +460,12 @@ $(document).ready(function () {
             filter2 = "";
         }
 
-        input4 = document.getElementById("unreadfilter");
-        if (input4.value.toUpperCase() != "ALL") {
-            filter4 = input4.value.toUpperCase();
-        } else {
-            filter4 = "";
-        }
-
         // Loop through all table rows, and hide those who don't match the search query
         for (i = 0; i < tr.length; i++) {
             td = tr[i].getElementsByTagName("td");
             if (td.length > 0) {
                 //txtValue = td.textContent || td.innerText;
-                if ((td[0].innerHTML.toUpperCase().indexOf(filter) > -1 || td[1].innerHTML.toUpperCase().indexOf(filter) > -1) && (td[2].innerHTML.toUpperCase().indexOf(filter2) > -1 && td[6].innerHTML.toUpperCase().indexOf(filter4) > -1)) {
+                if ((td[0].innerHTML.toUpperCase().indexOf(filter) > -1 || td[1].innerHTML.toUpperCase().indexOf(filter) > -1) && (td[2].innerHTML.toUpperCase().indexOf(filter2) > -1)) {
                     tr[i].style.display = "";
                 } else {
                     tr[i].style.display = "none";
@@ -540,19 +535,6 @@ $(document).ready(function () {
 
 <script>
     function updateDownloads(myObj) {
-
-        var table = document.getElementById("myTable");
-        for (var i = 1; i < table.rows.length; i++) {
-            var id = document.getElementById("myTable").rows[i].cells.item(0).innerHTML;
-            var newid = id.replace(/\s/g, "");
-            if (newid == myObj) {
-                //alert(i);
-                table.rows[i].style.backgroundColor = "";
-                table.rows[i].cells[6].innerHTML = '';
-                //$('#download_status'+i).html('read');
-            }
-        }
-
         var obj, dbParam, xmlhttp;
         obj = {
             "fid": myObj
@@ -593,56 +575,15 @@ $(document).ready(function () {
 </script> -->
 
 <script>
-    document.getElementById('filename').onchange = function() {
-
-        //var last = this.value.lastIndexOf(".");
-        //var filepath = this.value;
-        var fileextension = this.value.slice(this.value.lastIndexOf(".") + 1).toUpperCase();
-        //alert('Selected file extension: ' + fileextension);
-        document.getElementById("fileextension").value = fileextension;
-        //document.getElementById("filepath").value = filepath;
-        document.getElementById("filerevision").value = "1";
-        //document.getElementById("filerevision").disabled = true;
-        //document.getElementById("fileextension").disabled = true;
-
-    };
-</script>
-
-<script>
-    function notify(idx) {
-        var table = document.getElementById("myTable");
-
-        for (var i = 1; i < table.rows.length; i++) {
-            var id = document.getElementById("myTable").rows[i].cells.item(0).innerHTML;
-            var newid = id.replace(/\s/g, "");
-            if (newid == idx) {
-                //alert(i);
-                table.rows[i].style.backgroundColor = "lightgreen";
-                table.rows[i].cells[6].innerHTML = 'unread';
-                //$('#download_status'+i).html('unread');
-            }else{
-                //$('#download_status'+i).html('read');
-            }
-        }
+    function getRowID(r) {
+        var id = document.getElementById("myTable").rows[r].cells.item(0).innerHTML;
+        //var aid = document.getElementById("myTable").rows[r].cells.item(8).innerHTML;
+        var doc = document.getElementById("myTable").rows[r].cells.item(6).innerHTML;
+        document.getElementById("docname").innerHTML = doc;
+        $("#idno").val(id);
+        //$("#archived_idno").val(aid);
     }
 </script>
-
-<?php
-$sqld = "SELECT * FROM files WHERE NOT EXISTS (Select * FROM logs WHERE logs.file_id = files.id AND logs.author = " . $_SESSION['id'] . ") AND finout = 0 AND archive = 0;";
-$resultd = $conn->query($sqld);
-$n = 0;
-if ($resultd->num_rows > 0) {
-    while ($rowd = $resultd->fetch_assoc()) {
-        echo "<script> notify('" . $rowd['id'] . "'); </script>";
-        $n++;
-    }
-    if ($n == 0) {
-        $noticount = "";
-    } else {
-        $noticount = "<strong>(" . $n . ")</strong>";
-    }
-}
-?>
 
 <script>
     $(document).ready(function() {
@@ -655,7 +596,7 @@ if ($resultd->num_rows > 0) {
                         $('.progress-bar').width('0%');
                     },
                     uploadProgress: function(event, position, total, percentageComplete) {
-                        $('#status').text('Uploading (' + percentageComplete + '%)...');
+                        $('#status').text('Uploading ('+ percentageComplete + '%)...');
                         $('.progress-bar').animate({
                             width: percentageComplete + '%'
                         }, {

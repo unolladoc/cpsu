@@ -78,6 +78,12 @@
                             <p>Requests</p>
                         </a>
                     </li>
+                    <li>
+                        <a href="templates.php">
+                            <i class="now-ui-icons files_single-copy-04"></i>
+                            <p>Templates</p>
+                        </a>
+                    </li>
                 </ul>
             </div>
         </div>
