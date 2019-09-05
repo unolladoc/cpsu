@@ -44,67 +44,75 @@ function fileUpdload()
         }
     } else {
         $tmpcustomcampus = $_POST['customcampus'];
-        //vp
-        if (isset($_POST['vp'])) {
+        // //vp
+        // if (isset($_POST['vp'])) {
+        //     if ($tmpcustomcampus != "") {
+        //         $tmpcustomcampus .= "," . implode(",", $_POST['vp']);
+        //     } else {
+        //         $tmpcustomcampus .= implode(",", $_POST['vp']);
+        //     }
+        // }
+        // //director
+        // if (isset($_POST['director'])) {
+        //     if ($tmpcustomcampus != "") {
+        //         $tmpcustomcampus .= "," . implode(",", $_POST['director']);
+        //     } else {
+        //         $tmpcustomcampus .= implode(",", $_POST['director']);
+        //     }
+        // }//registrar
+        // if (isset($_POST['registrar'])) {
+        //     if ($tmpcustomcampus != "") {
+        //         $tmpcustomcampus .= "," . implode(",", $_POST['registrar']);
+        //     } else {
+        //         $tmpcustomcampus .= implode(",", $_POST['registrar']);
+        //     }
+        // }
+        // //accounting
+        // if (isset($_POST['accounting'])) {
+        //     if ($tmpcustomcampus != "") {
+        //         $tmpcustomcampus .= "," . implode(",", $_POST['accounting']);
+        //     } else {
+        //         $tmpcustomcampus .= implode(",", $_POST['accounting']);
+        //     }
+        // }
+        // //cashier
+        // if (isset($_POST['cashier'])) {
+        //     if ($tmpcustomcampus != "") {
+        //         $tmpcustomcampus .= "," . implode(",", $_POST['cashier']);
+        //     } else {
+        //         $tmpcustomcampus .= implode(",", $_POST['cashier']);
+        //     }
+        // }
+        // //library
+        // if (isset($_POST['library'])) {
+        //     if ($tmpcustomcampus != "") {
+        //         $tmpcustomcampus .= "," . implode(",", $_POST['library']);
+        //     } else {
+        //         $tmpcustomcampus .= implode(",", $_POST['library']);
+        //     }
+        // }
+        // //deans
+        // if (isset($_POST['deans'])) {
+        //     if ($tmpcustomcampus != "") {
+        //         $tmpcustomcampus .= "," . implode(",", $_POST['deans']);
+        //     } else {
+        //         $tmpcustomcampus .= implode(",", $_POST['deans']);
+        //     }
+        // }
+        // //campusdirectors
+        // if (isset($_POST['campusdirectors'])) {
+        //     if ($tmpcustomcampus != "") {
+        //         $tmpcustomcampus .= "," . implode(",", $_POST['campusdirectors']);
+        //     } else {
+        //         $tmpcustomcampus .= implode(",", $_POST['campusdirectors']);
+        //     }
+        // }
+        //offices
+        if (isset($_POST['offices'])) {
             if ($tmpcustomcampus != "") {
-                $tmpcustomcampus .= "," . implode(",", $_POST['vp']);
+                $tmpcustomcampus .= "," . implode(",", $_POST['offices']);
             } else {
-                $tmpcustomcampus .= implode(",", $_POST['vp']);
-            }
-        }
-        //director
-        if (isset($_POST['director'])) {
-            if ($tmpcustomcampus != "") {
-                $tmpcustomcampus .= "," . implode(",", $_POST['director']);
-            } else {
-                $tmpcustomcampus .= implode(",", $_POST['director']);
-            }
-        }//registrar
-        if (isset($_POST['registrar'])) {
-            if ($tmpcustomcampus != "") {
-                $tmpcustomcampus .= "," . implode(",", $_POST['registrar']);
-            } else {
-                $tmpcustomcampus .= implode(",", $_POST['registrar']);
-            }
-        }
-        //accounting
-        if (isset($_POST['accounting'])) {
-            if ($tmpcustomcampus != "") {
-                $tmpcustomcampus .= "," . implode(",", $_POST['accounting']);
-            } else {
-                $tmpcustomcampus .= implode(",", $_POST['accounting']);
-            }
-        }
-        //cashier
-        if (isset($_POST['cashier'])) {
-            if ($tmpcustomcampus != "") {
-                $tmpcustomcampus .= "," . implode(",", $_POST['cashier']);
-            } else {
-                $tmpcustomcampus .= implode(",", $_POST['cashier']);
-            }
-        }
-        //library
-        if (isset($_POST['library'])) {
-            if ($tmpcustomcampus != "") {
-                $tmpcustomcampus .= "," . implode(",", $_POST['library']);
-            } else {
-                $tmpcustomcampus .= implode(",", $_POST['library']);
-            }
-        }
-        //deans
-        if (isset($_POST['deans'])) {
-            if ($tmpcustomcampus != "") {
-                $tmpcustomcampus .= "," . implode(",", $_POST['deans']);
-            } else {
-                $tmpcustomcampus .= implode(",", $_POST['deans']);
-            }
-        }
-        //campusdirectors
-        if (isset($_POST['campusdirectors'])) {
-            if ($tmpcustomcampus != "") {
-                $tmpcustomcampus .= "," . implode(",", $_POST['campusdirectors']);
-            } else {
-                $tmpcustomcampus .= implode(",", $_POST['campusdirectors']);
+                $tmpcustomcampus .= implode(",", $_POST['offices']);
             }
         }
         $tmpcustomcampus_expl = explode(",",$tmpcustomcampus);
